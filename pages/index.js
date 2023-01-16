@@ -15,8 +15,8 @@ import {
   Button,
   Link,
 } from "@chakra-ui/react";
-import Image from "next/image";
-import ProfileImage from "@/src/assets/images/img.jpg";
+// import Image from "next/image";
+// import ProfileImage from "@/src/assets/images/img.jpg";
 import NextLink from "next/link";
 // import source_sans_3 from "@/src/constants/fonts/source_sans_3";
 
@@ -234,9 +234,9 @@ export default function Home() {
                 w={["100%"]}
                 height={["max-content"]}
                 spacing={["10px"]}
-                alignItems={["center"]}
+                alignItems={["flex-start"]}
               >
-                <Box
+                {/* <Box
                   width={["150px"]}
                   height={["150px"]}
                   position={["relative"]}
@@ -252,18 +252,17 @@ export default function Home() {
                     placeholder="blur"
                     fill
                   />
-                </Box>
+                </Box> */}
                 <Text
                   as="h1"
                   color={["brand.50"]}
                   fontWeight={["bold"]}
-                  fontSize={["4xl"]}
+                  fontSize={["7xl"]}
                 >
-                  Halo !
+                  Halo
                 </Text>
                 <Text
                   as="p"
-                  textAlign={["center"]}
                   fontWeight={["semibold"]}
                   fontSize={["xl"]}
                 >

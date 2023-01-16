@@ -1,7 +1,6 @@
 import "@/styles/globals.css";
 import { ChakraProvider } from "@chakra-ui/react";
 import theme from "@/src/config/chakra.config";
-import source_sans_3 from "@/src/constants/fonts/source_sans_3";
 import { Provider } from "react-redux";
 import { store } from "@/src/store";
 

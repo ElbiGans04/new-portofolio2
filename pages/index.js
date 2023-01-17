@@ -38,6 +38,11 @@ export default function Home() {
           left={["0"]}
           right="0"
           bottom="0"
+          backgroundColor={['white']}
+          borderBottomColor={["rgba(0,0,0, 0.2)"]}
+          borderBottomWidth={['1px']}
+          zIndex={['100']}
+          marginX={['0']}
         >
           <Flex justifyContent="space-between" align={["center"]}>
             <Text color="brand.50" fontSize={["5xl"]} fontWeight={["bold"]}>
@@ -70,12 +75,13 @@ export default function Home() {
             </Stack>
           </Flex>
         </Container>
-        <Box
-          width={["100%"]}
-          height="1px"
-          backgroundColor={["rgba(0,0,0, 0.2)"]}
-        />
-        <Grid w={["100%"]} templateColumns="repeat(3, 1fr)" paddingY={["20px"]}>
+    
+        <Grid 
+          w={["100%"]} 
+          height={['100%']} 
+          templateColumns="repeat(3, 1fr)"
+          templateRows="repeat(2, 1fr)"
+          paddingY={["20px"]}>
           {/* Left */}
           <GridItem
             borderRightWidth={["1px"]}
@@ -84,6 +90,9 @@ export default function Home() {
             height={["100%"]}
             paddingTop={["20px"]}
             paddingBottom={["100px"]}
+            position={['sticky']}
+            top={['105px']}
+            left={['0']}
           >
             <VStack
               w={["100%"]}
@@ -300,7 +309,7 @@ export default function Home() {
                     borderRightRadius={["8px"]}
                     borderLeftRadius={["0px"]}
                   >
-                    Cari
+                    Berlangganan
                   </Button>
                 </HStack>
                 <Text fontSize={["lg"]} fontWeight={["bold"]} color={['brand.50']}>
@@ -311,7 +320,7 @@ export default function Home() {
           </GridItem>
 
           {/* Right */}
-          <GridItem colSpan={2}>
+          <GridItem colSpan={2} rowSpan={2}>
             <VStack
               w={["100%"]}
               h={["100%"]}
@@ -621,12 +630,6 @@ export default function Home() {
               </VStack>
               {/* End Of Card */}
 
-              {/* Batas */}
-              <Box
-                w={["90%"]}
-                height={["1px"]}
-                bgColor={["rgba(0,0,0, 0.2)"]}
-              ></Box>
             </VStack>
           </GridItem>
         </Grid>

@@ -336,7 +336,7 @@ export default function Home() {
                 spacing={["30px"]}
               >
                 {/* Header */}
-                <Link as={NextLink} href="/" width={["100%"]}>
+                <Link as={NextLink} href="/blogs/1" width={["100%"]}>
                   <Box
                     w={["90%"]}
                     height={["350px"]}
@@ -365,7 +365,7 @@ export default function Home() {
                         textDecoration: "underline",
                       }}
                       as={NextLink}
-                      href="/"
+                      href="/blogs/1"
                     >
                       Membuat sesuatu yang bermanfaat
                     </Link>
@@ -389,7 +389,7 @@ export default function Home() {
                         textDecoration: "underline",
                       }}
                       as={NextLink}
-                      href="/"
+                      href="/blogs/1"
                     >
                       Klik disini untuk membaca selengkapnya.
                     </Link>

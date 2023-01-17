@@ -1,5 +1,6 @@
 import { extendTheme  } from '@chakra-ui/react'
 import source_sans from '../constants/fonts/source_sans_3';
+import work_sans from '../constants/fonts/work_sans';
 const configuration = {
   colors: {
     brand: {
@@ -17,7 +18,8 @@ const configuration = {
     },
   },
    fonts: {
-    main: source_sans.style.fontFamily,
+    body: source_sans.style.fontFamily,
+    heading: work_sans.style.fontFamily,
   },
 };
 

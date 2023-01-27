@@ -420,22 +420,12 @@ export default function Home() {
                 alignItems={["flex-start"]}
               >
                 <Button
-                  bgColor={["brand.50"]}
-                  cursor={["pointer"]}
-                  color={["white"]}
-                  padding={["10px"]}
-                  _hover={{ backgroundColor: "brand.600" }}
-                  _active={{ backgroundColor: "brand.700" }}
+                  variant={'brand'}
                 >
                   Pribadi
                 </Button>
                 <Button
-                  bgColor={["white"]}
-                  color={["brand.50"]}
-                  cursor={["pointer"]}
-                  borderWidth={["1px"]}
-                  borderColor={["brand.50"]}
-                  padding={["10px"]}
+                  variant={'brandOutline'}
                 >
                   Pekerjaan
                 </Button>

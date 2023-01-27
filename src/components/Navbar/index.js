@@ -64,7 +64,7 @@ export default function Navbar() {
               spacing={["10px"]}
             >
               <Text>🌞</Text>
-              <Switch></Switch>
+              <Switch colorScheme={'brand'} />
               <Text>🌙</Text>
             </HStack>
           </Stack>

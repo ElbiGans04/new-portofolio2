@@ -21,6 +21,52 @@ const configuration = {
     body: source_sans.style.fontFamily,
     heading: work_sans.style.fontFamily,
   },
+  components : {
+    Switch : {
+      variants : {
+        brand : {
+          backgroundColor: 'brand.50'
+        }
+      },
+      defaultProps: {
+        colorScheme: 'brand',
+      },
+    },
+    Button : {
+      variants : {
+        brand : {
+          backgroundColor: 'brand.50',
+          cursor: 'pointer',
+          color: 'white',
+          padding: '10px',
+          _hover: {
+            backgroundColor: 'brand.600',
+            color: 'whiteAlpha.900'
+          },
+          _active: {
+            backgroundColor: 'brand.700',
+            color: 'whiteAlpha.800'
+          },
+        },
+        brandOutline : {
+          backgroundColor: 'white',
+          color: 'brand.50',
+          cursor: 'pointer',
+          borderWidth: '1px',
+          borderColor: 'brand.50',
+          padding: '10px',
+          _hover: {
+            backgroundColor: 'gray.100',
+            color: 'brand.500'
+          },
+          _active: {
+            backgroundColor: 'gray.200',
+            color: 'brand.600'
+          },
+        }
+      },
+    }
+  }
 };
 
 

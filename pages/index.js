@@ -128,7 +128,7 @@ export default function Home() {
                     fontSize={["5xl"]}
                     fontWeight={["bold"]}
                   >
-                    Frontend developer
+                    Fullstack developer
                   </Box>
                 </Text>
               </VStack>
@@ -145,7 +145,7 @@ export default function Home() {
                   borderRadius={["50%"]}
                   overflow={["hidden"]}
                 >
-                  <Image src={ProfileImage} placeholder="blur" fill />
+                  <Image src={ProfileImage} alt="profile-rhafael" placeholder="blur" fill />
                 </Box>
               </VStack>
             </GridItem>
@@ -161,6 +161,32 @@ export default function Home() {
               Tentang
             </Heading>
             <Text fontSize={["3xl"]}>
+              Halo Semua, perkenalkan saya adalah seorang 
+              {" "}
+              <Box as="span" fontWeight={["bold"]} color="brand.50">
+                Fullstack web developer
+              </Box>
+              {" "}
+              dan saya adalah seseorang yang menyukai tantangan dan segala hal tentang teknologi
+              <br></br>
+              <br></br>
+              Dan saat ini{" "}
+              <Box as="span" fontWeight={["bold"]} color="brand.50">
+                Javascript dan Typescript
+              </Box>{" "}
+              adalah bahasa pemrograman yang sering saya pakai, dan framework
+              frontend seperti{" "}
+              <Box as="span" fontWeight={["bold"]} color="brand.50">
+                React dan Vue js
+              </Box>{" "}
+              sering saya gunakan dalam mengembangkan{" "}
+              <Box as="span" fontWeight={["bold"]} color="brand.50">
+                Web Aplikasi
+              </Box>
+              {"."}
+            </Text>
+            {/* Alasan komentar, karena itu merupakan hal yang bersifat pribadi, dan mungkin tidak perlu juga */}
+            {/* <Text fontSize={["3xl"]}>
               Halo Semua, perkenalkan nama saya adalah{" "}
               <Box as="span" fontWeight={["bold"]} color="brand.50">
                 Elbi
@@ -219,7 +245,7 @@ export default function Home() {
                 Web Applikasi
               </Box>
               {"."}
-            </Text>
+            </Text> */}
           </VStack>
 
           <VStack w={["100%"]} height={["100%"]} alignItems={["flex-start"]}>

@@ -1,6 +1,18 @@
-import { Container, Flex, HStack, Stack, Switch, Text } from "@chakra-ui/react";
+import {
+  Container,
+  Flex,
+  HStack,
+  Stack,
+  Switch,
+  Text,
+  Link,
+} from "@chakra-ui/react";
+import NextLink from "next/link";
+import { useRouter } from "next/router";
 
 export default function Navbar() {
+  const router = useRouter();
+  
   return (
     <HStack
       w={["100%"]}
@@ -18,16 +30,34 @@ export default function Navbar() {
     >
       <Container paddingY={["16px"]} maxW="container.xl">
         <Flex justifyContent="space-between" align={["center"]}>
-          <Text color="brand.50" fontSize={["5xl"]} fontWeight={["bold"]}>
+          <Link
+            color="brand.50"
+            fontSize={["5xl"]}
+            fontWeight={["bold"]}
+            href="/"
+            as={NextLink}
+          >
             Elbi
-          </Text>
+          </Link>
           <Stack direction={["row"]} spacing={["32px"]} alignItems={["center"]}>
-            <Text fontWeight={["semibold"]} color="" fontSize={["2xl"]}>
-              About
-            </Text>
-            <Text fontWeight={["semibold"]} color="brand.50" fontSize={["2xl"]}>
+            <Link
+              as={NextLink}
+              href="/"
+              fontWeight={["semibold"]}
+              color={router.pathname === "/" ? "brand.50" : "black"}
+              fontSize={["2xl"]}
+            >
+              Home
+            </Link>
+            <Link
+              as={NextLink}
+              href="/blogs"
+              fontWeight={["semibold"]}
+              color={router.pathname === "/blogs" ? "brand.50" : "black"}
+              fontSize={["2xl"]}
+            >
               Blog
-            </Text>
+            </Link>
             <HStack
               alignItems={["center"]}
               justifyContent={["space-between"]}

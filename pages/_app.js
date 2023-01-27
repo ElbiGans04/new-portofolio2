@@ -1,6 +1,5 @@
 import theme from "@/src/config/chakra.config";
 import { store } from "@/src/store";
-import "@/styles/globals.css";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Provider } from "react-redux";
 import {IconContext } from 'react-icons'

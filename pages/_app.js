@@ -4,6 +4,7 @@ import "@/styles/globals.css";
 import { ChakraProvider } from "@chakra-ui/react";
 import { Provider } from "react-redux";
 import {IconContext } from 'react-icons'
+import Navbar from "@/src/components/Navbar";
 
 export default function App({ Component, pageProps }) {
   return (
@@ -12,6 +13,7 @@ export default function App({ Component, pageProps }) {
         <IconContext.Provider  value={{
           style: { verticalAlign: 'middle' }
         }}>
+          <Navbar />
           <Component {...pageProps} />
         </IconContext.Provider>
       </ChakraProvider>

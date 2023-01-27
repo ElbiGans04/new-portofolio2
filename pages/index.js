@@ -4,10 +4,7 @@ import {
   Button,
   Card,
   CardBody,
-  CardFooter,
-  Container,
-  Flex,
-  Grid,
+  CardFooter, Grid,
   GridItem,
   Heading,
   HStack,
@@ -15,19 +12,8 @@ import {
   Link,
   List,
   ListIcon,
-  ListItem,
-  Stack,
-  Switch,
-  Text,
-  VStack,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalFooter,
-  ModalBody,
-  ModalCloseButton,
-  useDisclosure,
+  ListItem, Modal, ModalBody,
+  ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, useDisclosure, VStack
 } from "@chakra-ui/react";
 import Head from "next/head";
 import Image from "next/image";
@@ -44,52 +30,6 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <VStack w={["100%"]} alignItems={["flex-start"]} position={["relative"]}>
-        <Container
-          paddingY={["16px"]}
-          maxW="container.xl"
-          position={["sticky"]}
-          top={["0"]}
-          left={["0"]}
-          right="0"
-          bottom="0"
-          backgroundColor={["white"]}
-          borderBottomColor={["rgba(0,0,0, 0.2)"]}
-          borderBottomWidth={["1px"]}
-          zIndex={["100"]}
-          marginX={["0"]}
-        >
-          <Flex justifyContent="space-between" align={["center"]}>
-            <Text color="brand.50" fontSize={["5xl"]} fontWeight={["bold"]}>
-              Elbi
-            </Text>
-            <Stack
-              direction={["row"]}
-              spacing={["32px"]}
-              alignItems={["center"]}
-            >
-              <Text fontWeight={["semibold"]} color="" fontSize={["2xl"]}>
-                About
-              </Text>
-              <Text
-                fontWeight={["semibold"]}
-                color="brand.50"
-                fontSize={["2xl"]}
-              >
-                Blog
-              </Text>
-              <HStack
-                alignItems={["center"]}
-                justifyContent={["space-between"]}
-                spacing={["10px"]}
-              >
-                <Text>🌞</Text>
-                <Switch></Switch>
-                <Text>🌙</Text>
-              </HStack>
-            </Stack>
-          </Flex>
-        </Container>
-
         <VStack
           w={["100%"]}
           height={["100%"]}

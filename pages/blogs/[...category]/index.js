@@ -1,24 +1,10 @@
-import Head from "next/head";
 import {
-  Container,
-  Flex,
-  Text,
-  Stack,
-  Switch,
-  HStack,
-  VStack,
-  Grid,
-  GridItem,
-  Box,
-  Input,
-  SimpleGrid,
-  Button,
-  Link,
+  Box, Button, Grid,
+  GridItem, HStack, Link, Text, VStack
 } from "@chakra-ui/react";
-// import Image from "next/image";
-// import ProfileImage from "@/src/assets/images/img.jpg";
+import Head from "next/head";
+import Berlangganan from "@/src/components/Berlangganan";
 import NextLink from "next/link";
-// import source_sans_3 from "@/src/constants/fonts/source_sans_3";
 
 export default function Blog() {
   return (
@@ -184,84 +170,7 @@ export default function Blog() {
                 </VStack>
               </VStack>
 
-              <VStack
-                w={["80%"]}
-                height={["100%"]}
-                spacing={["10px"]}
-                alignItems={["flex-start"]}
-              >
-                {/* <Box
-                  width={["150px"]}
-                  height={["150px"]}
-                  position={["relative"]}
-                  overflow={["hidden"]}
-                  borderRadius={["50%"]}
-                  borderWidth={["5px"]}
-                  borderColor={["brand.50"]}
-                  flexShrink={["0"]}
-                >
-                  <Image
-                    src={ProfileImage}
-                    alt="profile picture"
-                    placeholder="blur"
-                    fill
-                  />
-                </Box> */}
-                <Text
-                  as="h1"
-                  color={["brand.50"]}
-                  fontWeight={["bold"]}
-                  fontSize={["7xl"]}
-                  lineHeight={['1.2em']}
-                >
-                  Halo
-                </Text>
-                <Text as="p" fontWeight={["semibold"]} fontSize={["xl"]}>
-                  Ayo berlangganan agar tidak ketinggalan update apapun dari
-                  website ini
-                </Text>
-                <HStack
-                  w={["100%"]}
-                  // borderWidth={["1px"]}
-                  // borderColor={["brand.50"]}
-                  borderRadius={["8px"]}
-                  h={["100%"]}
-                  spacing={[0]}
-                  // _hover={{ opacity: ["0.8"] }}
-                  // _focusVisible={{ borderWidth: ["2px"], opacity: ['1'] }}
-                  // overflow={['hidden']}
-                >
-                  <Input
-                    data-peer=""
-                    w={["70%"]}
-                    borderColor={["brand.50"]}
-                    _focusVisible={{ boxShadow: "0 0 1px #7e1aff" }}
-                    _hover={{ borderColor: ["brand.600"] }}
-                    borderRightRadius={["0"]}
-                    borderLeftRadius={["8px"]}
-                  ></Input>
-                  <Button
-                    w={["30%"]}
-                    height={["100%"]}
-                    bgColor={["brand.50"]}
-                    cursor={["pointer"]}
-                    color={["white"]}
-                    borderRadius={[0]}
-                    _hover={{ backgroundColor: "brand.500" }}
-                    borderRightRadius={["8px"]}
-                    borderLeftRadius={["0px"]}
-                  >
-                    Berlangganan
-                  </Button>
-                </HStack>
-                <Text
-                  fontSize={["lg"]}
-                  fontWeight={["bold"]}
-                  color={["brand.50"]}
-                >
-                  *Saya tidak akan mengirimkan email spam kepada anda*
-                </Text>
-              </VStack>
+              <Berlangganan />
             </VStack>
           </GridItem>
 

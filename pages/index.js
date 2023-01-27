@@ -526,12 +526,7 @@ export default function Home() {
 
           <ModalFooter>
             <Button
-              bgColor={["brand.50"]}
-              cursor={["pointer"]}
-              color={["white"]}
-              padding={["10px"]}
-              _hover={{ backgroundColor: "brand.600" }}
-              _active={{ backgroundColor: "brand.700" }}
+              variant="brand"
               onClick={onClose}
             >
               Tutup

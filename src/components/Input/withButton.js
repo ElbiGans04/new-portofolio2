@@ -1,6 +1,6 @@
 import { Button, HStack, Input } from "@chakra-ui/react";
 
-export default function InputWithButton(props) {
+export default function InputWithButton({children, onClick}) {
   return (
     <HStack
       w={["100%"]}
@@ -24,8 +24,9 @@ export default function InputWithButton(props) {
         borderRadius={[0]}
         borderRightRadius={["8px"]}
         borderLeftRadius={["0px"]}
+        onClick={onClick}
       >
-        {props.children}
+        {children}
       </Button>
     </HStack>
   );

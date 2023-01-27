@@ -4,6 +4,7 @@ import { ChakraProvider } from "@chakra-ui/react";
 import { Provider } from "react-redux";
 import {IconContext } from 'react-icons'
 import Navbar from "@/src/components/Navbar";
+import Footer from "@/src/components/Footer";
 
 export default function App({ Component, pageProps }) {
   return (
@@ -14,6 +15,7 @@ export default function App({ Component, pageProps }) {
         }}>
           <Navbar />
           <Component {...pageProps} />
+          <Footer />
         </IconContext.Provider>
       </ChakraProvider>
     </Provider>

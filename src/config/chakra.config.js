@@ -5,7 +5,7 @@ import work_sans from "../constants/fonts/work_sans";
 /**
  * Custom Breakpoint
  */
-const breakpoints = {
+export const breakpoints = {
   sm: "640px",
   md: "768px",
   lg: "1024px",
@@ -16,7 +16,7 @@ const breakpoints = {
 /**
  * Custom Configuration
  */
-const configuration = {
+export const configuration = {
   breakpoints,
   colors: {
     brand: {

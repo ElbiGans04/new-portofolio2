@@ -24,14 +24,20 @@ import {
   Stack,
   Text,
   useDisclosure,
-  VStack,
+  VStack,  useMediaQuery,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import Image from "next/image";
 import { AiFillGithub, AiFillLinkedin, AiFillMail } from "react-icons/ai";
+import { breakpoints } from "@/src/config/chakra.config";
 
 export default function Home() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [isLg] = useMediaQuery(`(min-width: ${breakpoints.lg})`, {
+    ssr: true,
+    fallback: false, // return false on the server, and re-evaluate on the client side
+  });
+
   return (
     <>
       <Head>
@@ -40,12 +46,14 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <VStack w={["100%"]} height={["100%"]} spacing={["100px"]} paddingX={['48px', null, null, null, null, '0']}>
+      <VStack w={["100%"]} height={["100%"]} spacing={["50px", "100px"]} paddingX={[0, null, null, null, '48px', '0']}>
         <Grid
           w={["100%"]}
           height={["100%"]}
-          gridTemplateColumns={["repeat(2, 1fr)"]}
+          gridTemplateColumns={["1fr", "repeat(2, 1fr)"]}
           paddingY={["64px"]}
+          gap={['30px']}
+          alignItems={['center']}
         >
           <GridItem>
             <VStack
@@ -56,22 +64,23 @@ export default function Home() {
               justifyContent={["center"]}
             >
               <Text
-                fontSize={["9xl"]}
+                fontSize={["6xl", "8xl", "9xl"]}
                 as="h1"
                 fontWeight={["bold"]}
                 lineHeight={["1em"]}
               >
                 Halo Semua
               </Text>
-              <Text fontSize={["4xl"]} lineHeight={["1.2em"]}>
+              <Text fontSize={["xl", "3xl", "4xl"]}>
                 Saya <Box as="span">Elbi</Box>
                 <br />
                 Saya adalah seorang{" "}
                 <Box
                   as="span"
                   color={["brand.50"]}
-                  fontSize={["5xl"]}
+                  fontSize={["2xl", "4xl", "5xl"]}
                   fontWeight={["bold"]}
+                  whiteSpace={['nowrap']}
                 >
                   Fullstack developer
                 </Box>
@@ -79,26 +88,30 @@ export default function Home() {
             </VStack>
           </GridItem>
 
-          <GridItem>
-            <VStack w={["100%"]} height={["100%"]} spacing={["16px"]}>
-              <Box
-                w={["450px"]}
-                height={["450px"]}
-                position={["relative"]}
-                borderWidth={["15px"]}
-                borderColor={["brand.50"]}
-                borderRadius={["50%"]}
-                overflow={["hidden"]}
-              >
-                <Image
-                  src={ProfileImage}
-                  alt="profile-rhafael"
-                  placeholder="blur"
-                  fill
-                />
-              </Box>
-            </VStack>
-          </GridItem>
+          {
+            isLg && (
+              <GridItem>
+                <VStack w={["100%"]} height={["100%"]} spacing={["16px"]}>
+                  <Box
+                    w={["150px", null, null, "400px", "450px"]}
+                    height={["150px", null, null, "400px", "450px"]}
+                    position={["relative"]}
+                    borderWidth={["5px", "15px"]}
+                    borderColor={["brand.50"]}
+                    borderRadius={["50%"]}
+                    overflow={["hidden"]}
+                  >
+                    <Image
+                      src={ProfileImage}
+                      alt="profile-rhafael"
+                      placeholder="blur"
+                      fill
+                    />
+                  </Box>
+                </VStack>
+              </GridItem>
+            )
+          }
         </Grid>
 
         <VStack w={["100%"]} height={["100%"]} alignItems={["flex-start"]}>
@@ -106,11 +119,11 @@ export default function Home() {
             as="h1"
             color={["brand.50"]}
             fontWeight={["bold"]}
-            fontSize={["5xl"]}
+            fontSize={["2xl", "3xl", "4xl", "5xl"]}
           >
             Tentang
           </Heading>
-          <Text fontSize={["3xl"]}>
+          <Text fontSize={["lg", "xl", "2xl", "3xl"]}>
             Halo Semua, perkenalkan saya adalah seorang{" "}
             <Box as="span" fontWeight={["bold"]} color="brand.50">
               Fullstack web developer
@@ -135,7 +148,7 @@ export default function Home() {
             {"."}
           </Text>
           {/* Alasan komentar, karena itu merupakan hal yang bersifat pribadi, dan mungkin tidak perlu juga */}
-          {/* <Text fontSize={["3xl"]}>
+          {/* <Text fontSize={["lg", "xl", "2xl", "3xl"]}>
               Halo Semua, perkenalkan nama saya adalah{" "}
               <Box as="span" fontWeight={["bold"]} color="brand.50">
                 Elbi
@@ -202,7 +215,7 @@ export default function Home() {
             as="h1"
             color={["brand.50"]}
             fontWeight={["bold"]}
-            fontSize={["5xl"]}
+            fontSize={["2xl", "3xl", "4xl", "5xl"]}
           >
             Kontak
           </Heading>
@@ -212,7 +225,7 @@ export default function Home() {
             alignItems={["flex-start"]}
             spacing={["20px"]}
           >
-            <Text fontSize={["3xl"]}>
+            <Text fontSize={["lg", "xl", "2xl", "3xl"]}>
               Tertarik untuk{" "}
               <Box as="span" fontWeight={["bold"]} color="brand.50">
                 merekrut saya
@@ -231,7 +244,7 @@ export default function Home() {
               <ListItem>
                 <Link
                   href="https://github.com/ElbiGans04"
-                  fontSize={["3xl"]}
+                  fontSize={["lg", "xl", "2xl", "3xl"]}
                   verticalAlign={["middle"]}
                 >
                   <ListIcon as={AiFillGithub} />
@@ -241,7 +254,7 @@ export default function Home() {
               <ListItem>
                 <Link
                   href="mailto:rhafaelbijaksana04@gmail.com"
-                  fontSize={["3xl"]}
+                  fontSize={["lg", "xl", "2xl", "3xl"]}
                   verticalAlign={["middle"]}
                 >
                   <ListIcon as={AiFillMail} />
@@ -251,7 +264,7 @@ export default function Home() {
               <ListItem>
                 <Link
                   href="www.linkedin.com/in/rhafael-bijaksana"
-                  fontSize={["3xl"]}
+                  fontSize={["lg", "xl", "2xl", "3xl"]}
                   verticalAlign={["middle"]}
                 >
                   <ListIcon as={AiFillLinkedin} />
@@ -272,7 +285,7 @@ export default function Home() {
             as="h1"
             color={["brand.50"]}
             fontWeight={["bold"]}
-            fontSize={["5xl"]}
+            fontSize={["2xl", "3xl", "4xl", "5xl"]}
           >
             Riwayat pekerjaan
           </Heading>
@@ -282,7 +295,7 @@ export default function Home() {
             gridTemplateColumns={["repeat(6, 1fr)"]}
             gap={["50px 0"]}
           >
-            <GridItem>
+           {isLg && <GridItem>
               <VStack w={["100%"]} height={["100%"]}>
                 <Box
                   w={["70px"]}
@@ -294,8 +307,8 @@ export default function Home() {
                 />
                 <Box w={["10px"]} h={["100%"]} backgroundColor={["brand.50"]} />
               </VStack>
-            </GridItem>
-            <GridItem colSpan={5}>
+            </GridItem>}
+            <GridItem colSpan={[6, 5]}>
               <VStack
                 w={["100%"]}
                 h={["100%"]}
@@ -303,22 +316,22 @@ export default function Home() {
                 alignItems={["flex-start"]}
               >
                 <VStack w={["100%"]} alignItems={["flex-start"]}>
-                  <Text
-                    fontSize={["3xl"]}
+                <Text
+                    fontSize={["xl", "2xl", "3xl"]}
                     fontWeight={["bold"]}
                     lineHeight={["1.1em"]}
                   >
                     Pt. InArray Indonesia
                   </Text>
-                  <Text fontSize={["2xl"]} lineHeight={["1.1em"]}>
+                  <Text fontSize={["lg", "xl", "2xl"]} lineHeight={["1.1em"]}>
                     Sebagai frontend developer
                   </Text>
-                  <Text fontSize={["xl"]} lineHeight={["1.1em"]}>
+                  <Text fontSize={["lg", "xl", "xl"]} lineHeight={["1.1em"]}>
                     Mar 20, 2020 - Des 04, 2029
                   </Text>
                 </VStack>
                 <VStack w={["100%"]} alignItems={["flex-start"]}>
-                  <Text fontSize={["xl"]} lineHeight={["1.1em"]}>
+                  <Text fontSize={["lg", "xl"]} lineHeight={["1.5em", null, null, null, "1.3em"]}>
                     Hello world Hello world Hello world Hello world Hello world
                     Hello world Hello world Hello world Hello world Hello world
                     Hello world Hello world Hello world Hello world Hello world
@@ -329,8 +342,8 @@ export default function Home() {
                 </VStack>
               </VStack>
             </GridItem>
-            <GridItem>
-              <VStack w={["100%"]} height={["100%"]} position={["relative"]}>
+            {isLg && <GridItem>
+              <VStack w={["100%"]} height={["100%"]}>
                 <Box
                   w={["70px"]}
                   h={["70px"]}
@@ -341,8 +354,8 @@ export default function Home() {
                 />
                 <Box w={["10px"]} h={["100%"]} backgroundColor={["brand.50"]} />
               </VStack>
-            </GridItem>
-            <GridItem colSpan={5}>
+            </GridItem>}
+            <GridItem colSpan={[6, 5]}>
               <VStack
                 w={["100%"]}
                 h={["100%"]}
@@ -351,21 +364,21 @@ export default function Home() {
               >
                 <VStack w={["100%"]} alignItems={["flex-start"]}>
                   <Text
-                    fontSize={["3xl"]}
+                    fontSize={["xl", "2xl", "3xl"]}
                     fontWeight={["bold"]}
                     lineHeight={["1.1em"]}
                   >
                     Pt. InArray Indonesia
                   </Text>
-                  <Text fontSize={["2xl"]} lineHeight={["1.1em"]}>
+                  <Text fontSize={["lg", "xl", "2xl"]} lineHeight={["1.1em"]}>
                     Sebagai frontend developer
                   </Text>
-                  <Text fontSize={["xl"]} lineHeight={["1.1em"]}>
+                  <Text fontSize={["lg", "xl", "xl"]} lineHeight={["1.1em"]}>
                     Mar 20, 2020 - Des 04, 2029
                   </Text>
                 </VStack>
                 <VStack w={["100%"]} alignItems={["flex-start"]}>
-                  <Text fontSize={["xl"]} lineHeight={["1.1em"]}>
+                  <Text fontSize={["lg", "xl"]} lineHeight={["1.5em", null, null, null, "1.3em"]}>
                     Hello world Hello world Hello world Hello world Hello world
                     Hello world Hello world Hello world Hello world Hello world
                     Hello world Hello world Hello world Hello world Hello world
@@ -390,12 +403,12 @@ export default function Home() {
               as="h1"
               color={["brand.50"]}
               fontWeight={["bold"]}
-              fontSize={["5xl"]}
+              fontSize={["2xl", "3xl", "4xl", "5xl"]}
               lineHeight={["1.2em"]}
             >
               Riwayat projects yang pernah saya kerjakan
             </Text>
-            <Text fontSize={["3xl"]}>
+            <Text fontSize={["lg", "xl", "2xl", "3xl"]}>
               Berikut merupakan projek-projek web apps yang{" "}
               <Box as="span" fontWeight={["bold"]} color="brand.50">
                 telah
@@ -426,7 +439,7 @@ export default function Home() {
           <Grid
             w={["100%"]}
             h={["100%"]}
-            templateColumns={["repeat(3, 1fr)"]}
+            templateColumns={["repeat(1, 1fr)", null, "repeat(2, 1fr)", null, "repeat(3, 1fr)"]}
             gap={["60px 30px"]}
           >
             <GridItem>
@@ -486,7 +499,7 @@ export default function Home() {
               <Box w={["100%"]} h={["250px"]} bgColor={["brand.500"]} />
               <VStack w={["100%"]} h={["100%"]} alignItems={["flex-start"]}>
                 <Heading
-                  fontSize={["3xl"]}
+                  fontSize={["lg", "xl", "2xl", "3xl"]}
                   fontWeight={["bold"]}
                   color={["brand.50"]}
                 >

@@ -103,7 +103,14 @@ export default function Navbar() {
                   <MenuButton isActive={isOpen} as={ButtonCustomMenu} />
                   <MenuList>
                     <MenuGroup title="Halaman">
-                      <MenuItem _hover={{
+                      <MenuItem as={NextLink} href="/" _hover={{
+                        backgroundColor: ['brand.100']
+                      }}
+                      _active={{
+                        backgroundColor: ['brand.200']
+                      }}
+                      >Home</MenuItem>
+                      <MenuItem as={NextLink} href="/blogs" _hover={{
                         backgroundColor: ['brand.100']
                       }}
                       _active={{

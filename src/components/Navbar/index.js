@@ -9,10 +9,11 @@ import {
 } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
+import style from "@/src/constants/styles";
 
 export default function Navbar() {
   const router = useRouter();
-  
+
   return (
     <HStack
       w={["100%"]}
@@ -26,9 +27,10 @@ export default function Navbar() {
       backgroundColor={["white"]}
       borderBottomColor={["rgba(0,0,0, 0.2)"]}
       borderBottomWidth={["1px"]}
-      zIndex={["100"]}
+      zIndex={style.navbarZIndex}
+      paddingY={["16px"]}
     >
-      <Container paddingY={["16px"]} maxW="container.xl">
+      <Container maxW={style.maxWidthContent}>
         <Flex justifyContent="space-between" align={["center"]}>
           <Link
             color="brand.50"
@@ -64,7 +66,7 @@ export default function Navbar() {
               spacing={["10px"]}
             >
               <Text>🌞</Text>
-              <Switch colorScheme={'brand'} />
+              <Switch colorScheme={"brand"} />
               <Text>🌙</Text>
             </HStack>
           </Stack>

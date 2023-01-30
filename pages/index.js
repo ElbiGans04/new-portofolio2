@@ -4,7 +4,8 @@ import {
   Button,
   Card,
   CardBody,
-  CardFooter, Grid,
+  CardFooter,
+  Grid,
   GridItem,
   Heading,
   HStack,
@@ -12,8 +13,18 @@ import {
   Link,
   List,
   ListIcon,
-  ListItem, Modal, ModalBody,
-  ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay, Stack, Text, useDisclosure, VStack
+  ListItem,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalFooter,
+  ModalHeader,
+  ModalOverlay,
+  Stack,
+  Text,
+  useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import Image from "next/image";
@@ -29,104 +40,102 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <VStack w={["100%"]} alignItems={["flex-start"]} position={["relative"]}>
-        <VStack
+      <VStack w={["100%"]} height={["100%"]} spacing={["100px"]} paddingX={['48px', null, null, null, null, '0']}>
+        <Grid
           w={["100%"]}
           height={["100%"]}
-          paddingX={["48px"]}
-          spacing={["100px"]}
+          gridTemplateColumns={["repeat(2, 1fr)"]}
+          paddingY={["64px"]}
         >
-          <Grid
-            w={["100%"]}
-            height={["100%"]}
-            gridTemplateColumns={["repeat(2, 1fr)"]}
-            paddingY={["64px"]}
-          >
-            <GridItem>
-              <VStack
-                w={["100%"]}
-                height={["100%"]}
-                alignItems={["flex-start"]}
-                spacing={["10px"]}
-                justifyContent={["center"]}
-              >
-                <Text
-                  fontSize={["9xl"]}
-                  as="h1"
-                  fontWeight={["bold"]}
-                  lineHeight={["1em"]}
-                >
-                  Halo Semua
-                </Text>
-                <Text fontSize={["4xl"]} lineHeight={["1.2em"]}>
-                  Saya <Box as="span">Elbi</Box>
-                  <br />
-                  Saya adalah seorang{" "}
-                  <Box
-                    as="span"
-                    color={["brand.50"]}
-                    fontSize={["5xl"]}
-                    fontWeight={["bold"]}
-                  >
-                    Fullstack developer
-                  </Box>
-                </Text>
-              </VStack>
-            </GridItem>
-
-            <GridItem>
-              <VStack w={["100%"]} height={["100%"]} spacing={["16px"]}>
-                <Box
-                  w={["450px"]}
-                  height={["450px"]}
-                  position={["relative"]}
-                  borderWidth={["15px"]}
-                  borderColor={["brand.50"]}
-                  borderRadius={["50%"]}
-                  overflow={["hidden"]}
-                >
-                  <Image src={ProfileImage} alt="profile-rhafael" placeholder="blur" fill />
-                </Box>
-              </VStack>
-            </GridItem>
-          </Grid>
-
-          <VStack w={["100%"]} height={["100%"]} alignItems={["flex-start"]}>
-            <Heading
-              as="h1"
-              color={["brand.50"]}
-              fontWeight={["bold"]}
-              fontSize={["5xl"]}
+          <GridItem>
+            <VStack
+              w={["100%"]}
+              height={["100%"]}
+              alignItems={["flex-start"]}
+              spacing={["10px"]}
+              justifyContent={["center"]}
             >
-              Tentang
-            </Heading>
-            <Text fontSize={["3xl"]}>
-              Halo Semua, perkenalkan saya adalah seorang 
-              {" "}
-              <Box as="span" fontWeight={["bold"]} color="brand.50">
-                Fullstack web developer
+              <Text
+                fontSize={["9xl"]}
+                as="h1"
+                fontWeight={["bold"]}
+                lineHeight={["1em"]}
+              >
+                Halo Semua
+              </Text>
+              <Text fontSize={["4xl"]} lineHeight={["1.2em"]}>
+                Saya <Box as="span">Elbi</Box>
+                <br />
+                Saya adalah seorang{" "}
+                <Box
+                  as="span"
+                  color={["brand.50"]}
+                  fontSize={["5xl"]}
+                  fontWeight={["bold"]}
+                >
+                  Fullstack developer
+                </Box>
+              </Text>
+            </VStack>
+          </GridItem>
+
+          <GridItem>
+            <VStack w={["100%"]} height={["100%"]} spacing={["16px"]}>
+              <Box
+                w={["450px"]}
+                height={["450px"]}
+                position={["relative"]}
+                borderWidth={["15px"]}
+                borderColor={["brand.50"]}
+                borderRadius={["50%"]}
+                overflow={["hidden"]}
+              >
+                <Image
+                  src={ProfileImage}
+                  alt="profile-rhafael"
+                  placeholder="blur"
+                  fill
+                />
               </Box>
-              {" "}
-              dan saya adalah seseorang yang menyukai tantangan dan segala hal tentang teknologi
-              <br></br>
-              <br></br>
-              Dan saat ini{" "}
-              <Box as="span" fontWeight={["bold"]} color="brand.50">
-                Javascript dan Typescript
-              </Box>{" "}
-              adalah bahasa pemrograman yang sering saya pakai, dan framework
-              frontend seperti{" "}
-              <Box as="span" fontWeight={["bold"]} color="brand.50">
-                React dan Vue js
-              </Box>{" "}
-              sering saya gunakan dalam mengembangkan{" "}
-              <Box as="span" fontWeight={["bold"]} color="brand.50">
-                Web Aplikasi
-              </Box>
-              {"."}
-            </Text>
-            {/* Alasan komentar, karena itu merupakan hal yang bersifat pribadi, dan mungkin tidak perlu juga */}
-            {/* <Text fontSize={["3xl"]}>
+            </VStack>
+          </GridItem>
+        </Grid>
+
+        <VStack w={["100%"]} height={["100%"]} alignItems={["flex-start"]}>
+          <Heading
+            as="h1"
+            color={["brand.50"]}
+            fontWeight={["bold"]}
+            fontSize={["5xl"]}
+          >
+            Tentang
+          </Heading>
+          <Text fontSize={["3xl"]}>
+            Halo Semua, perkenalkan saya adalah seorang{" "}
+            <Box as="span" fontWeight={["bold"]} color="brand.50">
+              Fullstack web developer
+            </Box>{" "}
+            dan saya adalah seseorang yang menyukai tantangan dan segala hal
+            tentang teknologi
+            <br></br>
+            <br></br>
+            Dan saat ini{" "}
+            <Box as="span" fontWeight={["bold"]} color="brand.50">
+              Javascript dan Typescript
+            </Box>{" "}
+            adalah bahasa pemrograman yang sering saya pakai, dan framework
+            frontend seperti{" "}
+            <Box as="span" fontWeight={["bold"]} color="brand.50">
+              React dan Vue js
+            </Box>{" "}
+            sering saya gunakan dalam mengembangkan{" "}
+            <Box as="span" fontWeight={["bold"]} color="brand.50">
+              Web Aplikasi
+            </Box>
+            {"."}
+          </Text>
+          {/* Alasan komentar, karena itu merupakan hal yang bersifat pribadi, dan mungkin tidak perlu juga */}
+          {/* <Text fontSize={["3xl"]}>
               Halo Semua, perkenalkan nama saya adalah{" "}
               <Box as="span" fontWeight={["bold"]} color="brand.50">
                 Elbi
@@ -186,298 +195,279 @@ export default function Home() {
               </Box>
               {"."}
             </Text> */}
-          </VStack>
+        </VStack>
 
-          <VStack w={["100%"]} height={["100%"]} alignItems={["flex-start"]}>
-            <Heading
-              as="h1"
-              color={["brand.50"]}
-              fontWeight={["bold"]}
-              fontSize={["5xl"]}
-            >
-              Kontak
-            </Heading>
-            <VStack
-              w={["100%"]}
-              height={["100%"]}
-              alignItems={["flex-start"]}
-              spacing={["20px"]}
-            >
-              <Text fontSize={["3xl"]}>
-                Tertarik untuk{" "}
-                <Box as="span" fontWeight={["bold"]} color="brand.50">
-                  merekrut saya
-                </Box>{" "}
-                atau{" "}
-                <Box as="span" fontWeight={["bold"]} color="brand.50">
-                  ingin membuat website
-                </Box>{" "}
-                sesuai{" "}
-                <Box as="span" fontWeight={["bold"]} color="brand.50">
-                  kebutuhan ? segera kirim saya pesan / email lewat beberapa
-                  cara dibawah ini{" : "}
-                </Box>{" "}
-              </Text>
-              <List spacing={3}>
-                <ListItem>
-                  <Link
-                    href="https://github.com/ElbiGans04"
-                    fontSize={["3xl"]}
-                    verticalAlign={["middle"]}
-                  >
-                    <ListIcon as={AiFillGithub} />
-                    ElbiGans04
-                  </Link>
-                </ListItem>
-                <ListItem>
-                  <Link
-                    href="mailto:rhafaelbijaksana04@gmail.com"
-                    fontSize={["3xl"]}
-                    verticalAlign={["middle"]}
-                  >
-                    <ListIcon as={AiFillMail} />
-                    rhafaelbijaksana04@gmail.com
-                  </Link>
-                </ListItem>
-                <ListItem>
-                  <Link
-                    href="www.linkedin.com/in/rhafael-bijaksana"
-                    fontSize={["3xl"]}
-                    verticalAlign={["middle"]}
-                  >
-                    <ListIcon as={AiFillLinkedin} />
-                    rhafael-bijaksana
-                  </Link>
-                </ListItem>
-              </List>
-            </VStack>
-          </VStack>
-
+        <VStack w={["100%"]} height={["100%"]} alignItems={["flex-start"]}>
+          <Heading
+            as="h1"
+            color={["brand.50"]}
+            fontWeight={["bold"]}
+            fontSize={["5xl"]}
+          >
+            Kontak
+          </Heading>
           <VStack
             w={["100%"]}
             height={["100%"]}
             alignItems={["flex-start"]}
-            spacing={["32px"]}
+            spacing={["20px"]}
           >
-            <Heading
-              as="h1"
-              color={["brand.50"]}
-              fontWeight={["bold"]}
-              fontSize={["5xl"]}
-            >
-              Riwayat pekerjaan
-            </Heading>
-            <Grid
-              w={["100%"]}
-              height={["100%"]}
-              gridTemplateColumns={["repeat(6, 1fr)"]}
-              gap={["50px 0"]}
-            >
-              <GridItem>
-                <VStack w={["100%"]} height={["100%"]}>
-                  <Box
-                    w={["70px"]}
-                    h={["70px"]}
-                    backgroundColor={["brand.50"]}
-                    borderRadius={["50%"]}
-                    borderWidth={["7px"]}
-                    flexShrink={[0]}
-                  />
-                  <Box
-                    w={["10px"]}
-                    h={["100%"]}
-                    backgroundColor={["brand.50"]}
-                  />
-                </VStack>
-              </GridItem>
-              <GridItem colSpan={5}>
-                <VStack
-                  w={["100%"]}
-                  h={["100%"]}
-                  spacing={["32px"]}
-                  alignItems={["flex-start"]}
+            <Text fontSize={["3xl"]}>
+              Tertarik untuk{" "}
+              <Box as="span" fontWeight={["bold"]} color="brand.50">
+                merekrut saya
+              </Box>{" "}
+              atau{" "}
+              <Box as="span" fontWeight={["bold"]} color="brand.50">
+                ingin membuat website
+              </Box>{" "}
+              sesuai{" "}
+              <Box as="span" fontWeight={["bold"]} color="brand.50">
+                kebutuhan ? segera kirim saya pesan / email lewat beberapa cara
+                dibawah ini{" : "}
+              </Box>{" "}
+            </Text>
+            <List spacing={3}>
+              <ListItem>
+                <Link
+                  href="https://github.com/ElbiGans04"
+                  fontSize={["3xl"]}
+                  verticalAlign={["middle"]}
                 >
-                  <VStack w={["100%"]} alignItems={["flex-start"]}>
-                    <Text
-                      fontSize={["3xl"]}
-                      fontWeight={["bold"]}
-                      lineHeight={["1.1em"]}
-                    >
-                      Pt. InArray Indonesia
-                    </Text>
-                    <Text fontSize={["2xl"]} lineHeight={["1.1em"]}>
-                      Sebagai frontend developer
-                    </Text>
-                    <Text fontSize={["xl"]} lineHeight={["1.1em"]}>
-                      Mar 20, 2020 - Des 04, 2029
-                    </Text>
-                  </VStack>
-                  <VStack w={["100%"]} alignItems={["flex-start"]}>
-                    <Text fontSize={["xl"]} lineHeight={["1.1em"]}>
-                      Hello world Hello world Hello world Hello world Hello
-                      world Hello world Hello world Hello world Hello world
-                      Hello world Hello world Hello world Hello world Hello
-                      world Hello world Hello world Hello world Hello world
-                      Hello world Hello world Hello world Hello world Hello
-                      world Hello world Hello world Hello world Hello world
-                      Hello world Hello world Hello world
-                    </Text>
-                  </VStack>
-                </VStack>
-              </GridItem>
-              <GridItem>
-                <VStack w={["100%"]} height={["100%"]} position={["relative"]}>
-                  <Box
-                    w={["70px"]}
-                    h={["70px"]}
-                    backgroundColor={["brand.50"]}
-                    borderRadius={["50%"]}
-                    borderWidth={["7px"]}
-                    flexShrink={[0]}
-                  />
-                  <Box
-                    w={["10px"]}
-                    h={["100%"]}
-                    backgroundColor={["brand.50"]}
-                  />
-                </VStack>
-              </GridItem>
-              <GridItem colSpan={5}>
-                <VStack
-                  w={["100%"]}
-                  h={["100%"]}
-                  spacing={["32px"]}
-                  alignItems={["flex-start"]}
+                  <ListIcon as={AiFillGithub} />
+                  ElbiGans04
+                </Link>
+              </ListItem>
+              <ListItem>
+                <Link
+                  href="mailto:rhafaelbijaksana04@gmail.com"
+                  fontSize={["3xl"]}
+                  verticalAlign={["middle"]}
                 >
-                  <VStack w={["100%"]} alignItems={["flex-start"]}>
-                    <Text
-                      fontSize={["3xl"]}
-                      fontWeight={["bold"]}
-                      lineHeight={["1.1em"]}
-                    >
-                      Pt. InArray Indonesia
-                    </Text>
-                    <Text fontSize={["2xl"]} lineHeight={["1.1em"]}>
-                      Sebagai frontend developer
-                    </Text>
-                    <Text fontSize={["xl"]} lineHeight={["1.1em"]}>
-                      Mar 20, 2020 - Des 04, 2029
-                    </Text>
-                  </VStack>
-                  <VStack w={["100%"]} alignItems={["flex-start"]}>
-                    <Text fontSize={["xl"]} lineHeight={["1.1em"]}>
-                      Hello world Hello world Hello world Hello world Hello
-                      world Hello world Hello world Hello world Hello world
-                      Hello world Hello world Hello world Hello world Hello
-                      world Hello world Hello world Hello world Hello world
-                      Hello world Hello world Hello world Hello world Hello
-                      world Hello world Hello world Hello world Hello world
-                      Hello world Hello world Hello world
-                    </Text>
-                  </VStack>
-                </VStack>
-              </GridItem>
-            </Grid>
+                  <ListIcon as={AiFillMail} />
+                  rhafaelbijaksana04@gmail.com
+                </Link>
+              </ListItem>
+              <ListItem>
+                <Link
+                  href="www.linkedin.com/in/rhafael-bijaksana"
+                  fontSize={["3xl"]}
+                  verticalAlign={["middle"]}
+                >
+                  <ListIcon as={AiFillLinkedin} />
+                  rhafael-bijaksana
+                </Link>
+              </ListItem>
+            </List>
           </VStack>
+        </VStack>
 
-          <VStack
+        <VStack
+          w={["100%"]}
+          height={["100%"]}
+          alignItems={["flex-start"]}
+          spacing={["32px"]}
+        >
+          <Heading
+            as="h1"
+            color={["brand.50"]}
+            fontWeight={["bold"]}
+            fontSize={["5xl"]}
+          >
+            Riwayat pekerjaan
+          </Heading>
+          <Grid
             w={["100%"]}
             height={["100%"]}
-            alignItems={["flex-start"]}
-            spacing={["50px"]}
+            gridTemplateColumns={["repeat(6, 1fr)"]}
+            gap={["50px 0"]}
           >
-            <VStack w={["100%"]} height={["100%"]} alignItems={["flex-start"]}>
-              <Text
-                as="h1"
-                color={["brand.50"]}
-                fontWeight={["bold"]}
-                fontSize={["5xl"]}
-                lineHeight={["1.2em"]}
-              >
-                Riwayat projects yang pernah saya kerjakan
-              </Text>
-              <Text fontSize={["3xl"]}>
-                Berikut merupakan projek-projek web apps yang{" "}
-                <Box as="span" fontWeight={["bold"]} color="brand.50">
-                  telah
-                </Box>{" "}
-                saya{" "}
-                <Box as="span" fontWeight={["bold"]} color="brand.50">
-                  kerjakan
-                </Box>{" "}
-                baik projek web individu{" "}
-                <Box as="span" fontWeight={["bold"]} color="brand.50">
-                  maupun
-                </Box>{" "}
-                projek pekerjaan saya
-              </Text>
-
-              {/* Action */}
-              <HStack
-                marginTop={["20px!important"]}
+            <GridItem>
+              <VStack w={["100%"]} height={["100%"]}>
+                <Box
+                  w={["70px"]}
+                  h={["70px"]}
+                  backgroundColor={["brand.50"]}
+                  borderRadius={["50%"]}
+                  borderWidth={["7px"]}
+                  flexShrink={[0]}
+                />
+                <Box w={["10px"]} h={["100%"]} backgroundColor={["brand.50"]} />
+              </VStack>
+            </GridItem>
+            <GridItem colSpan={5}>
+              <VStack
                 w={["100%"]}
                 h={["100%"]}
+                spacing={["32px"]}
                 alignItems={["flex-start"]}
               >
-                <Button
-                  variant={'brand'}
-                >
-                  Pribadi
-                </Button>
-                <Button
-                  variant={'brandOutline'}
-                >
-                  Pekerjaan
-                </Button>
-              </HStack>
-            </VStack>
+                <VStack w={["100%"]} alignItems={["flex-start"]}>
+                  <Text
+                    fontSize={["3xl"]}
+                    fontWeight={["bold"]}
+                    lineHeight={["1.1em"]}
+                  >
+                    Pt. InArray Indonesia
+                  </Text>
+                  <Text fontSize={["2xl"]} lineHeight={["1.1em"]}>
+                    Sebagai frontend developer
+                  </Text>
+                  <Text fontSize={["xl"]} lineHeight={["1.1em"]}>
+                    Mar 20, 2020 - Des 04, 2029
+                  </Text>
+                </VStack>
+                <VStack w={["100%"]} alignItems={["flex-start"]}>
+                  <Text fontSize={["xl"]} lineHeight={["1.1em"]}>
+                    Hello world Hello world Hello world Hello world Hello world
+                    Hello world Hello world Hello world Hello world Hello world
+                    Hello world Hello world Hello world Hello world Hello world
+                    Hello world Hello world Hello world Hello world Hello world
+                    Hello world Hello world Hello world Hello world Hello world
+                    Hello world Hello world Hello world Hello world Hello world
+                  </Text>
+                </VStack>
+              </VStack>
+            </GridItem>
+            <GridItem>
+              <VStack w={["100%"]} height={["100%"]} position={["relative"]}>
+                <Box
+                  w={["70px"]}
+                  h={["70px"]}
+                  backgroundColor={["brand.50"]}
+                  borderRadius={["50%"]}
+                  borderWidth={["7px"]}
+                  flexShrink={[0]}
+                />
+                <Box w={["10px"]} h={["100%"]} backgroundColor={["brand.50"]} />
+              </VStack>
+            </GridItem>
+            <GridItem colSpan={5}>
+              <VStack
+                w={["100%"]}
+                h={["100%"]}
+                spacing={["32px"]}
+                alignItems={["flex-start"]}
+              >
+                <VStack w={["100%"]} alignItems={["flex-start"]}>
+                  <Text
+                    fontSize={["3xl"]}
+                    fontWeight={["bold"]}
+                    lineHeight={["1.1em"]}
+                  >
+                    Pt. InArray Indonesia
+                  </Text>
+                  <Text fontSize={["2xl"]} lineHeight={["1.1em"]}>
+                    Sebagai frontend developer
+                  </Text>
+                  <Text fontSize={["xl"]} lineHeight={["1.1em"]}>
+                    Mar 20, 2020 - Des 04, 2029
+                  </Text>
+                </VStack>
+                <VStack w={["100%"]} alignItems={["flex-start"]}>
+                  <Text fontSize={["xl"]} lineHeight={["1.1em"]}>
+                    Hello world Hello world Hello world Hello world Hello world
+                    Hello world Hello world Hello world Hello world Hello world
+                    Hello world Hello world Hello world Hello world Hello world
+                    Hello world Hello world Hello world Hello world Hello world
+                    Hello world Hello world Hello world Hello world Hello world
+                    Hello world Hello world Hello world Hello world Hello world
+                  </Text>
+                </VStack>
+              </VStack>
+            </GridItem>
+          </Grid>
+        </VStack>
 
-            <Grid
+        <VStack
+          w={["100%"]}
+          height={["100%"]}
+          alignItems={["flex-start"]}
+          spacing={["50px"]}
+        >
+          <VStack w={["100%"]} height={["100%"]} alignItems={["flex-start"]}>
+            <Text
+              as="h1"
+              color={["brand.50"]}
+              fontWeight={["bold"]}
+              fontSize={["5xl"]}
+              lineHeight={["1.2em"]}
+            >
+              Riwayat projects yang pernah saya kerjakan
+            </Text>
+            <Text fontSize={["3xl"]}>
+              Berikut merupakan projek-projek web apps yang{" "}
+              <Box as="span" fontWeight={["bold"]} color="brand.50">
+                telah
+              </Box>{" "}
+              saya{" "}
+              <Box as="span" fontWeight={["bold"]} color="brand.50">
+                kerjakan
+              </Box>{" "}
+              baik projek web individu{" "}
+              <Box as="span" fontWeight={["bold"]} color="brand.50">
+                maupun
+              </Box>{" "}
+              projek pekerjaan saya
+            </Text>
+
+            {/* Action */}
+            <HStack
+              marginTop={["20px!important"]}
               w={["100%"]}
               h={["100%"]}
-              templateColumns={["repeat(3, 1fr)"]}
-              gap={["60px 30px"]}
+              alignItems={["flex-start"]}
             >
-              <GridItem>
-                <Card w={["100%"]} cursor="pointer" onClick={onOpen}>
-                  <CardBody>
-                    <ChakraImage
-                      src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-                      alt="Green double couch with wooden legs"
-                      borderRadius="lg"
-                    />
-                    <Stack mt="6" spacing="3">
-                      <Heading size={["xl"]} color={["brand.50"]}>
-                        Living room Sofa
-                      </Heading>
-                      <Text fontSize={["lg"]}>
-                        This sofa is perfect for modern tropical spaces, baroque
-                        inspired spaces, earthy toned spaces and for people who
-                        love a chic design with a sprinkle of vintage design.
-                      </Text>
-                    </Stack>
-                  </CardBody>
-                  <CardFooter>
-                    <HStack
-                      w={["100%"]}
-                      height={["100%"]}
-                      justifyContent={["flex-start"]}
-                      flexWrap={["wrap"]}
-                      spacing={[0]}
-                    >
-                      <Text
-                        fontWeight={["bold"]}
-                        color="brand.50"
-                        fontSize={["md"]}
-                      >
-                        #SELF IMPROVEMENT #BISNIS #SELF IMPROVEMENT #BISNIS
-                      </Text>
-                    </HStack>
-                  </CardFooter>
-                </Card>
-              </GridItem>
-            </Grid>
+              <Button variant={"brand"}>Pribadi</Button>
+              <Button variant={"brandOutline"}>Pekerjaan</Button>
+            </HStack>
           </VStack>
+
+          <Grid
+            w={["100%"]}
+            h={["100%"]}
+            templateColumns={["repeat(3, 1fr)"]}
+            gap={["60px 30px"]}
+          >
+            <GridItem>
+              <Card w={["100%"]} cursor="pointer" onClick={onOpen}>
+                <CardBody>
+                  <ChakraImage
+                    src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
+                    alt="Green double couch with wooden legs"
+                    borderRadius="lg"
+                  />
+                  <Stack mt="6" spacing="3">
+                    <Heading size={["xl"]} color={["brand.50"]}>
+                      Living room Sofa
+                    </Heading>
+                    <Text fontSize={["lg"]}>
+                      This sofa is perfect for modern tropical spaces, baroque
+                      inspired spaces, earthy toned spaces and for people who
+                      love a chic design with a sprinkle of vintage design.
+                    </Text>
+                  </Stack>
+                </CardBody>
+                <CardFooter>
+                  <HStack
+                    w={["100%"]}
+                    height={["100%"]}
+                    justifyContent={["flex-start"]}
+                    flexWrap={["wrap"]}
+                    spacing={[0]}
+                  >
+                    <Text
+                      fontWeight={["bold"]}
+                      color="brand.50"
+                      fontSize={["md"]}
+                    >
+                      #SELF IMPROVEMENT #BISNIS #SELF IMPROVEMENT #BISNIS
+                    </Text>
+                  </HStack>
+                </CardFooter>
+              </Card>
+            </GridItem>
+          </Grid>
         </VStack>
       </VStack>
 
@@ -525,10 +515,7 @@ export default function Home() {
           </ModalBody>
 
           <ModalFooter>
-            <Button
-              variant="brand"
-              onClick={onClose}
-            >
+            <Button variant="brand" onClick={onClose}>
               Tutup
             </Button>
           </ModalFooter>

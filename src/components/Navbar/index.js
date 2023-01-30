@@ -10,7 +10,7 @@ import {
 import NextLink from "next/link";
 import { useRouter } from "next/router";
 import style from "@/src/constants/styles";
-
+import {BsFillMoonFill, BsSunFill} from 'react-icons/bs'
 export default function Navbar() {
   const router = useRouter();
 
@@ -65,9 +65,9 @@ export default function Navbar() {
               justifyContent={["space-between"]}
               spacing={["10px"]}
             >
-              <Text>🌞</Text>
+              <BsSunFill />
               <Switch colorScheme={"brand"} />
-              <Text>🌙</Text>
+              <BsFillMoonFill />
             </HStack>
           </Stack>
         </Flex>

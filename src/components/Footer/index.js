@@ -1,6 +1,6 @@
 import { Container, Flex, HStack, Text, Box } from "@chakra-ui/react";
 import style from "@/src/constants/styles";
-
+import { BsSuitHeartFill } from "react-icons/bs";
 export default function Footer() {
   return (
     <HStack
@@ -16,7 +16,7 @@ export default function Footer() {
       <Container maxW={style.maxWidthContent}>
         <Flex justifyContent="center" align={["center"]}>
           <Text fontSize={["xl"]}>
-            Build with ❤{" "} By{" "} 
+            Build By{" "}
             <Box as="span" fontWeight={["bold"]} color={["brand.50"]}>
               Elbi
             </Box>

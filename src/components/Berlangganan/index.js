@@ -15,13 +15,13 @@ import {
 } from "@chakra-ui/react";
 import InputWithButton from "@/src/components/Input/withButton";
 
-export default function Berlangganan() {
+export default function Berlangganan({maxContent = false}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
       <VStack
         w={["100%"]}
-        height={["100%"]}
+        height={[maxContent ? "max-content" : "100%"]}
         spacing={["10px"]}
         alignItems={["flex-start"]}
       >

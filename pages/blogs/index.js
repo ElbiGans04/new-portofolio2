@@ -44,7 +44,7 @@ export default function Blogs() {
           w={["100%"]}
           height={["100%"]}
           templateColumns={["repeat(1, 1fr)", null, null, "repeat(3, 1fr)"]}
-          templateRows={["repeat(1, 1fr)", null, null, "repeat(1, 1fr)"]}
+          templateRows={["repeat(1, 1fr)", null, null, "repeat(2, 1fr)"]}
           paddingY={["20px"]}
         >
           {/* Left */}
@@ -56,7 +56,7 @@ export default function Blogs() {
               height={["100%"]}
               paddingTop={["20px"]}
               paddingBottom={["100px"]}
-              position={["static", null, null, null, "sticky"]}
+              position={["static", null, null, "sticky"]}
               top={["105px"]}
               left={["0"]}
             >
@@ -65,7 +65,7 @@ export default function Blogs() {
           )}
 
           {/* Right */}
-          <GridItem colSpan={[1, null, null, 2]} rowSpan={[1, null, null, 1]}>
+          <GridItem colSpan={[1, null, null, 2]} rowSpan={[1, null, null, 2]}>
             {!isLg && (
               <Button onClick={onOpen} variant="brandOutline">
                 Filter
@@ -181,6 +181,102 @@ export default function Blogs() {
                 height={["1px"]}
                 bgColor={["rgba(0,0,0, 0.2)"]}
               ></Box>
+
+                 {/* Card */}
+                 <VStack
+                w={["100%"]}
+                h={["max-content"]}
+                alignItems={["flex-start"]}
+                spacing={["30px"]}
+              >
+                {/* Header */}
+                <Link as={NextLink} href="/blogs/1" width={["100%"]}>
+                  <Box
+                    w={["100%", "90%"]}
+                    height={["200px", "250px", "350px"]}
+                    backgroundColor={["#D9D9D9"]}
+                    flexShrink={[0]}
+                  />
+                </Link>
+
+                {/* Body */}
+
+                <VStack
+                  w={["100%"]}
+                  height={["100%"]}
+                  alignItems={["flex-start"]}
+                  spacing={["40px"]}
+                >
+                  <VStack
+                    w={["100%"]}
+                    height={["100%"]}
+                    alignItems={["flex-start"]}
+                  >
+                    <Link
+                      fontSize={["2xl", "3xl", "4xl"]}
+                      fontWeight={["bold"]}
+                      _hover={{
+                        textDecoration: "underline",
+                      }}
+                      as={NextLink}
+                      href="/blogs/1"
+                    >
+                      Membuat sesuatu yang bermanfaat
+                    </Link>
+
+                    <Text fontSize={["md", "lg", "xl"]}>
+                      Desember 04, 2022 - 3 Minutes Reading
+                    </Text>
+                  </VStack>
+                  <VStack w={["100%"]} alignItems={["flex-start"]}>
+                    <Text fontSize={["lg", "xl", "2xl"]}>
+                      Membuat sesuatu yang bermanfaat bertujuan agar kita dapat
+                      memanfaatkan sesuatu yang mungkin akan kita butuhkan
+                      dimasa depan. Sesuatu yang bermanfaat bagi diri kita
+                      sendiri benarkan ?
+                    </Text>
+                    <Link
+                      fontSize={["lg", "xl", "2xl"]}
+                      fontWeight={["bold"]}
+                      color={["brand.50"]}
+                      _hover={{
+                        textDecoration: "underline",
+                      }}
+                      as={NextLink}
+                      href="/blogs/1"
+                    >
+                      Klik disini untuk membaca selengkapnya.
+                    </Link>
+                  </VStack>
+                </VStack>
+
+                {/* Footer */}
+                <HStack
+                  w={["100%"]}
+                  height={["100%"]}
+                  alignItems={["flex-start"]}
+                >
+                  <Link
+                    as={NextLink}
+                    href="/"
+                    fontWeight={["bold"]}
+                    color="brand.50"
+                    fontSize={["md", "lg", "xl"]}
+                  >
+                    #SELF IMPROVEMENT
+                  </Link>
+                  <Link
+                    as={NextLink}
+                    href="/"
+                    fontWeight={["bold"]}
+                    color="brand.50"
+                    fontSize={["md", "lg", "xl"]}
+                  >
+                    #BISNIS
+                  </Link>
+                </HStack>
+              </VStack>
+              {/* End Of Card */}
             </VStack>
           </GridItem>
 
@@ -333,7 +429,7 @@ function FilterComponent({ langgananTampil, forModal }) {
       {langgananTampil && (
         <>
           <Box w={["90%"]} height={["1px"]} bgColor={["rgba(0,0,0, 0.2)"]} />
-          <Berlangganan />
+          <Berlangganan maxContent />
         </>
       )}
     </VStack>

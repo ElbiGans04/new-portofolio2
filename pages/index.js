@@ -24,7 +24,9 @@ import {
   Stack,
   Text,
   useDisclosure,
-  VStack,  useMediaQuery,
+  VStack,
+  useMediaQuery,
+  Highlight,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import Image from "next/image";
@@ -46,14 +48,19 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <VStack w={["100%"]} height={["100%"]} spacing={["50px", "100px"]} paddingX={[0, null, null, null, '48px', '0']}>
+      <VStack
+        w={["100%"]}
+        height={["100%"]}
+        spacing={["50px", "100px"]}
+        paddingX={[0, null, null, null, "48px", "0"]}
+      >
         <Grid
           w={["100%"]}
           height={["100%"]}
           gridTemplateColumns={["1fr", "repeat(2, 1fr)"]}
           paddingY={["64px"]}
-          gap={['30px']}
-          alignItems={['center']}
+          gap={["30px"]}
+          alignItems={["center"]}
         >
           <GridItem>
             <VStack
@@ -80,7 +87,7 @@ export default function Home() {
                   color={["brand.50"]}
                   fontSize={["2xl", "4xl", "5xl"]}
                   fontWeight={["bold"]}
-                  whiteSpace={['nowrap']}
+                  whiteSpace={["nowrap"]}
                 >
                   Fullstack developer
                 </Box>
@@ -88,30 +95,28 @@ export default function Home() {
             </VStack>
           </GridItem>
 
-          {
-            isLg && (
-              <GridItem>
-                <VStack w={["100%"]} height={["100%"]} spacing={["16px"]}>
-                  <Box
-                    w={["150px", null, null, "400px", "450px"]}
-                    height={["150px", null, null, "400px", "450px"]}
-                    position={["relative"]}
-                    borderWidth={["5px", "15px"]}
-                    borderColor={["brand.50"]}
-                    borderRadius={["50%"]}
-                    overflow={["hidden"]}
-                  >
-                    <Image
-                      src={ProfileImage}
-                      alt="profile-rhafael"
-                      placeholder="blur"
-                      fill
-                    />
-                  </Box>
-                </VStack>
-              </GridItem>
-            )
-          }
+          {isLg && (
+            <GridItem>
+              <VStack w={["100%"]} height={["100%"]} spacing={["16px"]}>
+                <Box
+                  w={["150px", null, null, "400px", "450px"]}
+                  height={["150px", null, null, "400px", "450px"]}
+                  position={["relative"]}
+                  borderWidth={["5px", "15px"]}
+                  borderColor={["brand.50"]}
+                  borderRadius={["50%"]}
+                  overflow={["hidden"]}
+                >
+                  <Image
+                    src={ProfileImage}
+                    alt="profile-rhafael"
+                    placeholder="blur"
+                    fill
+                  />
+                </Box>
+              </VStack>
+            </GridItem>
+          )}
         </Grid>
 
         <VStack w={["100%"]} height={["100%"]} alignItems={["flex-start"]}>
@@ -124,28 +129,35 @@ export default function Home() {
             Tentang
           </Heading>
           <Text fontSize={["lg", "xl", "2xl", "3xl"]}>
-            Halo Semua, perkenalkan saya adalah seorang{" "}
-            <Box as="span" fontWeight={["bold"]} color="brand.50">
-              Fullstack web developer
-            </Box>{" "}
-            dan saya adalah seseorang yang menyukai tantangan dan segala hal
-            tentang teknologi
-            <br></br>
-            <br></br>
-            Dan saat ini{" "}
-            <Box as="span" fontWeight={["bold"]} color="brand.50">
-              Javascript dan Typescript
-            </Box>{" "}
-            adalah bahasa pemrograman yang sering saya pakai, dan framework
-            frontend seperti{" "}
-            <Box as="span" fontWeight={["bold"]} color="brand.50">
-              React dan Vue js
-            </Box>{" "}
-            sering saya gunakan dalam mengembangkan{" "}
-            <Box as="span" fontWeight={["bold"]} color="brand.50">
-              Web Aplikasi
-            </Box>
-            {"."}
+            <Highlight
+              styles={{
+                fontWeight: "bold",
+                color: "brand.50",
+              }}
+              query={["Fullstack web developer"]}
+            >
+              Halo Semua, perkenalkan saya adalah seorang Fullstack web
+              developer dan saya adalah seseorang yang menyukai tantangan dan
+              segala hal tentang teknologi
+            </Highlight>
+          </Text>
+          <br></br>
+          <Text fontSize={["lg", "xl", "2xl", "3xl"]}>
+            <Highlight
+              styles={{
+                fontWeight: "bold",
+                color: "brand.50",
+              }}
+              query={[
+                "Javascript dan Typescript",
+                "React dan Vue js",
+                "Web Aplikasi",
+              ]}
+            >
+              Dan saat ini Javascript dan Typescript adalah bahasa pemrograman
+              yang sering saya pakai, dan framework frontend seperti React dan
+              Vue js sering saya gunakan dalam mengembangkan Web Aplikasi.
+            </Highlight>
           </Text>
           {/* Alasan komentar, karena itu merupakan hal yang bersifat pribadi, dan mungkin tidak perlu juga */}
           {/* <Text fontSize={["lg", "xl", "2xl", "3xl"]}>
@@ -226,19 +238,24 @@ export default function Home() {
             spacing={["20px"]}
           >
             <Text fontSize={["lg", "xl", "2xl", "3xl"]}>
-              Tertarik untuk{" "}
-              <Box as="span" fontWeight={["bold"]} color="brand.50">
-                merekrut saya
-              </Box>{" "}
-              atau{" "}
-              <Box as="span" fontWeight={["bold"]} color="brand.50">
-                ingin membuat website
-              </Box>{" "}
-              sesuai{" "}
-              <Box as="span" fontWeight={["bold"]} color="brand.50">
-                kebutuhan ? segera kirim saya pesan / email lewat beberapa cara
-                dibawah ini{" : "}
-              </Box>{" "}
+              <Highlight
+                query={[
+                  "merekrut saya",
+                  "ingin membuat website",
+                  "sesuai kebutuhan",
+                  "segera kirim",
+                  "pesan / email",
+                  "dibawah ini",
+                ]}
+                styles={{
+                  fontWeight: "bold",
+                  color: "brand.50",
+                }}
+              >
+                Tertarik untuk merekrut saya atau atau ingin membuat website
+                sesuai kebutuhan ? segera kirim saya pesan / email lewat
+                beberapa cara dibawah ini :
+              </Highlight>
             </Text>
             <List spacing={3}>
               <ListItem>
@@ -295,66 +312,25 @@ export default function Home() {
             gridTemplateColumns={["repeat(6, 1fr)"]}
             gap={["50px 0"]}
           >
-           {isLg && <GridItem>
-              <VStack w={["100%"]} height={["100%"]}>
-                <Box
-                  w={["70px"]}
-                  h={["70px"]}
-                  backgroundColor={["brand.50"]}
-                  borderRadius={["50%"]}
-                  borderWidth={["7px"]}
-                  flexShrink={[0]}
-                />
-                <Box w={["10px"]} h={["100%"]} backgroundColor={["brand.50"]} />
-              </VStack>
-            </GridItem>}
-            <GridItem colSpan={[6, 5]}>
-              <VStack
-                w={["100%"]}
-                h={["100%"]}
-                spacing={["32px"]}
-                alignItems={["flex-start"]}
-              >
-                <VStack w={["100%"]} alignItems={["flex-start"]}>
-                <Text
-                    fontSize={["xl", "2xl", "3xl"]}
-                    fontWeight={["bold"]}
-                    lineHeight={["1.1em"]}
-                  >
-                    Pt. InArray Indonesia
-                  </Text>
-                  <Text fontSize={["lg", "xl", "2xl"]} lineHeight={["1.1em"]}>
-                    Sebagai frontend developer
-                  </Text>
-                  <Text fontSize={["lg", "xl", "xl"]} lineHeight={["1.1em"]}>
-                    Mar 20, 2020 - Des 04, 2029
-                  </Text>
+            {isLg && (
+              <GridItem>
+                <VStack w={["100%"]} height={["100%"]}>
+                  <Box
+                    w={["70px"]}
+                    h={["70px"]}
+                    backgroundColor={["brand.50"]}
+                    borderRadius={["50%"]}
+                    borderWidth={["7px"]}
+                    flexShrink={[0]}
+                  />
+                  <Box
+                    w={["10px"]}
+                    h={["100%"]}
+                    backgroundColor={["brand.50"]}
+                  />
                 </VStack>
-                <VStack w={["100%"]} alignItems={["flex-start"]}>
-                  <Text fontSize={["lg", "xl"]} lineHeight={["1.5em", null, null, null, "1.3em"]}>
-                    Hello world Hello world Hello world Hello world Hello world
-                    Hello world Hello world Hello world Hello world Hello world
-                    Hello world Hello world Hello world Hello world Hello world
-                    Hello world Hello world Hello world Hello world Hello world
-                    Hello world Hello world Hello world Hello world Hello world
-                    Hello world Hello world Hello world Hello world Hello world
-                  </Text>
-                </VStack>
-              </VStack>
-            </GridItem>
-            {isLg && <GridItem>
-              <VStack w={["100%"]} height={["100%"]}>
-                <Box
-                  w={["70px"]}
-                  h={["70px"]}
-                  backgroundColor={["brand.50"]}
-                  borderRadius={["50%"]}
-                  borderWidth={["7px"]}
-                  flexShrink={[0]}
-                />
-                <Box w={["10px"]} h={["100%"]} backgroundColor={["brand.50"]} />
-              </VStack>
-            </GridItem>}
+              </GridItem>
+            )}
             <GridItem colSpan={[6, 5]}>
               <VStack
                 w={["100%"]}
@@ -378,7 +354,66 @@ export default function Home() {
                   </Text>
                 </VStack>
                 <VStack w={["100%"]} alignItems={["flex-start"]}>
-                  <Text fontSize={["lg", "xl"]} lineHeight={["1.5em", null, null, null, "1.3em"]}>
+                  <Text
+                    fontSize={["lg", "xl"]}
+                    lineHeight={["1.5em", null, null, null, "1.3em"]}
+                  >
+                    Hello world Hello world Hello world Hello world Hello world
+                    Hello world Hello world Hello world Hello world Hello world
+                    Hello world Hello world Hello world Hello world Hello world
+                    Hello world Hello world Hello world Hello world Hello world
+                    Hello world Hello world Hello world Hello world Hello world
+                    Hello world Hello world Hello world Hello world Hello world
+                  </Text>
+                </VStack>
+              </VStack>
+            </GridItem>
+            {isLg && (
+              <GridItem>
+                <VStack w={["100%"]} height={["100%"]}>
+                  <Box
+                    w={["70px"]}
+                    h={["70px"]}
+                    backgroundColor={["brand.50"]}
+                    borderRadius={["50%"]}
+                    borderWidth={["7px"]}
+                    flexShrink={[0]}
+                  />
+                  <Box
+                    w={["10px"]}
+                    h={["100%"]}
+                    backgroundColor={["brand.50"]}
+                  />
+                </VStack>
+              </GridItem>
+            )}
+            <GridItem colSpan={[6, 5]}>
+              <VStack
+                w={["100%"]}
+                h={["100%"]}
+                spacing={["32px"]}
+                alignItems={["flex-start"]}
+              >
+                <VStack w={["100%"]} alignItems={["flex-start"]}>
+                  <Text
+                    fontSize={["xl", "2xl", "3xl"]}
+                    fontWeight={["bold"]}
+                    lineHeight={["1.1em"]}
+                  >
+                    Pt. InArray Indonesia
+                  </Text>
+                  <Text fontSize={["lg", "xl", "2xl"]} lineHeight={["1.1em"]}>
+                    Sebagai frontend developer
+                  </Text>
+                  <Text fontSize={["lg", "xl", "xl"]} lineHeight={["1.1em"]}>
+                    Mar 20, 2020 - Des 04, 2029
+                  </Text>
+                </VStack>
+                <VStack w={["100%"]} alignItems={["flex-start"]}>
+                  <Text
+                    fontSize={["lg", "xl"]}
+                    lineHeight={["1.5em", null, null, null, "1.3em"]}
+                  >
                     Hello world Hello world Hello world Hello world Hello world
                     Hello world Hello world Hello world Hello world Hello world
                     Hello world Hello world Hello world Hello world Hello world
@@ -409,19 +444,17 @@ export default function Home() {
               Riwayat projects yang pernah saya kerjakan
             </Text>
             <Text fontSize={["lg", "xl", "2xl", "3xl"]}>
-              Berikut merupakan projek-projek web apps yang{" "}
-              <Box as="span" fontWeight={["bold"]} color="brand.50">
-                telah
-              </Box>{" "}
-              saya{" "}
-              <Box as="span" fontWeight={["bold"]} color="brand.50">
-                kerjakan
-              </Box>{" "}
-              baik projek web individu{" "}
-              <Box as="span" fontWeight={["bold"]} color="brand.50">
-                maupun
-              </Box>{" "}
-              projek pekerjaan saya
+              <Highlight
+                query={["telah", "kerjakan", "individu", "pekerjaan saya"]}
+                styles={{
+                  fontWeight: "bold",
+                  color: "brand.50",
+                }}
+              >
+                Berikut merupakan projek-projek web apps yang telah saya
+                kerjakan baik projek web individu maupun projek web pekerjaan
+                saya
+              </Highlight>
             </Text>
 
             {/* Action */}
@@ -439,7 +472,13 @@ export default function Home() {
           <Grid
             w={["100%"]}
             h={["100%"]}
-            templateColumns={["repeat(1, 1fr)", null, "repeat(2, 1fr)", null, "repeat(3, 1fr)"]}
+            templateColumns={[
+              "repeat(1, 1fr)",
+              null,
+              "repeat(2, 1fr)",
+              null,
+              "repeat(3, 1fr)",
+            ]}
             gap={["60px 30px"]}
           >
             <GridItem>

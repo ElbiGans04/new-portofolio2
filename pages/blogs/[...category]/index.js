@@ -1,12 +1,25 @@
 import {
-  Box, Button, Grid,
-  GridItem, HStack, Link, Text, VStack
+  Box,
+  Button,
+  Grid,
+  GridItem,
+  HStack,
+  Link,
+  Text,
+  VStack,
+  useMediaQuery,
+  Stack,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import Berlangganan from "@/src/components/Berlangganan";
 import NextLink from "next/link";
+import { breakpoints } from "@/src/config/chakra.config";
 
 export default function Blog() {
+  const [isLg] = useMediaQuery(`(min-width: ${breakpoints.lg})`, {
+    ssr: true,
+    fallback: false, // return false on the server, and re-evaluate on the client side
+  });
   return (
     <>
       <Head>
@@ -19,38 +32,44 @@ export default function Blog() {
         <Grid
           w={["100%"]}
           height={["100%"]}
-          templateColumns="repeat(10, 1fr)"
+          templateColumns={["repeat(1, 1fr)", null, null, "repeat(10, 1fr)"]}
           // templateRows="repeat(2, 1fr)"
           paddingY={["20px"]}
-          gap={["0 50px"]}
+          gap={["50px 0px", null, null, "0 50px"]}
         >
           {/* Left */}
           <GridItem
-            borderRightWidth={["1px"]}
+            borderRightWidth={[0, null, null, "1px"]}
             borderRightColor={["rgba(0,0,0, 0.2)"]}
-            paddingX={["20px"]}
+            paddingX={[0, null, null, "20px"]}
             height={["100%"]}
-            paddingTop={["20px"]}
-            paddingBottom={["100px"]}
-            position={["sticky"]}
+            paddingTop={["0", null, null, "20px"]}
+            paddingBottom={["0", null, null, "100px"]}
+            position={["static", null, null, "sticky"]}
             top={["105px"]}
             left={["0"]}
             bottom={["0"]}
+            order={[2, null, null, 1]}
           >
-            <VStack
+            <Stack
               w={["100%"]}
               height={["100%"]}
               alignItems={["center"]}
-              spacing={["48px"]}
+              direction={['column', 'row', 'column']}
+              spacing={["16px", null, null, "48px"]}
             >
-              <Button>❤</Button>
-              <Button>✉</Button>
-              <Button>✈</Button>
-            </VStack>
+              <Button w={["100%", null, null, "inherit"]}>❤ {!isLg && 'Suka'}</Button>
+              <Button w={["100%", null, null, "inherit"]}>✉ {!isLg && 'Komentar'}</Button>
+              <Button w={["100%", null, null, "inherit"]}>✈ {!isLg && 'Share'}</Button>
+            </Stack>
           </GridItem>
 
           {/* Mid */}
-          <GridItem colSpan={6} rowSpan={2}>
+          <GridItem
+            order={[1, null, null, 2]}
+            colSpan={[null, null, null, 6]}
+            rowSpan={[null, null, null, 2]}
+          >
             <VStack
               w={["100%"]}
               h={["100%"]}
@@ -61,7 +80,7 @@ export default function Blog() {
               <Link as={NextLink} href="/" width={["100%"]}>
                 <Box
                   w={["100%"]}
-                  height={["350px"]}
+                  height={["200px", "350px"]}
                   backgroundColor={["#D9D9D9"]}
                   flexShrink={[0]}
                 />
@@ -82,14 +101,14 @@ export default function Blog() {
                 >
                   <Text
                     as="h1"
-                    fontSize={["5xl"]}
+                    fontSize={["3xl", "4xl", "5xl"]}
                     lineHeight={["1.2em"]}
                     fontWeight={["bold"]}
                   >
                     Membuat sesuatu yang bermanfaat
                   </Text>
 
-                  <Text fontSize={["xl"]}>
+                  <Text fontSize={["md", "lg","xl"]}>
                     Desember 04, 2022 - 3 Minutes Reading
                   </Text>
                   <HStack
@@ -102,7 +121,7 @@ export default function Blog() {
                       href="/"
                       fontWeight={["bold"]}
                       color="brand.50"
-                      fontSize={["xl"]}
+                      fontSize={["md", "lg","xl"]}
                     >
                       #SELF IMPROVEMENT
                     </Link>
@@ -111,14 +130,14 @@ export default function Blog() {
                       href="/"
                       fontWeight={["bold"]}
                       color="brand.50"
-                      fontSize={["xl"]}
+                      fontSize={["md", "lg","xl"]}
                     >
                       #BISNIS
                     </Link>
                   </HStack>
                 </VStack>
                 <VStack w={["100%"]} alignItems={["flex-start"]}>
-                  <Text fontSize={["2xl"]}>
+                  <Text fontSize={["lg", "xl", "2xl"]}>
                     Membuat sesuatu yang bermanfaat bertujuan agar kita dapat
                     memanfaatkan sesuatu yang mungkin akan kita butuhkan dimasa
                     depan. Sesuatu yang bermanfaat bagi diri kita sendiri
@@ -131,19 +150,19 @@ export default function Blog() {
                     bagi diri kita sendiri benarkan ?
                   </Text>
 
-                  <Text fontSize={["4xl"]} fontWeight={["bold"]}>
+                  <Text fontSize={["2xl", "3xl", "4xl"]} fontWeight={["bold"]}>
                     Heading 1
                   </Text>
-                  <Text fontSize={["3xl"]} fontWeight={["bold"]}>
+                  <Text fontSize={["xl", "2xl", "3xl"]} fontWeight={["bold"]}>
                     Heading 2
                   </Text>
-                  <Text fontSize={["2xl"]} fontWeight={["bold"]}>
+                  <Text fontSize={["lg", "xl", "2xl"]} fontWeight={["bold"]}>
                     Heading 3
                   </Text>
-                  <Text fontSize={["xl"]} fontWeight={["bold"]}>
+                  <Text fontSize={["md", "lg", "xl"]} fontWeight={["bold"]}>
                     Heading 4
                   </Text>
-                  <Text fontSize={["2xl"]}>
+                  <Text fontSize={["lg", "xl", "2xl"]}>
                     Membuat sesuatu yang bermanfaat bertujuan agar kita dapat
                     memanfaatkan sesuatu yang mungkin akan kita butuhkan dimasa
                     depan. Sesuatu yang bermanfaat bagi diri kita sendiri
@@ -155,7 +174,7 @@ export default function Blog() {
                     akan kita butuhkan dimasa depan. Sesuatu yang bermanfaat
                     bagi diri kita sendiri benarkan ?
                   </Text>
-                  <Text fontSize={["2xl"]}>
+                  <Text fontSize={["lg", "xl", "2xl"]}>
                     Membuat sesuatu yang bermanfaat bertujuan agar kita dapat
                     memanfaatkan sesuatu yang mungkin akan kita butuhkan dimasa
                     depan. Sesuatu yang bermanfaat bagi diri kita sendiri
@@ -170,18 +189,25 @@ export default function Blog() {
                 </VStack>
               </VStack>
 
-              <Berlangganan />
+              {isLg && <Berlangganan />}
             </VStack>
           </GridItem>
 
+          {!isLg && 
+            <GridItem height={['100%']} order={[3]}>
+              <Berlangganan />
+            </GridItem>
+          }
+
           {/* Right */}
           <GridItem
-            colSpan={3}
-            position={["sticky"]}
+            colSpan={[null, null, null, 3]}
+            position={["static", null, null, "sticky"]}
             top={["105px"]}
             left={["0"]}
             bottom={["0"]}
             paddingTop={["20px"]}
+            order={[4]}
           >
             <VStack
               w={["100%"]}
@@ -206,7 +232,7 @@ export default function Blog() {
                   <Text
                     as="h2"
                     color="brand.50"
-                    fontSize={["3xl"]}
+                    fontSize={["xl", "2xl", "3xl"]}
                     fontWeight={["bold"]}
                     lineHeight={["1.2em"]}
                   >
@@ -221,14 +247,14 @@ export default function Blog() {
                   >
                     <VStack w={["100%"]} alignItems={["flex-start"]}>
                       <Link
-                        fontSize={["2xl"]}
+                        fontSize={["lg", "xl","2xl"]}
                         fontWeight={["bold"]}
                         as={NextLink}
                         href="/"
                       >
                         Cara membuat sesuatu
                       </Link>
-                      <Text fontSize={["xl"]}>
+                      <Text fontSize={["md", "lg","xl"]}>
                         Desember 04, 2022 - 3 Minutes Reading
                       </Text>
                       <HStack
@@ -241,7 +267,7 @@ export default function Blog() {
                           href="/"
                           fontWeight={["bold"]}
                           color="brand.50"
-                          fontSize={["xl"]}
+                          fontSize={["md", "lg","xl"]}
                         >
                           #SELF IMPROVEMENT
                         </Link>
@@ -250,7 +276,7 @@ export default function Blog() {
                           href="/"
                           fontWeight={["bold"]}
                           color="brand.50"
-                          fontSize={["xl"]}
+                          fontSize={["md", "lg","xl"]}
                         >
                           #BISNIS
                         </Link>
@@ -258,14 +284,14 @@ export default function Blog() {
                     </VStack>
                     <VStack w={["100%"]} alignItems={["flex-start"]}>
                       <Link
-                        fontSize={["2xl"]}
+                         fontSize={["lg", "xl","2xl"]}
                         fontWeight={["bold"]}
                         as={NextLink}
                         href="/"
                       >
                         Cara membuat sesuatu
                       </Link>
-                      <Text fontSize={["xl"]}>
+                      <Text fontSize={["md", "lg","xl"]}>
                         Desember 04, 2022 - 3 Minutes Reading
                       </Text>
                       <HStack
@@ -278,7 +304,7 @@ export default function Blog() {
                           href="/"
                           fontWeight={["bold"]}
                           color="brand.50"
-                          fontSize={["xl"]}
+                          fontSize={["md", "lg","xl"]}
                         >
                           #SELF IMPROVEMENT
                         </Link>
@@ -287,7 +313,7 @@ export default function Blog() {
                           href="/"
                           fontWeight={["bold"]}
                           color="brand.50"
-                          fontSize={["xl"]}
+                          fontSize={["md", "lg","xl"]}
                         >
                           #BISNIS
                         </Link>
@@ -295,14 +321,14 @@ export default function Blog() {
                     </VStack>
                     <VStack w={["100%"]} alignItems={["flex-start"]}>
                       <Link
-                        fontSize={["2xl"]}
+                         fontSize={["lg", "xl","2xl"]}
                         fontWeight={["bold"]}
                         as={NextLink}
                         href="/"
                       >
                         Cara membuat sesuatu
                       </Link>
-                      <Text fontSize={["xl"]}>
+                      <Text fontSize={["md", "lg","xl"]}>
                         Desember 04, 2022 - 3 Minutes Reading
                       </Text>
                       <HStack
@@ -315,7 +341,7 @@ export default function Blog() {
                           href="/"
                           fontWeight={["bold"]}
                           color="brand.50"
-                          fontSize={["xl"]}
+                          fontSize={["md", "lg","xl"]}
                         >
                           #SELF IMPROVEMENT
                         </Link>
@@ -324,7 +350,7 @@ export default function Blog() {
                           href="/"
                           fontWeight={["bold"]}
                           color="brand.50"
-                          fontSize={["xl"]}
+                          fontSize={["md", "lg","xl"]}
                         >
                           #BISNIS
                         </Link>
@@ -338,12 +364,12 @@ export default function Blog() {
                   w={["100%"]}
                   height={["max-content"]}
                   alignItems={["flex-start"]}
-                  spacing={["32px"]}
+                  spacing={["24px","32px"]}
                 >
                   <Text
                     as="h2"
                     color="brand.50"
-                    fontSize={["3xl"]}
+                    fontSize={["xl", "2xl", "3xl"]}
                     fontWeight={["bold"]}
                     lineHeight={["1.2em"]}
                   >
@@ -361,7 +387,7 @@ export default function Blog() {
                       href="/"
                       fontWeight={["bold"]}
                       color="brand.50"
-                      fontSize={["xl"]}
+                      fontSize={["md", "lg","xl"]}
                     >
                       #SELF IMPROVEMENT
                     </Link>
@@ -370,7 +396,7 @@ export default function Blog() {
                       href="/"
                       fontWeight={["bold"]}
                       color="brand.50"
-                      fontSize={["xl"]}
+                      fontSize={["md", "lg","xl"]}
                     >
                       #SELF MOVEMENT
                     </Link>
@@ -379,7 +405,7 @@ export default function Blog() {
                       href="/"
                       fontWeight={["bold"]}
                       color="brand.50"
-                      fontSize={["xl"]}
+                      fontSize={["md", "lg","xl"]}
                     >
                       #SELF INDIVIDUALIS
                     </Link>

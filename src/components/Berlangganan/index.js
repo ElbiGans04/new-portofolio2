@@ -21,7 +21,7 @@ export default function Berlangganan() {
     <>
       <VStack
         w={["100%"]}
-        height={["max-content"]}
+        height={["100%"]}
         spacing={["10px"]}
         alignItems={["flex-start"]}
       >
@@ -46,15 +46,15 @@ export default function Berlangganan() {
           as="h1"
           color={["brand.50"]}
           fontWeight={["bold"]}
-          fontSize={["7xl"]}
+          fontSize={["5xl", "6xl", "7xl"]}
         >
           Halo
         </Text>
-        <Text as="p" fontWeight={["semibold"]} fontSize={["xl"]}>
+        <Text as="p" fontWeight={["semibold"]} fontSize={["md","lg", "xl"]}>
           Ayo berlangganan agar tidak ketinggalan update apapun dari website ini
         </Text>
         <InputWithButton onClick={onOpen}>Berlangganan</InputWithButton>
-        <Text fontSize={["lg"]} fontWeight={["bold"]} color={["brand.50"]}>
+        <Text fontSize={["sm", "md", "lg"]} fontWeight={["bold"]} color={["brand.50"]}>
           *Saya tidak akan mengirimkan email spam kepada anda*
         </Text>
       </VStack>
@@ -70,7 +70,7 @@ export default function Berlangganan() {
               alignItems={["flex-start"]}
               spacing={["30px"]}
             >
-              <Text fontSize={["xl"]}>
+              <Text fontSize={["md","lg", "xl"]}>
                 Fitur belum tersedia
               </Text>
             </VStack>

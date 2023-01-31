@@ -190,7 +190,7 @@ export default function Blogs() {
               <ModalHeader color="brand.50">Personal Project</ModalHeader>
               <ModalCloseButton color="brand.50" />
               <ModalBody>
-                <FilterComponent langgananTampil={false} />
+                <FilterComponent forModal={true} langgananTampil={false} />
               </ModalBody>
 
               <ModalFooter>

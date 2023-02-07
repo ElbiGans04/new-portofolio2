@@ -14,7 +14,7 @@ import Head from "next/head";
 import Berlangganan from "@/src/components/Berlangganan";
 import NextLink from "next/link";
 import { breakpoints } from "@/src/config/chakra.config";
-
+import {AiOutlineLink, AiOutlineComment, AiOutlineHeart} from 'react-icons/ai'
 export default function Blog() {
   const [isLg] = useMediaQuery(`(min-width: ${breakpoints.lg})`, {
     ssr: true,
@@ -58,9 +58,9 @@ export default function Blog() {
               direction={['column', 'row', 'column']}
               spacing={["16px", null, null, "48px"]}
             >
-              <Button w={["100%", null, null, "inherit"]}>❤ {!isLg && 'Suka'}</Button>
-              <Button w={["100%", null, null, "inherit"]}>✉ {!isLg && 'Komentar'}</Button>
-              <Button w={["100%", null, null, "inherit"]}>✈ {!isLg && 'Share'}</Button>
+              <Button variant="brandOutline" w={["100%", null, null, "inherit"]}><AiOutlineHeart style={!isLg && {marginRight : '10px'}} /> {!isLg && 'Suka'}</Button>
+              <Button variant="brandOutline" w={["100%", null, null, "inherit"]}><AiOutlineComment style={!isLg && {marginRight : '10px'}} /> {!isLg && 'Komentar'}</Button>
+              <Button variant="brandOutline" w={["100%", null, null, "inherit"]}><AiOutlineLink style={!isLg && {marginRight : '10px'}} /> {!isLg && 'Share'}</Button>
             </Stack>
           </GridItem>
 

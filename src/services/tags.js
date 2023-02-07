@@ -5,10 +5,10 @@
  * @param {*} filter 
  * @returns 
  */
-export async function getArticles(fields = ["*"], populate = "*", filters = false) {
+export async function getTags(fields = ["*"], populate = "*", filters = false) {
   return await (
     await fetch(
-      `${process.env.STRAPI_BASE_API_URL}/articles?${
+      `${process.env.STRAPI_BASE_API_URL}/tags?${
         !populate ? "" : `populate=*`
       }${fields.reduce(
         (prev, current, index) => `${prev}&fields[${index}]=${current}`,

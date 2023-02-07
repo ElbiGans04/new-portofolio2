@@ -1,3 +1,5 @@
+import Berlangganan from "@/src/components/Berlangganan";
+import { breakpoints } from "@/src/config/chakra.config";
 import {
   Box,
   Button,
@@ -5,34 +7,29 @@ import {
   GridItem,
   HStack,
   Input,
-  Link,
-  SimpleGrid,
-  Text,
-  VStack,
-  useMediaQuery,
-  Modal,
+  Link, Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay,
-  useDisclosure,
+  ModalOverlay, SimpleGrid,
+  Text, useDisclosure, useMediaQuery, VStack
 } from "@chakra-ui/react";
 import Head from "next/head";
-import NextLink from "next/link";
-import Berlangganan from "@/src/components/Berlangganan";
-import { breakpoints } from "@/src/config/chakra.config";
-import React from "react";
-import { unified } from "unified";
-import remarkParse from "remark-parse";
 import NextImage from "next/image";
+import NextLink from "next/link";
+import React from "react";
+import remarkParse from "remark-parse";
+import { unified } from "unified";
 // import remarkRehype from 'remark-rehype'
 // import rehypeStringify from 'rehype-stringify'
+import getFormatDateArticle from "@/src/helpers/getFormatDateArticle";
+import getReadingTime from "@/src/helpers/getReadingTime";
 import remarkReText from "remark-retext";
-import retextStringify from "retext-stringify";
 import retextEnglish from "retext-english";
-import dayjs from "dayjs";
+import retextStringify from "retext-stringify";
+
 export async function getStaticProps() {
   const processor = unified()
     .use(remarkParse)
@@ -114,9 +111,6 @@ export default function Blogs({ data }) {
             >
               {/* Card */}
               {data.map(({ id, attributes }) => {
-                const waktuMembaca = Math.ceil(
-                  attributes.plainDeskripsi.split(" ").length / 125
-                );
                 return (
                   <React.Fragment key={id}>
                     <VStack
@@ -176,10 +170,8 @@ export default function Blogs({ data }) {
                           </Link>
 
                           <Text fontSize={["md", "lg", "xl"]}>
-                            {dayjs(attributes.createdAt).format(
-                              "MMMM DD, YYYY"
-                            )}{" "}
-                            - {waktuMembaca} Menit
+                            {getFormatDateArticle(attributes.createdAt)}{" "}
+                            - {getReadingTime(attributes.plainDeskripsi)} Menit
                           </Text>
                         </VStack>
                         <VStack w={["100%"]} alignItems={["flex-start"]}>
@@ -217,7 +209,7 @@ export default function Blogs({ data }) {
                               fontSize={["md", "lg", "xl"]}
                               key={id}
                             >
-                              # {attributes.title}
+                              #{attributes.title}
                             </Link>
                           );
                         })}

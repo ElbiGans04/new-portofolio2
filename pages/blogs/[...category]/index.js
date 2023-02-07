@@ -15,6 +15,7 @@ import Berlangganan from "@/src/components/Berlangganan";
 import NextLink from "next/link";
 import { breakpoints } from "@/src/config/chakra.config";
 import {AiOutlineLink, AiOutlineComment, AiOutlineHeart} from 'react-icons/ai'
+
 export default function Blog() {
   const [isLg] = useMediaQuery(`(min-width: ${breakpoints.lg})`, {
     ssr: true,

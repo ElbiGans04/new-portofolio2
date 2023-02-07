@@ -23,14 +23,47 @@ import Head from "next/head";
 import NextLink from "next/link";
 import Berlangganan from "@/src/components/Berlangganan";
 import { breakpoints } from "@/src/config/chakra.config";
+import React from "react";
+import { unified } from "unified";
+import remarkParse from "remark-parse";
+import NextImage from "next/image";
+// import remarkRehype from 'remark-rehype'
+// import rehypeStringify from 'rehype-stringify'
+import remarkReText from "remark-retext";
+import retextStringify from "retext-stringify";
+import retextEnglish from "retext-english";
+import dayjs from "dayjs";
+export async function getStaticProps() {
+  const processor = unified()
+    .use(remarkParse)
+    .use(remarkReText, unified().use(retextEnglish), {
+      // ignore: ["heading"],
+    })
+    .use(retextStringify);
 
-export default function Blogs() {
+  const { data } = await (
+    await fetch(`${process.env.STRAPI_BASE_API_URL}/articles?populate=*`)
+  ).json();
+
+  return {
+    props: {
+      data: data.map((candidate) => ({
+        ...candidate,
+        attributes: {
+          ...candidate.attributes,
+          plainDeskripsi: processor.processSync(candidate.attributes.isi).value,
+        },
+      })),
+    },
+  };
+}
+
+export default function Blogs({ data }) {
   const [isLg] = useMediaQuery(`(min-width: ${breakpoints.lg})`, {
     ssr: true,
     fallback: false, // return false on the server, and re-evaluate on the client side
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
-
   return (
     <>
       <Head>
@@ -80,202 +113,125 @@ export default function Blogs() {
               marginTop={["20px"]}
             >
               {/* Card */}
-              <VStack
-                w={["100%"]}
-                h={["max-content"]}
-                alignItems={["flex-start"]}
-                spacing={["30px"]}
-              >
-                {/* Header */}
-                <Link as={NextLink} href="/blogs/1" width={["100%"]}>
-                  <Box
-                    w={["100%", "90%"]}
-                    height={["200px", "250px", "350px"]}
-                    backgroundColor={["#D9D9D9"]}
-                    flexShrink={[0]}
-                  />
-                </Link>
-
-                {/* Body */}
-
-                <VStack
-                  w={["100%"]}
-                  height={["100%"]}
-                  alignItems={["flex-start"]}
-                  spacing={["40px"]}
-                >
-                  <VStack
-                    w={["100%"]}
-                    height={["100%"]}
-                    alignItems={["flex-start"]}
-                  >
-                    <Link
-                      fontSize={["2xl", "3xl", "4xl"]}
-                      fontWeight={["bold"]}
-                      _hover={{
-                        textDecoration: "underline",
-                      }}
-                      as={NextLink}
-                      href="/blogs/1"
+              {data.map(({ id, attributes }) => {
+                const waktuMembaca = Math.ceil(
+                  attributes.plainDeskripsi.split(" ").length / 125
+                );
+                return (
+                  <React.Fragment key={id}>
+                    <VStack
+                      w={["100%"]}
+                      h={["max-content"]}
+                      alignItems={["flex-start"]}
+                      spacing={["30px"]}
                     >
-                      Membuat sesuatu yang bermanfaat
-                    </Link>
+                      {/* Header */}
+                      <Link
+                        as={NextLink}
+                        href={`/blogs/${id}`}
+                        width={["100%"]}
+                      >
+                        <Box
+                          w={["100%", "90%"]}
+                          height={["200px", "250px", "350px"]}
+                          backgroundColor={["#D9D9D9"]}
+                          flexShrink={[0]}
+                          position={["relative"]}
+                        >
+                          {attributes.images &&
+                            Array.isArray(attributes.images.data) &&
+                            attributes.images.data[0] && (
+                              <NextImage
+                                src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${attributes.images.data[0].attributes.formats.large.url}`}
+                                fill
+                                alt={attributes.judul}
+                              />
+                            )}
+                        </Box>
+                      </Link>
 
-                    <Text fontSize={["md", "lg", "xl"]}>
-                      Desember 04, 2022 - 3 Minutes Reading
-                    </Text>
-                  </VStack>
-                  <VStack w={["100%"]} alignItems={["flex-start"]}>
-                    <Text fontSize={["lg", "xl", "2xl"]}>
-                      Membuat sesuatu yang bermanfaat bertujuan agar kita dapat
-                      memanfaatkan sesuatu yang mungkin akan kita butuhkan
-                      dimasa depan. Sesuatu yang bermanfaat bagi diri kita
-                      sendiri benarkan ?
-                    </Text>
-                    <Link
-                      fontSize={["lg", "xl", "2xl"]}
-                      fontWeight={["bold"]}
-                      color={["brand.50"]}
-                      _hover={{
-                        textDecoration: "underline",
-                      }}
-                      as={NextLink}
-                      href="/blogs/1"
-                    >
-                      Klik disini untuk membaca selengkapnya.
-                    </Link>
-                  </VStack>
-                </VStack>
+                      {/* Body */}
 
-                {/* Footer */}
-                <HStack
-                  w={["100%"]}
-                  height={["100%"]}
-                  alignItems={["flex-start"]}
-                >
-                  <Link
-                    as={NextLink}
-                    href="/"
-                    fontWeight={["bold"]}
-                    color="brand.50"
-                    fontSize={["md", "lg", "xl"]}
-                  >
-                    #SELF IMPROVEMENT
-                  </Link>
-                  <Link
-                    as={NextLink}
-                    href="/"
-                    fontWeight={["bold"]}
-                    color="brand.50"
-                    fontSize={["md", "lg", "xl"]}
-                  >
-                    #BISNIS
-                  </Link>
-                </HStack>
-              </VStack>
-              {/* End Of Card */}
+                      <VStack
+                        w={["100%"]}
+                        height={["100%"]}
+                        alignItems={["flex-start"]}
+                        spacing={["40px"]}
+                      >
+                        <VStack
+                          w={["100%"]}
+                          height={["100%"]}
+                          alignItems={["flex-start"]}
+                        >
+                          <Link
+                            fontSize={["2xl", "3xl", "4xl"]}
+                            fontWeight={["bold"]}
+                            _hover={{
+                              textDecoration: "underline",
+                            }}
+                            as={NextLink}
+                            href={`/blogs/${id}`}
+                          >
+                            {attributes.judul}
+                          </Link>
 
-              {/* Batas */}
-              <Box
-                w={["90%"]}
-                height={["1px"]}
-                bgColor={["rgba(0,0,0, 0.2)"]}
-              ></Box>
+                          <Text fontSize={["md", "lg", "xl"]}>
+                            {dayjs(attributes.createdAt).format(
+                              "MMMM DD, YYYY"
+                            )}{" "}
+                            - {waktuMembaca} Menit
+                          </Text>
+                        </VStack>
+                        <VStack w={["100%"]} alignItems={["flex-start"]}>
+                          <Text fontSize={["lg", "xl", "2xl"]}>
+                            {attributes.deskripsi}...
+                          </Text>
+                          <Link
+                            fontSize={["lg", "xl", "2xl"]}
+                            fontWeight={["bold"]}
+                            color={["brand.50"]}
+                            _hover={{
+                              textDecoration: "underline",
+                            }}
+                            as={NextLink}
+                            href={`/blogs/${id}`}
+                          >
+                            Klik disini untuk membaca selengkapnya.
+                          </Link>
+                        </VStack>
+                      </VStack>
 
-                 {/* Card */}
-                 <VStack
-                w={["100%"]}
-                h={["max-content"]}
-                alignItems={["flex-start"]}
-                spacing={["30px"]}
-              >
-                {/* Header */}
-                <Link as={NextLink} href="/blogs/1" width={["100%"]}>
-                  <Box
-                    w={["100%", "90%"]}
-                    height={["200px", "250px", "350px"]}
-                    backgroundColor={["#D9D9D9"]}
-                    flexShrink={[0]}
-                  />
-                </Link>
-
-                {/* Body */}
-
-                <VStack
-                  w={["100%"]}
-                  height={["100%"]}
-                  alignItems={["flex-start"]}
-                  spacing={["40px"]}
-                >
-                  <VStack
-                    w={["100%"]}
-                    height={["100%"]}
-                    alignItems={["flex-start"]}
-                  >
-                    <Link
-                      fontSize={["2xl", "3xl", "4xl"]}
-                      fontWeight={["bold"]}
-                      _hover={{
-                        textDecoration: "underline",
-                      }}
-                      as={NextLink}
-                      href="/blogs/1"
-                    >
-                      Membuat sesuatu yang bermanfaat
-                    </Link>
-
-                    <Text fontSize={["md", "lg", "xl"]}>
-                      Desember 04, 2022 - 3 Minutes Reading
-                    </Text>
-                  </VStack>
-                  <VStack w={["100%"]} alignItems={["flex-start"]}>
-                    <Text fontSize={["lg", "xl", "2xl"]}>
-                      Membuat sesuatu yang bermanfaat bertujuan agar kita dapat
-                      memanfaatkan sesuatu yang mungkin akan kita butuhkan
-                      dimasa depan. Sesuatu yang bermanfaat bagi diri kita
-                      sendiri benarkan ?
-                    </Text>
-                    <Link
-                      fontSize={["lg", "xl", "2xl"]}
-                      fontWeight={["bold"]}
-                      color={["brand.50"]}
-                      _hover={{
-                        textDecoration: "underline",
-                      }}
-                      as={NextLink}
-                      href="/blogs/1"
-                    >
-                      Klik disini untuk membaca selengkapnya.
-                    </Link>
-                  </VStack>
-                </VStack>
-
-                {/* Footer */}
-                <HStack
-                  w={["100%"]}
-                  height={["100%"]}
-                  alignItems={["flex-start"]}
-                >
-                  <Link
-                    as={NextLink}
-                    href="/"
-                    fontWeight={["bold"]}
-                    color="brand.50"
-                    fontSize={["md", "lg", "xl"]}
-                  >
-                    #SELF IMPROVEMENT
-                  </Link>
-                  <Link
-                    as={NextLink}
-                    href="/"
-                    fontWeight={["bold"]}
-                    color="brand.50"
-                    fontSize={["md", "lg", "xl"]}
-                  >
-                    #BISNIS
-                  </Link>
-                </HStack>
-              </VStack>
+                      {/* Footer */}
+                      <HStack
+                        w={["100%"]}
+                        height={["100%"]}
+                        alignItems={["flex-start"]}
+                      >
+                        {attributes.tags.data.map(({ id, attributes }) => {
+                          return (
+                            <Link
+                              as={NextLink}
+                              href={`/blogs?tag=${id}`}
+                              fontWeight={["bold"]}
+                              color="brand.50"
+                              fontSize={["md", "lg", "xl"]}
+                              key={id}
+                            >
+                              # {attributes.title}
+                            </Link>
+                          );
+                        })}
+                      </HStack>
+                    </VStack>
+                    {/* Batas */}
+                    <Box
+                      w={["90%"]}
+                      height={["1px"]}
+                      bgColor={["rgba(0,0,0, 0.2)"]}
+                    />
+                  </React.Fragment>
+                );
+              })}
               {/* End Of Card */}
             </VStack>
           </GridItem>
@@ -316,13 +272,21 @@ function FilterComponent({ langgananTampil, forModal }) {
         alignItems={["center"]}
         spacing={["10px"]}
       >
-        <Text color="brand.50" fontSize={["2xl","3xl", "4xl"]} fontWeight={["bold"]}>
+        <Text
+          color="brand.50"
+          fontSize={["2xl", "3xl", "4xl"]}
+          fontWeight={["bold"]}
+        >
           Filter
         </Text>
 
         <VStack w={["100%"]} h={["100%"]} spacing={["20px"]}>
           <VStack w={["100%"]} h={["100%"]} alignItems={["flex-start"]}>
-            <Text color="brand.50" fontSize={["lg","xl", "2xl"]} fontWeight={["bold"]}>
+            <Text
+              color="brand.50"
+              fontSize={["lg", "xl", "2xl"]}
+              fontWeight={["bold"]}
+            >
               Judul
             </Text>
             <HStack
@@ -362,7 +326,11 @@ function FilterComponent({ langgananTampil, forModal }) {
           </VStack>
 
           <VStack w={["100%"]} alignItems={["flex-start"]}>
-            <Text color="brand.50" fontSize={["lg","xl", "2xl"]} fontWeight={["bold"]}>
+            <Text
+              color="brand.50"
+              fontSize={["lg", "xl", "2xl"]}
+              fontWeight={["bold"]}
+            >
               Tags
             </Text>
             <HStack
@@ -383,7 +351,11 @@ function FilterComponent({ langgananTampil, forModal }) {
 
           <SimpleGrid columns={2} w={["100%"]} spacingX={["30px"]}>
             <VStack w={["100%"]} alignItems={["flex-start"]}>
-              <Text color="brand.50" fontSize={["lg","xl", "2xl"]} fontWeight={["bold"]}>
+              <Text
+                color="brand.50"
+                fontSize={["lg", "xl", "2xl"]}
+                fontWeight={["bold"]}
+              >
                 Dari
               </Text>
               <HStack
@@ -403,7 +375,11 @@ function FilterComponent({ langgananTampil, forModal }) {
               </HStack>
             </VStack>
             <VStack w={["100%"]} alignItems={["flex-start"]}>
-              <Text color="brand.50" fontSize={["lg","xl", "2xl"]} fontWeight={["bold"]}>
+              <Text
+                color="brand.50"
+                fontSize={["lg", "xl", "2xl"]}
+                fontWeight={["bold"]}
+              >
                 Sampai
               </Text>
               <HStack

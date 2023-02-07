@@ -29,6 +29,7 @@ import getReadingTime from "@/src/helpers/getReadingTime";
 import remarkReText from "remark-retext";
 import retextEnglish from "retext-english";
 import retextStringify from "retext-stringify";
+import { getArticles } from "@/src/services/articles";
 
 export async function getStaticProps() {
   const processor = unified()
@@ -38,9 +39,7 @@ export async function getStaticProps() {
     })
     .use(retextStringify);
 
-  const { data } = await (
-    await fetch(`${process.env.STRAPI_BASE_API_URL}/articles?populate=*`)
-  ).json();
+  const { data } = await getArticles();
 
   return {
     props: {

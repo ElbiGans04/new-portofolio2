@@ -12,14 +12,19 @@ import {
   Grid,
   GridItem,
   HStack,
-  Link, Stack, Text, useMediaQuery, VStack
+  Link,
+  Stack,
+  Text,
+  useMediaQuery,
+  VStack,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import NextImage from "next/image";
 import NextLink from "next/link";
 import {
   AiOutlineComment,
-  AiOutlineHeart, AiOutlineLink
+  AiOutlineHeart,
+  AiOutlineLink,
 } from "react-icons/ai";
 import urls from "@/src/constants/url";
 
@@ -31,12 +36,14 @@ export async function getStaticProps({ params }) {
     },
   ]);
 
-  const { data: data2 } = await getArticles(["*"], true, [
-    {
-      conditional: ["id", "$ne"],
-      value: params.slug,
-    },
-  ]);
+  const { data: data2 } = await getArticles(
+    ["*"],
+    true,
+    data[0].attributes.tags.data.map((candidate) => ({
+      conditional: ["tags", "id", "$in"],
+      value: candidate.id,
+    }))
+  );
 
   const { data: data3 } = await getTags(
     ["*"],
@@ -52,7 +59,7 @@ export async function getStaticProps({ params }) {
       data: data[0],
       plainText: getTextFromMd(data[0].attributes.isi).value,
       htmlConverter: getHtmlFromMd(data[0].attributes.isi).value,
-      articlesLainnya: data2.map((value) => ({
+      articlesLainnya: data2.filter(candidate => candidate.id !== parseInt(params.slug)).map((value) => ({
         ...value,
         attributes: {
           ...value.attributes,
@@ -71,7 +78,7 @@ export async function getStaticPaths() {
     paths: data.map((candidate) => ({
       params: { slug: candidate.id + "" },
     })),
-    fallback: 'blocking',
+    fallback: "blocking",
   };
 }
 

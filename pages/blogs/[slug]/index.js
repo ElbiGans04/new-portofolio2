@@ -91,7 +91,7 @@ export async function getStaticPaths() {
     paths: data.map((candidate) => ({
       params: { slug: candidate.id + "" },
     })),
-    fallback: false,
+    fallback: 'blocking',
   };
 }
 

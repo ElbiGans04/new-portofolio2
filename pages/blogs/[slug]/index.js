@@ -69,15 +69,15 @@ export async function getStaticProps({ params }) {
 
   return {
     props: {
-      data,
+      data: data[0],
       plainText: processor2.processSync(data[0].attributes.isi).value,
       htmlConverter: processor.processSync(data[0].attributes.isi).value,
-      articlesLainnya: data2.map(value => ({
+      articlesLainnya: data2.map((value) => ({
         ...value,
         attributes: {
           ...value.attributes,
-          plainText: processor2.processSync(value.attributes.isi).value
-        }
+          plainText: processor2.processSync(value.attributes.isi).value,
+        },
       })),
       tagsLainnya: data3,
     },
@@ -91,7 +91,7 @@ export async function getStaticPaths() {
     paths: data.map((candidate) => ({
       params: { slug: candidate.id + "" },
     })),
-    fallback: true,
+    fallback: false,
   };
 }
 
@@ -110,8 +110,8 @@ export default function Blog({
   return (
     <>
       <Head>
-        <title>{data[0].attributes.judul}</title>
-        <meta name="description" content={data[0].attributes.deskripsi} />
+        <title>{data.attributes.judul}</title>
+        <meta name="description" content={data.attributes.deskripsi} />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
@@ -190,13 +190,13 @@ export default function Blog({
                   flexShrink={[0]}
                   position={["relative"]}
                 >
-                  {data[0].attributes.images &&
-                    Array.isArray(data[0].attributes.images.data) &&
-                    data[0].attributes.images.data[0] && (
+                  {data.attributes.images &&
+                    Array.isArray(data.attributes.images.data) &&
+                    data.attributes.images.data[0] && (
                       <NextImage
-                        src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${data[0].attributes.images.data[0].attributes.formats.large.url}`}
+                        src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${data.attributes.images.data[0].attributes.formats.large.url}`}
                         fill
-                        alt={data[0].attributes.judul}
+                        alt={data.attributes.judul}
                       />
                     )}
                 </Box>
@@ -221,11 +221,11 @@ export default function Blog({
                     lineHeight={["1.2em"]}
                     fontWeight={["bold"]}
                   >
-                    {data[0].attributes.judul}
+                    {data.attributes.judul}
                   </Text>
 
                   <Text fontSize={["md", "lg", "xl"]}>
-                    {getFormatDateArticle(data[0].attributes.createdAt)} -{" "}
+                    {getFormatDateArticle(data.attributes.createdAt)} -{" "}
                     {getReadingTime(plainText)} Menit
                   </Text>
                   <HStack
@@ -233,7 +233,7 @@ export default function Blog({
                     height={["100%"]}
                     alignItems={["flex-start"]}
                   >
-                    {data[0].attributes.tags.data.map(({ id, attributes }) => {
+                    {data.attributes.tags.data.map(({ id, attributes }) => {
                       return (
                         <Link
                           as={NextLink}

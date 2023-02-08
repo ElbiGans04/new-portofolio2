@@ -7,38 +7,30 @@ import {
   GridItem,
   HStack,
   Input,
-  Link, Modal,
+  Link,
+  Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay, SimpleGrid,
-  Text, useDisclosure, useMediaQuery, VStack
+  ModalOverlay,
+  SimpleGrid,
+  Text,
+  useDisclosure,
+  useMediaQuery,
+  VStack,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import NextImage from "next/image";
 import NextLink from "next/link";
 import React from "react";
-import remarkParse from "remark-parse";
-import { unified } from "unified";
-// import remarkRehype from 'remark-rehype'
-// import rehypeStringify from 'rehype-stringify'
 import getFormatDateArticle from "@/src/helpers/getFormatDateArticle";
 import getReadingTime from "@/src/helpers/getReadingTime";
-import remarkReText from "remark-retext";
-import retextEnglish from "retext-english";
-import retextStringify from "retext-stringify";
+import getTextFromMd from "@/src/helpers/getTextFromMd";
 import { getArticles } from "@/src/services/articles";
 
 export async function getStaticProps() {
-  const processor = unified()
-    .use(remarkParse)
-    .use(remarkReText, unified().use(retextEnglish), {
-      // ignore: ["heading"],
-    })
-    .use(retextStringify);
-
   const { data } = await getArticles();
 
   return {
@@ -47,7 +39,7 @@ export async function getStaticProps() {
         ...candidate,
         attributes: {
           ...candidate.attributes,
-          plainDeskripsi: processor.processSync(candidate.attributes.isi).value,
+          plainDeskripsi: getTextFromMd(candidate.attributes.isi).value,
         },
       })),
     },
@@ -169,8 +161,8 @@ export default function Blogs({ data }) {
                           </Link>
 
                           <Text fontSize={["md", "lg", "xl"]}>
-                            {getFormatDateArticle(attributes.createdAt)}{" "}
-                            - {getReadingTime(attributes.plainDeskripsi)} Menit
+                            {getFormatDateArticle(attributes.createdAt)} -{" "}
+                            {getReadingTime(attributes.plainDeskripsi)} Menit
                           </Text>
                         </VStack>
                         <VStack w={["100%"]} alignItems={["flex-start"]}>

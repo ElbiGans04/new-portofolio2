@@ -1,36 +1,26 @@
+import Berlangganan from "@/src/components/Berlangganan";
+import { breakpoints } from "@/src/config/chakra.config";
+import getFormatDateArticle from "@/src/helpers/getFormatDateArticle";
+import getHtmlFromMd from "@/src/helpers/getHtmlFromMd";
+import getReadingTime from "@/src/helpers/getReadingTime";
+import getTextFromMd from "@/src/helpers/getTextFromMd";
+import { getArticles } from "@/src/services/articles";
+import { getTags } from "@/src/services/tags";
 import {
   Box,
   Button,
   Grid,
   GridItem,
   HStack,
-  Link,
-  Text,
-  VStack,
-  useMediaQuery,
-  Stack,
+  Link, Stack, Text, useMediaQuery, VStack
 } from "@chakra-ui/react";
 import Head from "next/head";
-import Berlangganan from "@/src/components/Berlangganan";
-import NextLink from "next/link";
-import { breakpoints } from "@/src/config/chakra.config";
-import {
-  AiOutlineLink,
-  AiOutlineComment,
-  AiOutlineHeart,
-} from "react-icons/ai";
-import { getArticles } from "@/src/services/articles";
-import getFormatDateArticle from "@/src/helpers/getFormatDateArticle";
 import NextImage from "next/image";
-import remarkParse from "remark-parse";
-import { unified } from "unified";
-import remarkReText from "remark-retext";
-import retextEnglish from "retext-english";
-import retextStringify from "retext-stringify";
-import remarkRehype from "remark-rehype";
-import rehypeStringify from "rehype-stringify";
-import getReadingTime from "@/src/helpers/getReadingTime";
-import { getTags } from "@/src/services/tags";
+import NextLink from "next/link";
+import {
+  AiOutlineComment,
+  AiOutlineHeart, AiOutlineLink
+} from "react-icons/ai";
 
 export async function getStaticProps({ params }) {
   const { data } = await getArticles(["*"], true, [
@@ -56,27 +46,16 @@ export async function getStaticProps({ params }) {
     }))
   );
 
-  const processor = unified()
-    .use(remarkParse)
-    .use(remarkRehype)
-    .use(rehypeStringify);
-  const processor2 = unified()
-    .use(remarkParse)
-    .use(remarkReText, unified().use(retextEnglish), {
-      // ignore: ["heading"],
-    })
-    .use(retextStringify);
-
   return {
     props: {
       data: data[0],
-      plainText: processor2.processSync(data[0].attributes.isi).value,
-      htmlConverter: processor.processSync(data[0].attributes.isi).value,
+      plainText: getTextFromMd(data[0].attributes.isi).value,
+      htmlConverter: getHtmlFromMd(data[0].attributes.isi).value,
       articlesLainnya: data2.map((value) => ({
         ...value,
         attributes: {
           ...value.attributes,
-          plainText: processor2.processSync(value.attributes.isi).value,
+          plainText: getTextFromMd(value.attributes.isi).value,
         },
       })),
       tagsLainnya: data3,

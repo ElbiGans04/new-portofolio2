@@ -21,6 +21,7 @@ import { useRouter } from "next/router";
 import { AiOutlineMenu, AiOutlineClose } from 'react-icons/ai';
 import { BsFillMoonFill, BsSunFill } from 'react-icons/bs';
 import { breakpoints } from "@/src/config/chakra.config";
+import urls from "@/src/constants/url";
 
 const ButtonCustomMenu = forwardRef(({isActive, ...props}, ref) => (
   <Button _hover={{
@@ -80,9 +81,9 @@ export default function Navbar() {
               </Link>
               <Link
                 as={NextLink}
-                href="/blogs"
+                href={urls.blogs.url}
                 fontWeight={["semibold"]}
-                color={router.pathname === "/blogs" ? "brand.50" : "black"}
+                color={router.pathname === urls.blogs.url ? "brand.50" : "black"}
                 fontSize={["lg", "2xl"]}
               >
                 Blog
@@ -110,7 +111,7 @@ export default function Navbar() {
                         backgroundColor: ['brand.200']
                       }}
                       >Home</MenuItem>
-                      <MenuItem as={NextLink} href="/blogs" _hover={{
+                      <MenuItem as={NextLink} href={urls.blogs.url} _hover={{
                         backgroundColor: ['brand.100']
                       }}
                       _active={{

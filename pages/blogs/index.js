@@ -29,6 +29,7 @@ import getFormatDateArticle from "@/src/helpers/getFormatDateArticle";
 import getReadingTime from "@/src/helpers/getReadingTime";
 import getTextFromMd from "@/src/helpers/getTextFromMd";
 import { getArticles } from "@/src/services/articles";
+import urls from "@/src/constants/url";
 
 export async function getStaticProps() {
   const { data } = await getArticles();
@@ -113,7 +114,7 @@ export default function Blogs({ data }) {
                       {/* Header */}
                       <Link
                         as={NextLink}
-                        href={`/blogs/${id}`}
+                        href={`${urls.blogs.url}/${id}`}
                         width={["100%"]}
                       >
                         <Box
@@ -155,7 +156,7 @@ export default function Blogs({ data }) {
                               textDecoration: "underline",
                             }}
                             as={NextLink}
-                            href={`/blogs/${id}`}
+                            href={`${urls.blogs.url}/${id}`}
                           >
                             {attributes.judul}
                           </Link>
@@ -177,7 +178,7 @@ export default function Blogs({ data }) {
                               textDecoration: "underline",
                             }}
                             as={NextLink}
-                            href={`/blogs/${id}`}
+                            href={`${urls.blogs.url}/${id}`}
                           >
                             Klik disini untuk membaca selengkapnya.
                           </Link>
@@ -194,7 +195,7 @@ export default function Blogs({ data }) {
                           return (
                             <Link
                               as={NextLink}
-                              href={`/blogs?tag=${id}`}
+                              href={`${urls.blogs.url}?${urls.blogs.params.tag}=${id}`}
                               fontWeight={["bold"]}
                               color="brand.50"
                               fontSize={["md", "lg", "xl"]}

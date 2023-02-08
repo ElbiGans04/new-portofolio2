@@ -21,6 +21,7 @@ import {
   AiOutlineComment,
   AiOutlineHeart, AiOutlineLink
 } from "react-icons/ai";
+import urls from "@/src/constants/url";
 
 export async function getStaticProps({ params }) {
   const { data } = await getArticles(["*"], true, [
@@ -216,7 +217,7 @@ export default function Blog({
                       return (
                         <Link
                           as={NextLink}
-                          href={`/blogs?tag=${id}`}
+                          href={`${urls.blogs.url}?${urls.blogs.params.tag}=${id}`}
                           fontWeight={["bold"]}
                           color="brand.50"
                           fontSize={["md", "lg", "xl"]}
@@ -321,7 +322,7 @@ export default function Blog({
                                   fontSize={["lg", "xl", "2xl"]}
                                   fontWeight={["bold"]}
                                   as={NextLink}
-                                  href={`/blogs/${id}`}
+                                  href={`${urls.blogs.url}/${id}`}
                                 >
                                   {attributes.judul}
                                 </Link>
@@ -340,7 +341,7 @@ export default function Blog({
                                         <Link
                                           as={NextLink}
                                           key={id}
-                                          href={`/blogs?tag=${id}`}
+                                          href={`${urls.blogs.url}?${urls.blogs.params.tag}=${id}`}
                                           fontWeight={["bold"]}
                                           color="brand.50"
                                           fontSize={["md", "lg", "xl"]}
@@ -386,7 +387,7 @@ export default function Blog({
                         return (
                           <Link
                             as={NextLink}
-                            href={`/blogs?tag=${id}`}
+                            href={`${urls.blogs.url}?${urls.blogs.params.tag}=${id}`}
                             fontWeight={["bold"]}
                             color="brand.50"
                             fontSize={["md", "lg", "xl"]}

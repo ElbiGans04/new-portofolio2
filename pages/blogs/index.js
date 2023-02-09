@@ -30,6 +30,9 @@ import getReadingTime from "@/src/helpers/getReadingTime";
 import getTextFromMd from "@/src/helpers/getTextFromMd";
 import { getArticles } from "@/src/services/articles";
 import urls from "@/src/constants/url";
+import { useReducer } from "react";
+import ReactSelect from "react-select";
+import { configuration } from "@/src/config/chakra.config";
 
 export async function getStaticProps() {
   const { data } = await getArticles();
@@ -47,12 +50,81 @@ export async function getStaticProps() {
   };
 }
 
+const initialMainState = {
+  dataFilter: null,
+  filters: {
+    title: "",
+    date: {
+      from: "",
+      until: "",
+    },
+  },
+};
+
+function MainReducer(state, action) {
+  switch (action.type) {
+    case "filter-title-change": {
+      return {
+        ...state,
+        filters: {
+          ...state.filters,
+          title: action.payload.data,
+        },
+      };
+    }
+    case "filter-title-filter-data": {
+      return {
+        ...state,
+        dataFilter: action.payload.data,
+      };
+    }
+    case "filter-date-from-change": {
+      return {
+        ...state,
+        filters: {
+          ...state.filters,
+          date: {
+            ...state.filters.date,
+            from: action.payload.data,
+          },
+        },
+      };
+    }
+    case "filter-date-from-filter-data": {
+      return {
+        ...state,
+        dataFilter: action.payload.data,
+      };
+    }
+    case "filter-date-until-change": {
+      return {
+        ...state,
+        filters: {
+          ...state.filters,
+          date: {
+            ...state.filters.date,
+            until: action.payload.data,
+          },
+        },
+      };
+    }
+    case "filter-date-until-filter-data": {
+      return {
+        ...state,
+        dataFilter: action.payload.data,
+      };
+    }
+  }
+}
+
 export default function Blogs({ data }) {
   const [isLg] = useMediaQuery(`(min-width: ${breakpoints.lg})`, {
     ssr: true,
     fallback: false, // return false on the server, and re-evaluate on the client side
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [state, dispatch] = useReducer(MainReducer, initialMainState);
+
   return (
     <>
       <Head>
@@ -323,13 +395,99 @@ function FilterComponent({ langgananTampil, forModal }) {
               h={["100%"]}
               borderColor={["brand.50"]}
             >
-              <Input
+              {/* <Input
                 borderColor={["brand.50"]}
                 _focusVisible={{ boxShadow: "0 0 1px #7e1aff" }}
                 _hover={{ borderColor: ["brand.600"] }}
                 borderRadius={["8px"]}
                 w={["100%"]}
-              ></Input>
+              ></Input> */}
+              <ReactSelect
+                options={[
+                  {
+                    label: "Test",
+                    value: "1",
+                  },
+                  {
+                    label: "Test 2",
+                    value: "12",
+                  },
+                ]}
+                styles={{
+                  container: (baseStyles) => {
+                    return {
+                      ...baseStyles,
+                      width: "100%",
+                    };
+                  },
+                  control: (baseStyles, state) => {
+                    return {
+                      ...baseStyles,
+                      borderColor: state.isDisabled
+                        ? configuration.colors.brand[100]
+                        : state.isFocused
+                        ? configuration.colors.brand[500]
+                        : configuration.colors.brand[50],
+                      ":hover": {
+                        borderColor: state.isDisabled
+                          ? configuration.colors.brand[300]
+                          : state.isFocused
+                          ? configuration.colors.brand[700]
+                          : configuration.colors.brand[600],
+                      },
+                      boxShadow: state.isFocused
+                        ? `0 0 3px ${configuration.colors.brand[50]}`
+                        : state.isDisabled
+                        ? `0 0 1px ${configuration.colors.brand[100]}`
+                        : `0 0 1px ${configuration.colors.brand[500]}`,
+                    };
+                  },
+                  dropdownIndicator: (baseStyles, state) => {
+                    return {
+                      ...baseStyles,
+                      color: state.isDisabled
+                        ? configuration.colors.brand[100]
+                        : state.isFocused
+                        ? configuration.colors.brand[500]
+                        : configuration.colors.brand[50],
+                      ":hover": {
+                        color: state.isDisabled
+                          ? configuration.colors.brand[300]
+                          : state.isFocused
+                          ? configuration.colors.brand[700]
+                          : configuration.colors.brand[600],
+                      },
+                    };
+                  },
+                  option: (baseStyles, state) => {
+                    console.log(state);
+                    return {
+                      ...baseStyles,
+                      color: state.isDisabled
+                        ? configuration.colors.brand[100]
+                        : state.isFocused || state.isSelected
+                        ? "white"
+                        : configuration.colors.brand[50],
+                      backgroundColor: state.isDisabled
+                        ? configuration.colors.brand[100]
+                        : state.isSelected
+                        ? configuration.colors.brand[50]
+                        : state.isFocused
+                        ? configuration.colors.brand[400]
+                        : "white",
+                      ":active": {
+                        backgroundColor: state.isDisabled
+                          ? configuration.colors.brand[100]
+                          : state.isSelected
+                          ? configuration.colors.brand[400]
+                          : state.isFocused
+                          ? configuration.colors.brand[300]
+                          : "white",
+                      },
+                    };
+                  },
+                }}
+              />
             </HStack>
           </VStack>
 

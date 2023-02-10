@@ -403,6 +403,7 @@ function FilterComponent({ langgananTampil, forModal }) {
                 w={["100%"]}
               ></Input> */}
               <ReactSelect
+                isMulti
                 options={[
                   {
                     label: "Test",
@@ -418,6 +419,65 @@ function FilterComponent({ langgananTampil, forModal }) {
                     return {
                       ...baseStyles,
                       width: "100%",
+                    };
+                  },
+                  multiValue: (baseStyles, state) => {
+                    return {
+                      ...baseStyles,
+                      backgroundColor: state.isDisabled
+                        ? configuration.colors.brand[100]
+                        : state.isFocused
+                        ? configuration.colors.brand[500]
+                        : configuration.colors.brand[50],
+                      ":hover": {
+                        backgroundColor: state.isDisabled
+                          ? configuration.colors.brand[300]
+                          : state.isFocused
+                          ? configuration.colors.brand[50]
+                          : configuration.colors.brand[500],
+                      },
+                    };
+                  },
+                  multiValueLabel: (baseStyles, state) => {
+                    return {
+                      ...baseStyles,
+                      color: 'white',
+                      fontWeight: 'bold'
+                    };
+                  },
+                  multiValueRemove: (baseStyles, state) => {
+                    return {
+                      ...baseStyles,
+                      color: 'white',
+                      backgroundColor: state.isDisabled
+                          ? configuration.colors.brand[300]
+                          : state.isFocused
+                          ? configuration.colors.brand[50]
+                          : configuration.colors.brand[400],
+                      ":hover": {
+                        backgroundColor: state.isDisabled
+                          ? configuration.colors.brand[300]
+                          : state.isFocused
+                          ? configuration.colors.brand[50]
+                          : configuration.colors.brand[600],
+                      },
+                    };
+                  },
+                  clearIndicator: (baseStyles, state) => {
+                    return {
+                      ...baseStyles,
+                      color: state.isDisabled
+                        ? configuration.colors.brand[100]
+                        : state.isFocused
+                        ? configuration.colors.brand[500]
+                        : configuration.colors.brand[50],
+                      ":hover": {
+                        color: state.isDisabled
+                          ? configuration.colors.brand[300]
+                          : state.isFocused
+                          ? configuration.colors.brand[700]
+                          : configuration.colors.brand[600],
+                      },
                     };
                   },
                   control: (baseStyles, state) => {
@@ -460,7 +520,6 @@ function FilterComponent({ langgananTampil, forModal }) {
                     };
                   },
                   option: (baseStyles, state) => {
-                    console.log(state);
                     return {
                       ...baseStyles,
                       color: state.isDisabled

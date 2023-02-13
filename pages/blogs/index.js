@@ -24,7 +24,7 @@ import {
 import Head from "next/head";
 import NextImage from "next/image";
 import NextLink from "next/link";
-import React from "react";
+import React, { useMemo, useState, useEffect } from "react";
 import getFormatDateArticle from "@/src/helpers/getFormatDateArticle";
 import getReadingTime from "@/src/helpers/getReadingTime";
 import getTextFromMd from "@/src/helpers/getTextFromMd";
@@ -33,97 +33,39 @@ import urls from "@/src/constants/url";
 import { useReducer } from "react";
 import ReactSelect from "react-select";
 import { configuration } from "@/src/config/chakra.config";
+import { getTags } from "@/src/services/tags";
+import dayjs from "dayjs";
+import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
+import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
+
+dayjs.extend(isSameOrAfter);
+dayjs.extend(isSameOrBefore);
 
 export async function getStaticProps() {
-  const { data } = await getArticles();
+  const { data: dataArticle } = await getArticles();
+  const { data: dataTags } = await getTags();
 
   return {
     props: {
-      data: data.map((candidate) => ({
+      dataArticle: dataArticle.map((candidate) => ({
         ...candidate,
         attributes: {
           ...candidate.attributes,
           plainDeskripsi: getTextFromMd(candidate.attributes.isi).value,
         },
       })),
+      dataTags,
     },
   };
 }
 
-const initialMainState = {
-  dataFilter: null,
-  filters: {
-    title: "",
-    date: {
-      from: "",
-      until: "",
-    },
-  },
-};
-
-function MainReducer(state, action) {
-  switch (action.type) {
-    case "filter-title-change": {
-      return {
-        ...state,
-        filters: {
-          ...state.filters,
-          title: action.payload.data,
-        },
-      };
-    }
-    case "filter-title-filter-data": {
-      return {
-        ...state,
-        dataFilter: action.payload.data,
-      };
-    }
-    case "filter-date-from-change": {
-      return {
-        ...state,
-        filters: {
-          ...state.filters,
-          date: {
-            ...state.filters.date,
-            from: action.payload.data,
-          },
-        },
-      };
-    }
-    case "filter-date-from-filter-data": {
-      return {
-        ...state,
-        dataFilter: action.payload.data,
-      };
-    }
-    case "filter-date-until-change": {
-      return {
-        ...state,
-        filters: {
-          ...state.filters,
-          date: {
-            ...state.filters.date,
-            until: action.payload.data,
-          },
-        },
-      };
-    }
-    case "filter-date-until-filter-data": {
-      return {
-        ...state,
-        dataFilter: action.payload.data,
-      };
-    }
-  }
-}
-
-export default function Blogs({ data }) {
+export default function Blogs({ dataArticle, dataTags }) {
   const [isLg] = useMediaQuery(`(min-width: ${breakpoints.lg})`, {
     ssr: true,
     fallback: false, // return false on the server, and re-evaluate on the client side
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const [state, dispatch] = useReducer(MainReducer, initialMainState);
+  const [state, setState] = useState(dataArticle);
 
   return (
     <>
@@ -154,7 +96,12 @@ export default function Blogs({ data }) {
               top={["105px"]}
               left={["0"]}
             >
-              <FilterComponent langgananTampil={isLg} />
+              <FilterComponent
+                dataArticle={dataArticle}
+                setState={setState}
+                data={dataTags}
+                langgananTampil={isLg}
+              />
             </GridItem>
           )}
 
@@ -174,7 +121,7 @@ export default function Blogs({ data }) {
               marginTop={["20px"]}
             >
               {/* Card */}
-              {data.map(({ id, attributes }) => {
+              {state.map(({ id, attributes }) => {
                 return (
                   <React.Fragment key={id}>
                     <VStack
@@ -298,7 +245,13 @@ export default function Blogs({ data }) {
               <ModalHeader color="brand.50">Personal Project</ModalHeader>
               <ModalCloseButton color="brand.50" />
               <ModalBody>
-                <FilterComponent forModal={true} langgananTampil={false} />
+                <FilterComponent
+                  dataArticle={dataArticle}
+                  data={dataTags}
+                  setState={setState}
+                  forModal={true}
+                  langgananTampil={false}
+                />
               </ModalBody>
 
               <ModalFooter>
@@ -314,7 +267,101 @@ export default function Blogs({ data }) {
   );
 }
 
-function FilterComponent({ langgananTampil, forModal }) {
+const initialFiltersState = {
+  title: "",
+  tags: [],
+  date: {
+    from: "",
+    until: "",
+  },
+};
+
+function MainReducer(state, action) {
+  switch (action.type) {
+    case "filter-title-change": {
+      return {
+        ...state,
+        title: action.payload.data,
+      };
+    }
+    case "filter-tags-change": {
+      return {
+        ...state,
+        tags: action.payload.data,
+      };
+    }
+    case "filter-date-from-change": {
+      return {
+        ...state,
+        date: {
+          ...state.date,
+          from: action.payload.data,
+        },
+      };
+    }
+    case "filter-date-until-change": {
+      return {
+        ...state,
+        date: {
+          ...state.date,
+          until: action.payload.data,
+        },
+      };
+    }
+  }
+}
+
+function FilterComponent({
+  langgananTampil,
+  forModal,
+  data,
+  setState,
+  dataArticle,
+}) {
+  const [state, dispatch] = useReducer(MainReducer, initialFiltersState);
+  const dataMemo = useMemo(() => {
+    return data.map((candidate) => ({
+      label: candidate.attributes.title,
+      value: candidate.id,
+    }));
+  }, [data]);
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+    if (!Array.isArray(dataArticle)) return null;
+    setState(
+      dataArticle
+        .filter(({ attributes }) => {
+          if (!state.title) return true;
+          return attributes.judul
+            .toLowerCase()
+            .search(state.title.toLowerCase()) === -1
+            ? false
+            : true;
+        })
+        .filter(({ attributes }) => {
+          return state.tags.length === 0
+            ? true
+            : attributes.tags.data.find((candidate) =>
+                state.tags.find(
+                  (candidate2) => candidate2.value === candidate.id
+                )
+              );
+        })
+        .filter(({ attributes }) => {
+          if (!state.date.from && !state.date.until) return true;
+
+          const waktuData = dayjs(attributes.createdAt);
+          const waktuDulu = dayjs(state.date.from || new Date());
+          const waktuSetelah = dayjs(state.date.until || new Date());
+          return waktuData.isSameOrAfter(waktuDulu, "day") &&
+            waktuData.isSameOrBefore(waktuSetelah, "day")
+            ? true
+            : false;
+        })
+    );
+  }, [state, dataArticle, setState]);
+
   return (
     <VStack
       w={["100%"]}
@@ -364,17 +411,23 @@ function FilterComponent({ langgananTampil, forModal }) {
                 _hover={{ borderColor: ["brand.600"] }}
                 borderRightRadius={["0"]}
                 borderLeftRadius={["8px"]}
-              ></Input>
+                value={search}
+                onInput={(e) => setSearch(e.target.value)}
+              />
               <Button
                 w={["30%"]}
                 height={["100%"]}
-                bgColor={["brand.50"]}
-                cursor={["pointer"]}
-                color={["white"]}
-                borderRadius={[0]}
-                _hover={{ backgroundColor: "brand.500" }}
+                variant="brand"
                 borderRightRadius={["8px"]}
                 borderLeftRadius={["0px"]}
+                onClick={() => {
+                  dispatch({
+                    type: "filter-title-change",
+                    payload: {
+                      data: search,
+                    },
+                  });
+                }}
               >
                 Cari
               </Button>
@@ -403,17 +456,17 @@ function FilterComponent({ langgananTampil, forModal }) {
                 w={["100%"]}
               ></Input> */}
               <ReactSelect
+                onChange={(values) =>
+                  dispatch({
+                    type: "filter-tags-change",
+                    payload: {
+                      data: values,
+                    },
+                  })
+                }
+                defaultValue={state.tags}
                 isMulti
-                options={[
-                  {
-                    label: "Test",
-                    value: "1",
-                  },
-                  {
-                    label: "Test 2",
-                    value: "12",
-                  },
-                ]}
+                options={dataMemo}
                 styles={{
                   container: (baseStyles) => {
                     return {
@@ -441,19 +494,19 @@ function FilterComponent({ langgananTampil, forModal }) {
                   multiValueLabel: (baseStyles, state) => {
                     return {
                       ...baseStyles,
-                      color: 'white',
-                      fontWeight: 'bold'
+                      color: "white",
+                      fontWeight: "bold",
                     };
                   },
                   multiValueRemove: (baseStyles, state) => {
                     return {
                       ...baseStyles,
-                      color: 'white',
+                      color: "white",
                       backgroundColor: state.isDisabled
-                          ? configuration.colors.brand[300]
-                          : state.isFocused
-                          ? configuration.colors.brand[50]
-                          : configuration.colors.brand[400],
+                        ? configuration.colors.brand[300]
+                        : state.isFocused
+                        ? configuration.colors.brand[50]
+                        : configuration.colors.brand[400],
                       ":hover": {
                         backgroundColor: state.isDisabled
                           ? configuration.colors.brand[300]
@@ -572,6 +625,15 @@ function FilterComponent({ langgananTampil, forModal }) {
                   borderRadius={["8px"]}
                   w={["100%"]}
                   type="date"
+                  value={state.date.from}
+                  onInput={(e) =>
+                    dispatch({
+                      type: "filter-date-from-change",
+                      payload: {
+                        data: e.target.value,
+                      },
+                    })
+                  }
                 ></Input>
               </HStack>
             </VStack>
@@ -596,6 +658,15 @@ function FilterComponent({ langgananTampil, forModal }) {
                   borderRadius={["8px"]}
                   w={["100%"]}
                   type="date"
+                  value={state.date.until}
+                  onInput={(e) =>
+                    dispatch({
+                      type: "filter-date-until-change",
+                      payload: {
+                        data: e.target.value,
+                      },
+                    })
+                  }
                 ></Input>
               </HStack>
             </VStack>

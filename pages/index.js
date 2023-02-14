@@ -1,4 +1,3 @@
-import ProfileImage from "@/src/assets/images/img.jpg";
 import {
   Box,
   Button,
@@ -26,19 +25,101 @@ import {
   useDisclosure,
   VStack,
   useMediaQuery,
-  Highlight,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import Image from "next/image";
 import { AiFillGithub, AiFillLinkedin, AiFillMail } from "react-icons/ai";
 import { breakpoints } from "@/src/config/chakra.config";
+import { getHome } from "@/src/services/home";
+import getHtmlFromMd from "@/src/helpers/getHtmlFromMd";
+import indexModuleScss from "@/src/styles/index.module.scss";
+import { getContact } from "@/src/services/contacts";
+import { getJobs } from "@/src/services/jobs";
+import React, { useMemo, useReducer } from "react";
+import getFormatDateArticle from "@/src/helpers/getFormatDateArticle";
+import { getProjects } from "@/src/services/projects";
+import { getProjectTypes } from "@/src/services/projectTypes";
 
-export default function Home() {
+export async function getStaticProps() {
+  const { data } = await getHome(["*"], ["*"]);
+  const { data: dataContact } = await getContact(["*"], ["*"]);
+  const { data: dataJobs } = await getJobs(["*"], ["*"]);
+  const { data: dataProjects } = await getProjects(["*"], ["*"]);
+  const { data: dataProjectTypes } = await getProjectTypes(["*"], ["*"]);
+
+  return {
+    props: {
+      data: {
+        ...data,
+        attributes: {
+          ...data.attributes,
+          tentangSaya: getHtmlFromMd(data.attributes.tentangSaya).value,
+          kontak: getHtmlFromMd(data.attributes.kontak).value,
+          projek: getHtmlFromMd(data.attributes.projek).value,
+        },
+      },
+      dataContact,
+      dataJobs,
+      dataProjects,
+      dataProjectTypes,
+    },
+  };
+}
+
+const initialFiltersState = {
+  selectedDataId: null,
+  filterProjectActive: "ALL",
+};
+
+function MainReducer(state, action) {
+  switch (action.type) {
+    case "filter-button-change": {
+      return {
+        ...state,
+        filterProjectActive: action.payload.data,
+      };
+    }
+    case "select-project-change": {
+      return {
+        ...state,
+        selectedDataId: action.payload.data,
+      };
+    }
+    default: {
+      return state;
+    }
+  }
+}
+
+export default function Home({
+  data,
+  dataContact,
+  dataJobs,
+  dataProjects,
+  dataProjectTypes,
+}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLg] = useMediaQuery(`(min-width: ${breakpoints.lg})`, {
     ssr: true,
     fallback: false, // return false on the server, and re-evaluate on the client side
   });
+  const [state, dispatch] = useReducer(MainReducer, initialFiltersState);
+
+  const filteredData = useMemo(() => {
+    return dataProjects.filter(({ attributes }) => {
+      if (state.filterProjectActive === "ALL") return true;
+      return (
+        parseInt(state.filterProjectActive) ===
+        parseInt(attributes.project_type.data.id)
+      );
+    });
+  }, [state.filterProjectActive, dataProjects]);
+
+  const filteredDataModal = useMemo(() => {
+    return dataProjects.find(({ id }) => {
+      return parseInt(state.selectedDataId) === parseInt(id);
+    });
+  }, [state.selectedDataId, dataProjects]);
 
   return (
     <>
@@ -79,7 +160,7 @@ export default function Home() {
                 Halo Semua
               </Text>
               <Text fontSize={["xl", "3xl", "4xl"]}>
-                Saya <Box as="span">Elbi</Box>
+                Saya <Box as="span">{data.attributes.nama}</Box>
                 <br />
                 Saya adalah seorang{" "}
                 <Box
@@ -89,7 +170,7 @@ export default function Home() {
                   fontWeight={["bold"]}
                   whiteSpace={["nowrap"]}
                 >
-                  Fullstack developer
+                  {data.attributes.job}
                 </Box>
               </Text>
             </VStack>
@@ -108,9 +189,8 @@ export default function Home() {
                   overflow={["hidden"]}
                 >
                   <Image
-                    src={ProfileImage}
+                    src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${data.attributes.profile.data.attributes.formats.large.url}`}
                     alt="profile-rhafael"
-                    placeholder="blur"
                     fill
                   />
                 </Box>
@@ -128,98 +208,11 @@ export default function Home() {
           >
             Tentang
           </Heading>
-          <Text fontSize={["lg", "xl", "2xl", "3xl"]}>
-            <Highlight
-              styles={{
-                fontWeight: "bold",
-                color: "brand.50",
-              }}
-              query={["Fullstack web developer"]}
-            >
-              Halo Semua, perkenalkan saya adalah seorang Fullstack web
-              developer dan saya adalah seseorang yang menyukai tantangan dan
-              segala hal tentang teknologi
-            </Highlight>
-          </Text>
-          <br></br>
-          <Text fontSize={["lg", "xl", "2xl", "3xl"]}>
-            <Highlight
-              styles={{
-                fontWeight: "bold",
-                color: "brand.50",
-              }}
-              query={[
-                "Javascript dan Typescript",
-                "React dan Vue js",
-                "Web Aplikasi",
-              ]}
-            >
-              Dan saat ini Javascript dan Typescript adalah bahasa pemrograman
-              yang sering saya pakai, dan framework frontend seperti React dan
-              Vue js sering saya gunakan dalam mengembangkan Web Aplikasi.
-            </Highlight>
-          </Text>
-          {/* Alasan komentar, karena itu merupakan hal yang bersifat pribadi, dan mungkin tidak perlu juga */}
-          {/* <Text fontSize={["lg", "xl", "2xl", "3xl"]}>
-              Halo Semua, perkenalkan nama saya adalah{" "}
-              <Box as="span" fontWeight={["bold"]} color="brand.50">
-                Elbi
-              </Box>{" "}
-              dan saya berasal dari{" "}
-              <Box as="span" fontWeight={["bold"]} color="brand.50">
-                Tangerang
-              </Box>{" "}
-              yaitu salah satu kota yang berada didalam{" "}
-              <Box as="span" fontWeight={["bold"]} color="brand.50">
-                negara Indonesia
-              </Box>
-              {". "} Ketertarikan saya terhadap{" "}
-              <Box as="span" fontWeight={["bold"]} color="brand.50">
-                Programming
-              </Box>{" "}
-              berawal dari kesukaan saya dalam bermain permainan di{" "}
-              <Box as="span" fontWeight={["bold"]} color="brand.50">
-                Komputer, Playstation
-              </Box>{" "}
-              dan bahkan{" "}
-              <Box as="span" fontWeight={["bold"]} color="brand.50">
-                pada smartphone (android)
-              </Box>
-              {". "} Oleh sebab ketertarikan saya dalam bermain{" "}
-              <Box as="span" fontWeight={["bold"]} color="brand.50">
-                permainan
-              </Box>
-              {", "}
-              saya kemudian mulai mencari tau bagaimana membuat game.{" "}
-              <Box as="span" fontWeight={["bold"]} color="brand.50">
-                Tetapi
-              </Box>{" "}
-              oleh karena keterbatasan sumber daya{" "}
-              <Box as="span" fontWeight={["bold"]} color="brand.50">
-                (Seperti: spesifikasi laptop/komputer yang belum memadai dan
-                keterbatasan materi belajar yang gratis internet)
-              </Box>
-              {", "} saya memulai programming dengan{" "}
-              <Box as="span" fontWeight={["bold"]} color="brand.50">
-                belajar web developement.
-              </Box>
-              <br></br>
-              <br></br>
-              Dan saat ini{" "}
-              <Box as="span" fontWeight={["bold"]} color="brand.50">
-                Javascript dan Typescript
-              </Box>{" "}
-              adalah bahasa pemrograman yang sering saya pakai, dan framework
-              frontend seperti{" "}
-              <Box as="span" fontWeight={["bold"]} color="brand.50">
-                React dan Vue js
-              </Box>{" "}
-              sering saya gunakan dalam mengembangkan{" "}
-              <Box as="span" fontWeight={["bold"]} color="brand.50">
-                Web Applikasi
-              </Box>
-              {"."}
-            </Text> */}
+          <Box
+            fontSize={["lg", "xl", "2xl", "3xl"]}
+            dangerouslySetInnerHTML={{ __html: data.attributes.tentangSaya }}
+            className={indexModuleScss.content}
+          />
         </VStack>
 
         <VStack w={["100%"]} height={["100%"]} alignItems={["flex-start"]}>
@@ -237,55 +230,65 @@ export default function Home() {
             alignItems={["flex-start"]}
             spacing={["20px"]}
           >
-            <Text fontSize={["lg", "xl", "2xl", "3xl"]}>
-              <Highlight
-                query={[
-                  "merekrut saya",
-                  "ingin membuat website",
-                  "sesuai kebutuhan",
-                  "segera kirim",
-                  "pesan / email",
-                  "dibawah ini",
-                ]}
-                styles={{
-                  fontWeight: "bold",
-                  color: "brand.50",
-                }}
-              >
-                Tertarik untuk merekrut saya atau atau ingin membuat website
-                sesuai kebutuhan ? segera kirim saya pesan / email lewat
-                beberapa cara dibawah ini :
-              </Highlight>
-            </Text>
+            <Box
+              fontSize={["lg", "xl", "2xl", "3xl"]}
+              dangerouslySetInnerHTML={{ __html: data.attributes.kontak }}
+              className={indexModuleScss.content}
+            />
             <List spacing={3}>
               <ListItem>
                 <Link
-                  href="https://github.com/ElbiGans04"
+                  href={
+                    dataContact.find(
+                      (candidate) => candidate.attributes.judul === "Github"
+                    )?.attributes?.tautan
+                  }
                   fontSize={["lg", "xl", "2xl", "3xl"]}
                   verticalAlign={["middle"]}
                 >
                   <ListIcon as={AiFillGithub} />
-                  ElbiGans04
+                  {
+                    dataContact.find(
+                      (candidate) => candidate.attributes.judul === "Github"
+                    )?.attributes?.judul
+                  }
                 </Link>
               </ListItem>
               <ListItem>
                 <Link
-                  href="mailto:rhafaelbijaksana04@gmail.com"
+                  href={
+                    "mailto:" +
+                    dataContact.find(
+                      (candidate) => candidate.attributes.judul === "Email"
+                    )?.attributes?.tautan
+                  }
                   fontSize={["lg", "xl", "2xl", "3xl"]}
                   verticalAlign={["middle"]}
                 >
                   <ListIcon as={AiFillMail} />
-                  rhafaelbijaksana04@gmail.com
+                  {
+                    dataContact.find(
+                      (candidate) => candidate.attributes.judul === "Email"
+                    )?.attributes?.judul
+                  }
                 </Link>
               </ListItem>
               <ListItem>
                 <Link
-                  href="www.linkedin.com/in/rhafael-bijaksana"
+                  href={
+                    dataContact.find(
+                      (candidate) => candidate.attributes.judul === "Linkedin"
+                    )?.attributes?.tautan
+                  }
                   fontSize={["lg", "xl", "2xl", "3xl"]}
                   verticalAlign={["middle"]}
                 >
                   <ListIcon as={AiFillLinkedin} />
-                  rhafael-bijaksana
+                  {
+                    dataContact.find(
+                      (candidate) => candidate.attributes.judul === "Linkedin"
+                    )?.attributes?.judul
+                  }
                 </Link>
               </ListItem>
             </List>
@@ -312,118 +315,72 @@ export default function Home() {
             gridTemplateColumns={["repeat(6, 1fr)"]}
             gap={["50px 0"]}
           >
-            {isLg && (
-              <GridItem>
-                <VStack w={["100%"]} height={["100%"]}>
-                  <Box
-                    w={["70px"]}
-                    h={["70px"]}
-                    backgroundColor={["brand.50"]}
-                    borderRadius={["50%"]}
-                    borderWidth={["7px"]}
-                    flexShrink={[0]}
-                  />
-                  <Box
-                    w={["10px"]}
-                    h={["100%"]}
-                    backgroundColor={["brand.50"]}
-                  />
-                </VStack>
-              </GridItem>
-            )}
-            <GridItem colSpan={[6, 5]}>
-              <VStack
-                w={["100%"]}
-                h={["100%"]}
-                spacing={["32px"]}
-                alignItems={["flex-start"]}
-              >
-                <VStack w={["100%"]} alignItems={["flex-start"]}>
-                  <Text
-                    fontSize={["xl", "2xl", "3xl"]}
-                    fontWeight={["bold"]}
-                    lineHeight={["1.1em"]}
-                  >
-                    Pt. InArray Indonesia
-                  </Text>
-                  <Text fontSize={["lg", "xl", "2xl"]} lineHeight={["1.1em"]}>
-                    Sebagai frontend developer
-                  </Text>
-                  <Text fontSize={["lg", "xl", "xl"]} lineHeight={["1.1em"]}>
-                    Mar 20, 2020 - Des 04, 2029
-                  </Text>
-                </VStack>
-                <VStack w={["100%"]} alignItems={["flex-start"]}>
-                  <Text
-                    fontSize={["lg", "xl"]}
-                    lineHeight={["1.5em", null, null, null, "1.3em"]}
-                  >
-                    Hello world Hello world Hello world Hello world Hello world
-                    Hello world Hello world Hello world Hello world Hello world
-                    Hello world Hello world Hello world Hello world Hello world
-                    Hello world Hello world Hello world Hello world Hello world
-                    Hello world Hello world Hello world Hello world Hello world
-                    Hello world Hello world Hello world Hello world Hello world
-                  </Text>
-                </VStack>
-              </VStack>
-            </GridItem>
-            {isLg && (
-              <GridItem>
-                <VStack w={["100%"]} height={["100%"]}>
-                  <Box
-                    w={["70px"]}
-                    h={["70px"]}
-                    backgroundColor={["brand.50"]}
-                    borderRadius={["50%"]}
-                    borderWidth={["7px"]}
-                    flexShrink={[0]}
-                  />
-                  <Box
-                    w={["10px"]}
-                    h={["100%"]}
-                    backgroundColor={["brand.50"]}
-                  />
-                </VStack>
-              </GridItem>
-            )}
-            <GridItem colSpan={[6, 5]}>
-              <VStack
-                w={["100%"]}
-                h={["100%"]}
-                spacing={["32px"]}
-                alignItems={["flex-start"]}
-              >
-                <VStack w={["100%"]} alignItems={["flex-start"]}>
-                  <Text
-                    fontSize={["xl", "2xl", "3xl"]}
-                    fontWeight={["bold"]}
-                    lineHeight={["1.1em"]}
-                  >
-                    Pt. InArray Indonesia
-                  </Text>
-                  <Text fontSize={["lg", "xl", "2xl"]} lineHeight={["1.1em"]}>
-                    Sebagai frontend developer
-                  </Text>
-                  <Text fontSize={["lg", "xl", "xl"]} lineHeight={["1.1em"]}>
-                    Mar 20, 2020 - Des 04, 2029
-                  </Text>
-                </VStack>
-                <VStack w={["100%"]} alignItems={["flex-start"]}>
-                  <Text
-                    fontSize={["lg", "xl"]}
-                    lineHeight={["1.5em", null, null, null, "1.3em"]}
-                  >
-                    Hello world Hello world Hello world Hello world Hello world
-                    Hello world Hello world Hello world Hello world Hello world
-                    Hello world Hello world Hello world Hello world Hello world
-                    Hello world Hello world Hello world Hello world Hello world
-                    Hello world Hello world Hello world Hello world Hello world
-                    Hello world Hello world Hello world Hello world Hello world
-                  </Text>
-                </VStack>
-              </VStack>
-            </GridItem>
+            {dataJobs.map(({ id, attributes }) => {
+              return (
+                <React.Fragment key={id}>
+                  {isLg && (
+                    <GridItem>
+                      <VStack w={["100%"]} height={["100%"]}>
+                        <Box
+                          w={["70px"]}
+                          h={["70px"]}
+                          backgroundColor={["brand.50"]}
+                          borderRadius={["50%"]}
+                          borderWidth={["7px"]}
+                          flexShrink={[0]}
+                        />
+                        <Box
+                          w={["10px"]}
+                          h={["100%"]}
+                          backgroundColor={["brand.50"]}
+                        />
+                      </VStack>
+                    </GridItem>
+                  )}
+                  <GridItem colSpan={[6, 5]}>
+                    <VStack
+                      w={["100%"]}
+                      h={["100%"]}
+                      spacing={["32px"]}
+                      alignItems={["flex-start"]}
+                    >
+                      <VStack w={["100%"]} alignItems={["flex-start"]}>
+                        <Text
+                          fontSize={["xl", "2xl", "3xl"]}
+                          fontWeight={["bold"]}
+                          lineHeight={["1.1em"]}
+                        >
+                          {attributes.namaPerusahaan}
+                        </Text>
+                        <Text
+                          fontSize={["lg", "xl", "2xl"]}
+                          lineHeight={["1.1em"]}
+                        >
+                          Sebagai {attributes.jabatan}
+                        </Text>
+                        <Text
+                          fontSize={["lg", "xl", "xl"]}
+                          lineHeight={["1.1em"]}
+                        >
+                          {getFormatDateArticle(attributes.dari)} -{" "}
+                          {attributes.sampai
+                            ? getFormatDateArticle(attributes.sampai)
+                            : "Sekarang"}
+                        </Text>
+                      </VStack>
+                      <VStack w={["100%"]} alignItems={["flex-start"]}>
+                        <Text
+                          fontSize={["lg", "xl"]}
+                          lineHeight={["1.5em", null, null, null, "1.3em"]}
+                        >
+                          {attributes.deskripsi}
+                        </Text>
+                      </VStack>
+                    </VStack>
+                  </GridItem>
+                </React.Fragment>
+              );
+            })}
           </Grid>
         </VStack>
 
@@ -443,19 +400,11 @@ export default function Home() {
             >
               Riwayat projects yang pernah saya kerjakan
             </Text>
-            <Text fontSize={["lg", "xl", "2xl", "3xl"]}>
-              <Highlight
-                query={["telah", "kerjakan", "individu", "pekerjaan saya"]}
-                styles={{
-                  fontWeight: "bold",
-                  color: "brand.50",
-                }}
-              >
-                Berikut merupakan projek-projek web apps yang telah saya
-                kerjakan baik projek web individu maupun projek web pekerjaan
-                saya
-              </Highlight>
-            </Text>
+            <Box
+              fontSize={["lg", "xl", "2xl", "3xl"]}
+              dangerouslySetInnerHTML={{ __html: data.attributes.projek }}
+              className={indexModuleScss.content}
+            />
 
             {/* Action */}
             <HStack
@@ -464,8 +413,39 @@ export default function Home() {
               h={["100%"]}
               alignItems={["flex-start"]}
             >
-              <Button variant={"brand"}>Pribadi</Button>
-              <Button variant={"brandOutline"}>Pekerjaan</Button>
+              <Button
+                onClick={() =>
+                  dispatch({
+                    type: "filter-button-change",
+                    payload: { data: "ALL" },
+                  })
+                }
+                variant={
+                  state.filterProjectActive === "ALL" ? "brand" : "brandOutline"
+                }
+              >
+                Semua
+              </Button>
+              {dataProjectTypes.map(({ id, attributes }) => {
+                return (
+                  <Button
+                    key={id}
+                    onClick={() =>
+                      dispatch({
+                        type: "filter-button-change",
+                        payload: { data: id },
+                      })
+                    }
+                    variant={
+                      state.filterProjectActive === id
+                        ? "brand"
+                        : "brandOutline"
+                    }
+                  >
+                    {attributes.judul}
+                  </Button>
+                );
+              })}
             </HStack>
           </VStack>
 
@@ -481,44 +461,62 @@ export default function Home() {
             ]}
             gap={["60px 30px"]}
           >
-            <GridItem>
-              <Card w={["100%"]} cursor="pointer" onClick={onOpen}>
-                <CardBody>
-                  <ChakraImage
-                    src="https://images.unsplash.com/photo-1555041469-a586c61ea9bc?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1770&q=80"
-                    alt="Green double couch with wooden legs"
-                    borderRadius="lg"
-                  />
-                  <Stack mt="6" spacing="3">
-                    <Heading size={["xl"]} color={["brand.50"]}>
-                      Living room Sofa
-                    </Heading>
-                    <Text fontSize={["lg"]}>
-                      This sofa is perfect for modern tropical spaces, baroque
-                      inspired spaces, earthy toned spaces and for people who
-                      love a chic design with a sprinkle of vintage design.
-                    </Text>
-                  </Stack>
-                </CardBody>
-                <CardFooter>
-                  <HStack
+            {filteredData.map(({ id, attributes }) => {
+              return (
+                <GridItem key={id}>
+                  <Card
+                    shadow="xl"
+                    borderColor={["gray.100"]}
+                    borderWidth={["1px"]}
                     w={["100%"]}
-                    height={["100%"]}
-                    justifyContent={["flex-start"]}
-                    flexWrap={["wrap"]}
-                    spacing={[0]}
+                    cursor="pointer"
+                    onClick={() => {
+                      dispatch({
+                        type: "select-project-change",
+                        payload: { data: id },
+                      });
+                      onOpen();
+                    }}
                   >
-                    <Text
-                      fontWeight={["bold"]}
-                      color="brand.50"
-                      fontSize={["md"]}
-                    >
-                      #SELF IMPROVEMENT #BISNIS #SELF IMPROVEMENT #BISNIS
-                    </Text>
-                  </HStack>
-                </CardFooter>
-              </Card>
-            </GridItem>
+                    <CardBody>
+                      <Stack mt="6" spacing="3">
+                        <Heading size={["xl"]} color={["brand.50"]}>
+                          {attributes.judul}
+                        </Heading>
+                        <Text fontSize={["lg"]}>
+                          {attributes.deskripsiSingkat}
+                        </Text>
+                      </Stack>
+                    </CardBody>
+                    <CardFooter>
+                      <HStack
+                        w={["100%"]}
+                        height={["100%"]}
+                        justifyContent={["flex-start"]}
+                        flexWrap={["wrap"]}
+                        spacing={[0]}
+                      >
+                        <Text
+                          fontWeight={["bold"]}
+                          color="brand.50"
+                          fontSize={["md"]}
+                        >
+                          {attributes.project_tools.data.map(
+                            ({ id, attributes }) => {
+                              return (
+                                <React.Fragment key={id}>
+                                  #{attributes.judul}{" "}
+                                </React.Fragment>
+                              );
+                            }
+                          )}
+                        </Text>
+                      </HStack>
+                    </CardFooter>
+                  </Card>
+                </GridItem>
+              );
+            })}
           </Grid>
         </VStack>
       </VStack>
@@ -526,7 +524,11 @@ export default function Home() {
       <Modal size="xl" isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader color="brand.50">Personal Project</ModalHeader>
+          <ModalHeader color="brand.50">
+            Projek{" "}
+            {filteredDataModal &&
+              filteredDataModal.attributes.project_type.data.attributes.judul}
+          </ModalHeader>
           <ModalCloseButton color="brand.50" />
           <ModalBody>
             <VStack
@@ -535,33 +537,57 @@ export default function Home() {
               alignItems={["flex-start"]}
               spacing={["30px"]}
             >
-              <Box w={["100%"]} h={["250px"]} bgColor={["brand.500"]} />
+              <Box w={["100%"]} h={["250px"]} bgColor={["brand.500"]} position={['relative']}>
+                <Image
+                  src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${filteredDataModal.attributes.gambarProjek.data.attributes.formats.large.url}`}
+                  alt="profile-rhafael"
+                  fill
+                />
+              </Box>
               <VStack w={["100%"]} h={["100%"]} alignItems={["flex-start"]}>
                 <Heading
                   fontSize={["lg", "xl", "2xl", "3xl"]}
                   fontWeight={["bold"]}
                   color={["brand.50"]}
                 >
-                  Nama Project
+                  {filteredDataModal && filteredDataModal.attributes.judul}
                 </Heading>
                 <Text title="proses pengembangan" fontSize={["xl"]}>
-                  Des 04, 2022 - Jan 01, 2023
+                  {getFormatDateArticle(
+                    filteredDataModal &&
+                      filteredDataModal.attributes.waktuMulaiDevelop
+                  )}{" "}
+                  -{" "}
+                  {getFormatDateArticle(
+                    filteredDataModal &&
+                      filteredDataModal.attributes.waktuSelesaiDevelop
+                  )}
                 </Text>
                 <Text title="proses pengembangan" fontSize={["xl"]}>
-                  Personal Project
+                  Projek{" "}
+                  {filteredDataModal &&
+                    filteredDataModal.attributes.project_type.data.attributes
+                      .judul}
                 </Text>
                 <Text title="proses pengembangan" fontSize={["xl"]}>
-                  Node js, Sequelize
+                  {filteredDataModal &&
+                    filteredDataModal.attributes.project_tools.data.map(
+                      ({ id, attributes }, index, arrayy) => {
+                        console.log(index, arrayy);
+                        return (
+                          <React.Fragment key={id}>
+                            {attributes.judul}
+                            {index < arrayy.length - 1 && ", "}
+                          </React.Fragment>
+                        );
+                      }
+                    )}
                 </Text>
               </VStack>
 
               <Text fontSize={["xl"]}>
-                Lorem Lorem lorem lorem lorem lorem Lorem Lorem lorem lorem
-                lorem lorem Lorem Lorem lorem lorem lorem lorem Lorem Lorem
-                lorem lorem lorem lorem Lorem Lorem lorem lorem lorem lorem
-                Lorem Lorem lorem lorem lorem lorem Lorem Lorem lorem lorem
-                lorem lorem Lorem Lorem lorem lorem lorem lorem Lorem Lorem
-                lorem lorem lorem lorem Lorem Lorem lorem lorem lorem lorem
+                {filteredDataModal &&
+                  filteredDataModal.attributes.deskripsiPanjang}
               </Text>
             </VStack>
           </ModalBody>

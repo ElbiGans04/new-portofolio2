@@ -1,0 +1,14 @@
+$brandTextBold : var(--chakra-colors-brand-50); 
+.content {
+    p {
+        margin-bottom: 20px;
+        strong { 
+            color: $brandTextBold;
+            font-weight: bold;
+        }
+    }
+
+    p:last-child {
+        margin-bottom: 0;
+    }
+}

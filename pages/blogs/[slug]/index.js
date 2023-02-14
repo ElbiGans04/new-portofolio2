@@ -17,6 +17,7 @@ import {
   Text,
   useMediaQuery,
   VStack,
+  Tooltip
 } from "@chakra-ui/react";
 import Head from "next/head";
 import NextImage from "next/image";
@@ -133,27 +134,33 @@ export default function Blog({
               direction={["column", "row", "column"]}
               spacing={["16px", null, null, "48px"]}
             >
-              <Button
-                variant="brandOutline"
-                w={["100%", null, null, "inherit"]}
-              >
-                <AiOutlineHeart style={!isLg && { marginRight: "10px" }} />{" "}
-                {!isLg && "Suka"}
-              </Button>
-              <Button
-                variant="brandOutline"
-                w={["100%", null, null, "inherit"]}
-              >
-                <AiOutlineComment style={!isLg && { marginRight: "10px" }} />{" "}
-                {!isLg && "Komentar"}
-              </Button>
-              <Button
-                variant="brandOutline"
-                w={["100%", null, null, "inherit"]}
-              >
-                <AiOutlineLink style={!isLg && { marginRight: "10px" }} />{" "}
-                {!isLg && "Share"}
-              </Button>
+              <Tooltip  hasArrow label='Sukai Blog' bg='brand.50' color='white'>
+                <Button
+                  variant="brandOutline"
+                  w={["100%", null, null, "inherit"]}
+                >
+                  <AiOutlineHeart style={!isLg && { marginRight: "10px" }} />{" "}
+                  {!isLg && "Suka"}
+                </Button>
+              </Tooltip>
+              <Tooltip  hasArrow label='Tambahkan Komentar' bg='brand.50' color='white'>
+                <Button
+                  variant="brandOutline"
+                  w={["100%", null, null, "inherit"]}
+                >
+                  <AiOutlineComment style={!isLg && { marginRight: "10px" }} />{" "}
+                  {!isLg && "Komentar"}
+                </Button>
+              </Tooltip>
+              <Tooltip  hasArrow label='Salin Tautan' bg='brand.50' color='white'>
+                <Button
+                  variant="brandOutline"
+                  w={["100%", null, null, "inherit"]}
+                >
+                  <AiOutlineLink style={!isLg && { marginRight: "10px" }} />{" "}
+                  {!isLg && "Share"}
+                </Button>
+              </Tooltip>
             </Stack>
           </GridItem>
 

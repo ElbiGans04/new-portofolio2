@@ -17,7 +17,7 @@ import {
   Text,
   useMediaQuery,
   VStack,
-  Tooltip
+  Tooltip,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import NextImage from "next/image";
@@ -28,12 +28,12 @@ import {
   AiOutlineLink,
 } from "react-icons/ai";
 import urls from "@/src/constants/url";
-import slugCssModule from '@/src/styles/blogs/slug.module.scss'
+import slugCssModule from "@/src/styles/blogs/slug.module.scss";
 
 export async function getStaticProps({ params }) {
   const { data } = await getArticles(["*"], true, [
     {
-      conditional: ["id", "$eq"],
+      conditional: ["slug", "$eq"],
       value: params.slug,
     },
   ]);
@@ -61,13 +61,15 @@ export async function getStaticProps({ params }) {
       data: data[0],
       plainText: getTextFromMd(data[0].attributes.isi).value,
       htmlConverter: getHtmlFromMd(data[0].attributes.isi).value,
-      articlesLainnya: data2.filter(candidate => candidate.id !== parseInt(params.slug)).map((value) => ({
-        ...value,
-        attributes: {
-          ...value.attributes,
-          plainText: getTextFromMd(value.attributes.isi).value,
-        },
-      })),
+      articlesLainnya: data2
+        .filter((candidate) => candidate.attributes.slug !== params.slug)
+        .map((value) => ({
+          ...value,
+          attributes: {
+            ...value.attributes,
+            plainText: getTextFromMd(value.attributes.isi).value,
+          },
+        })),
       tagsLainnya: data3,
     },
   };
@@ -134,7 +136,7 @@ export default function Blog({
               direction={["column", "row", "column"]}
               spacing={["16px", null, null, "48px"]}
             >
-              <Tooltip  hasArrow label='Sukai Blog' bg='brand.50' color='white'>
+              <Tooltip hasArrow label="Sukai Blog" bg="brand.50" color="white">
                 <Button
                   variant="brandOutline"
                   w={["100%", null, null, "inherit"]}
@@ -143,7 +145,12 @@ export default function Blog({
                   {!isLg && "Suka"}
                 </Button>
               </Tooltip>
-              <Tooltip  hasArrow label='Tambahkan Komentar' bg='brand.50' color='white'>
+              <Tooltip
+                hasArrow
+                label="Tambahkan Komentar"
+                bg="brand.50"
+                color="white"
+              >
                 <Button
                   variant="brandOutline"
                   w={["100%", null, null, "inherit"]}
@@ -152,7 +159,12 @@ export default function Blog({
                   {!isLg && "Komentar"}
                 </Button>
               </Tooltip>
-              <Tooltip  hasArrow label='Salin Tautan' bg='brand.50' color='white'>
+              <Tooltip
+                hasArrow
+                label="Salin Tautan"
+                bg="brand.50"
+                color="white"
+              >
                 <Button
                   variant="brandOutline"
                   w={["100%", null, null, "inherit"]}
@@ -177,25 +189,23 @@ export default function Blog({
               spacing={["30px"]}
             >
               {/* Header */}
-              <Link as={NextLink} href="/" width={["100%"]}>
-                <Box
-                  w={["100%"]}
-                  height={["200px", "350px"]}
-                  backgroundColor={["#D9D9D9"]}
-                  flexShrink={[0]}
-                  position={["relative"]}
-                >
-                  {data.attributes.images &&
-                    Array.isArray(data.attributes.images.data) &&
-                    data.attributes.images.data[0] && (
-                      <NextImage
-                        src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${data.attributes.images.data[0].attributes.formats.large.url}`}
-                        fill
-                        alt={data.attributes.judul}
-                      />
-                    )}
-                </Box>
-              </Link>
+              <Box
+                w={["100%"]}
+                height={["200px", "350px"]}
+                backgroundColor={["#D9D9D9"]}
+                flexShrink={[0]}
+                position={["relative"]}
+              >
+                {data.attributes.images &&
+                  Array.isArray(data.attributes.images.data) &&
+                  data.attributes.images.data[0] && (
+                    <NextImage
+                      src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${data.attributes.images.data[0].attributes.formats.large.url}`}
+                      fill
+                      alt={data.attributes.judul}
+                    />
+                  )}
+              </Box>
 
               {/* Body */}
 
@@ -238,7 +248,7 @@ export default function Blog({
                           fontSize={["md", "lg", "xl"]}
                           key={id}
                         >
-                          #{attributes.title}
+                          #{attributes.judul}
                         </Link>
                       );
                     })}
@@ -338,7 +348,7 @@ export default function Blog({
                                   fontSize={["lg", "xl", "2xl"]}
                                   fontWeight={["bold"]}
                                   as={NextLink}
-                                  href={`${urls.blogs.url}/${id}`}
+                                  href={`${urls.blogs.url}/${attributes.slug}`}
                                 >
                                   {attributes.judul}
                                 </Link>
@@ -362,7 +372,7 @@ export default function Blog({
                                           color="brand.50"
                                           fontSize={["md", "lg", "xl"]}
                                         >
-                                          #{attributes.title}
+                                          #{attributes.judul}
                                         </Link>
                                       );
                                     }
@@ -409,7 +419,7 @@ export default function Blog({
                             fontSize={["md", "lg", "xl"]}
                             key={id}
                           >
-                            #{attributes.title}
+                            #{attributes.judul}
                           </Link>
                         );
                       })}

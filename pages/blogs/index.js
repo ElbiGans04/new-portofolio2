@@ -133,7 +133,7 @@ export default function Blogs({ dataArticle, dataTags }) {
                       {/* Header */}
                       <Link
                         as={NextLink}
-                        href={`${urls.blogs.url}/${id}`}
+                        href={`${urls.blogs.url}/${attributes.slug}`}
                         width={["100%"]}
                       >
                         <Box
@@ -175,7 +175,7 @@ export default function Blogs({ dataArticle, dataTags }) {
                               textDecoration: "underline",
                             }}
                             as={NextLink}
-                            href={`${urls.blogs.url}/${id}`}
+                            href={`${urls.blogs.url}/${attributes.slug}`}
                           >
                             {attributes.judul}
                           </Link>
@@ -197,7 +197,7 @@ export default function Blogs({ dataArticle, dataTags }) {
                               textDecoration: "underline",
                             }}
                             as={NextLink}
-                            href={`${urls.blogs.url}/${id}`}
+                            href={`${urls.blogs.url}/${attributes.slug}`}
                           >
                             Klik disini untuk membaca selengkapnya.
                           </Link>
@@ -220,7 +220,7 @@ export default function Blogs({ dataArticle, dataTags }) {
                               fontSize={["md", "lg", "xl"]}
                               key={id}
                             >
-                              #{attributes.title}
+                              #{attributes.judul}
                             </Link>
                           );
                         })}
@@ -321,7 +321,7 @@ function FilterComponent({
   const [state, dispatch] = useReducer(MainReducer, initialFiltersState);
   const dataMemo = useMemo(() => {
     return data.map((candidate) => ({
-      label: candidate.attributes.title,
+      label: candidate.attributes.judul,
       value: candidate.id,
     }));
   }, [data]);

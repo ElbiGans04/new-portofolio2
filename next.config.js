@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
-
-const pecah = process.env.STRAPI_BASE_URL.split(":")
+const path = require("path");
+const pecah = process.env.STRAPI_BASE_URL.split(":");
 const nextConfig = {
   reactStrictMode: true,
   images: {
@@ -13,6 +13,9 @@ const nextConfig = {
       },
     ],
   },
-}
+  sassOptions: {
+    includePaths: [path.join(__dirname, "src/styles")],
+  },
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;

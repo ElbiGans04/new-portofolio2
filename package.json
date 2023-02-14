@@ -30,5 +30,8 @@
     "retext-english": "^4.1.0",
     "retext-stringify": "^3.1.0",
     "unified": "^10.1.2"
+  },
+  "devDependencies": {
+    "sass": "^1.58.1"
   }
 }

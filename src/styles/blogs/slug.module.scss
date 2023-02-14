@@ -1,0 +1,50 @@
+$brandTextBold : var(--chakra-colors-brand-50); 
+
+.content {
+    h1 {
+        margin:  40px 0 10px;
+        color: $brandTextBold;
+        font-weight: bold;
+        font-size: 24px;
+
+        &:first-child {
+            margin-top: 0px;
+        }
+
+        @media screen and (min-width: 576px) {
+            & {
+                font-size: 28px;
+                margin:  50px 0 20px;
+            }    
+        }
+
+        @media screen and (min-width: 768px) {
+            & {
+                font-size: 32px;
+            }    
+        }
+
+        @media screen and (min-width: 991px) {
+            & {
+                font-size: 36px;
+            }    
+        }
+    }
+
+    p {
+        margin: 20px 0;
+    }
+
+    strong {
+        color: $brandTextBold
+    }
+    a {
+        color: $brandTextBold;
+        text-decoration: underline;
+        font-weight: bold;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}

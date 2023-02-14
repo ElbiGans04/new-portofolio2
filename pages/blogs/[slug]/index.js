@@ -27,6 +27,7 @@ import {
   AiOutlineLink,
 } from "react-icons/ai";
 import urls from "@/src/constants/url";
+import slugCssModule from '@/src/styles/blogs/slug.module.scss'
 
 export async function getStaticProps({ params }) {
   const { data } = await getArticles(["*"], true, [
@@ -241,6 +242,7 @@ export default function Blog({
                     dangerouslySetInnerHTML={{ __html: htmlConverter }}
                     as="div"
                     fontSize={["lg", "xl", "2xl"]}
+                    className={slugCssModule.content}
                   />
 
                   {/* <Text fontSize={["2xl", "3xl", "4xl"]} fontWeight={["bold"]}>

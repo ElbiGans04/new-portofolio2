@@ -136,7 +136,7 @@ export default function Blog({
               direction={["column", "row", "column"]}
               spacing={["16px", null, null, "48px"]}
             >
-              <Tooltip hasArrow label="Sukai Blog" bg="brand.50" color="white">
+              {/* <Tooltip hasArrow label="Sukai Blog" bg="brand.50" color="white">
                 <Button
                   variant="brandOutline"
                   w={["100%", null, null, "inherit"]}
@@ -158,7 +158,7 @@ export default function Blog({
                   <AiOutlineComment style={!isLg && { marginRight: "10px" }} />{" "}
                   {!isLg && "Komentar"}
                 </Button>
-              </Tooltip>
+              </Tooltip> */}
               <Tooltip
                 hasArrow
                 label="Salin Tautan"
@@ -170,7 +170,7 @@ export default function Blog({
                   w={["100%", null, null, "inherit"]}
                 >
                   <AiOutlineLink style={!isLg && { marginRight: "10px" }} />{" "}
-                  {!isLg && "Share"}
+                  {!isLg && "Salin"}
                 </Button>
               </Tooltip>
             </Stack>

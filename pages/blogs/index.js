@@ -329,38 +329,39 @@ function FilterComponent({
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    if (!Array.isArray(dataArticle)) return [];
-    setState(
-      dataArticle
-        .filter(({ attributes }) => {
-          if (!state.title) return true;
-          return attributes.judul
-            .toLowerCase()
-            .search(state.title.toLowerCase()) === -1
-            ? false
-            : true;
-        })
-        .filter(({ attributes }) => {
-          return state.tags.length === 0
-            ? true
-            : attributes.tags.data.find((candidate) =>
-                state.tags.find(
-                  (candidate2) => candidate2.value === candidate.id
-                )
-              );
-        })
-        .filter(({ attributes }) => {
-          if (!state.date.from && !state.date.until) return true;
-
-          const waktuData = dayjs(attributes.createdAt);
-          const waktuDulu = dayjs(state.date.from || new Date());
-          const waktuSetelah = dayjs(state.date.until || new Date());
-          return waktuData.isSameOrAfter(waktuDulu, "day") &&
-            waktuData.isSameOrBefore(waktuSetelah, "day")
-            ? true
-            : false;
-        })
-    );
+    if (Array.isArray(dataArticle)) {
+      setState(
+        dataArticle
+          .filter(({ attributes }) => {
+            if (!state.title) return true;
+            return attributes.judul
+              .toLowerCase()
+              .search(state.title.toLowerCase()) === -1
+              ? false
+              : true;
+          })
+          .filter(({ attributes }) => {
+            return state.tags.length === 0
+              ? true
+              : attributes.tags.data.find((candidate) =>
+                  state.tags.find(
+                    (candidate2) => candidate2.value === candidate.id
+                  )
+                );
+          })
+          .filter(({ attributes }) => {
+            if (!state.date.from && !state.date.until) return true;
+  
+            const waktuData = dayjs(attributes.createdAt);
+            const waktuDulu = dayjs(state.date.from || new Date());
+            const waktuSetelah = dayjs(state.date.until || new Date());
+            return waktuData.isSameOrAfter(waktuDulu, "day") &&
+              waktuData.isSameOrBefore(waktuSetelah, "day")
+              ? true
+              : false;
+          })
+      );
+    }
   }, [state, dataArticle, setState]);
 
   return (

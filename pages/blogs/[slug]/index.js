@@ -29,6 +29,7 @@ import {
 } from "react-icons/ai";
 import urls from "@/src/constants/url";
 import slugCssModule from "@/src/styles/blogs/slug.module.scss";
+import { useState } from "react";
 
 export async function getStaticProps({ params }) {
   const { data } = await getArticles(["*"], true, [
@@ -40,8 +41,8 @@ export async function getStaticProps({ params }) {
 
   if (!Array.isArray(data) || (Array.isArray(data) && data.length === 0)) {
     return {
-      notFound: true
-    }
+      notFound: true,
+    };
   }
 
   const { data: data2 } = await getArticles(
@@ -67,15 +68,17 @@ export async function getStaticProps({ params }) {
       data: data[0],
       plainText: data[0] && getTextFromMd(data[0].attributes.isi).value,
       htmlConverter: data[0] && getHtmlFromMd(data[0].attributes.isi).value,
-      articlesLainnya: Array.isArray(data2) && data2
-        .filter((candidate) => candidate.attributes.slug !== params.slug)
-        .map((value) => ({
-          ...value,
-          attributes: {
-            ...value.attributes,
-            plainText: getTextFromMd(value.attributes.isi).value,
-          },
-        })),
+      articlesLainnya:
+        Array.isArray(data2) &&
+        data2
+          .filter((candidate) => candidate.attributes.slug !== params.slug)
+          .map((value) => ({
+            ...value,
+            attributes: {
+              ...value.attributes,
+              plainText: getTextFromMd(value.attributes.isi).value,
+            },
+          })),
       tagsLainnya: data3,
     },
   };
@@ -85,9 +88,11 @@ export async function getStaticPaths() {
   const { data } = await getArticles(["id"], false);
 
   return {
-    paths: Array.isArray(data) ? data.map((candidate) => ({
-      params: { slug: candidate.id + "" },
-    })) : [],
+    paths: Array.isArray(data)
+      ? data.map((candidate) => ({
+          params: { slug: candidate.id + "" },
+        }))
+      : [],
     fallback: "blocking",
   };
 }
@@ -165,20 +170,7 @@ export default function Blog({
                   {!isLg && "Komentar"}
                 </Button>
               </Tooltip> */}
-              <Tooltip
-                hasArrow
-                label="Salin Tautan"
-                bg="brand.50"
-                color="white"
-              >
-                <Button
-                  variant="brandOutline"
-                  w={["100%", null, null, "inherit"]}
-                >
-                  <AiOutlineLink style={!isLg && { marginRight: "10px" }} />{" "}
-                  {!isLg && "Salin"}
-                </Button>
-              </Tooltip>
+              <Salin />
             </Stack>
           </GridItem>
 
@@ -202,7 +194,8 @@ export default function Blog({
                 flexShrink={[0]}
                 position={["relative"]}
               >
-                {data && data.attributes.images &&
+                {data &&
+                  data.attributes.images &&
                   Array.isArray(data.attributes.images.data) &&
                   data.attributes.images.data[0] && (
                     <NextImage
@@ -236,41 +229,42 @@ export default function Blog({
                   </Text>
 
                   <Text fontSize={["md", "lg", "xl"]}>
-                    {getFormatDateArticle(data && data.attributes.createdAt || new Date())} -{" "}
-                    {getReadingTime(plainText || '')} Menit
+                    {getFormatDateArticle(
+                      (data && data.attributes.createdAt) || new Date()
+                    )}{" "}
+                    - {getReadingTime(plainText || "")} Menit
                   </Text>
                   <HStack
                     w={["100%"]}
                     height={["100%"]}
                     alignItems={["flex-start"]}
                   >
-                    {Array.isArray(data) && data.attributes.tags.data.map(({ id, attributes }) => {
-                      return (
-                        <Link
-                          as={NextLink}
-                          href={`${urls.blogs.url}?${urls.blogs.params.tag}=${id}`}
-                          fontWeight={["bold"]}
-                          color="brand.50"
-                          fontSize={["md", "lg", "xl"]}
-                          key={id}
-                        >
-                          #{attributes.judul}
-                        </Link>
-                      );
-                    })}
+                    {Array.isArray(data) &&
+                      data.attributes.tags.data.map(({ id, attributes }) => {
+                        return (
+                          <Link
+                            as={NextLink}
+                            href={`${urls.blogs.url}?${urls.blogs.params.tag}=${id}`}
+                            fontWeight={["bold"]}
+                            color="brand.50"
+                            fontSize={["md", "lg", "xl"]}
+                            key={id}
+                          >
+                            #{attributes.judul}
+                          </Link>
+                        );
+                      })}
                   </HStack>
                 </VStack>
                 <VStack w={["100%"]} alignItems={["flex-start"]}>
-                  {
-                    htmlConverter && (
-                      <Box
-                        dangerouslySetInnerHTML={{ __html: htmlConverter }}
-                        as="div"
-                        fontSize={["lg", "xl", "2xl"]}
-                        className={slugCssModule.content}
-                      />
-                    )
-                  }
+                  {htmlConverter && (
+                    <Box
+                      dangerouslySetInnerHTML={{ __html: htmlConverter }}
+                      as="div"
+                      fontSize={["lg", "xl", "2xl"]}
+                      className={slugCssModule.content}
+                    />
+                  )}
                 </VStack>
               </VStack>
 
@@ -430,5 +424,43 @@ export default function Blog({
         </Grid>
       </VStack>
     </>
+  );
+}
+
+function Salin() {
+  const [isLg] = useMediaQuery(`(min-width: ${breakpoints.lg})`, {
+    ssr: true,
+    fallback: false, // return false on the server, and re-evaluate on the client side
+  });
+  const [state, setState] = useState({ isOpen: undefined, message: 'Salin Tautan' });
+  return (
+    <Tooltip
+      hasArrow
+      label={state.message}
+      bg="brand.50"
+      color="white"
+      isOpen={state.isOpen}
+    >
+      <Button
+        variant="brandOutline"
+        w={["100%", null, null, "inherit"]}
+        onBlur={() => setState({isOpen: undefined, message: 'Salin Tautan'})}
+        onClick={() => {
+          navigator.permissions
+            .query({ name: "clipboard-write" })
+            .then((result) => {
+              if (result.state === "granted" || result.state === "prompt") {
+                navigator.clipboard
+                  .writeText(window && window.location.href)
+                  .then(() => setState({isOpen: true, message: 'Berhasil Menyalin Tautan'}))
+                  .catch(() => setState({isOpen: true, message: 'Gagal Menyalin Tautan'}));
+              }
+            });
+        }}
+      >
+        <AiOutlineLink style={!isLg && { marginRight: "10px" }} />{" "}
+        {!isLg && "Salin"}
+      </Button>
+    </Tooltip>
   );
 }

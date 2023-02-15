@@ -158,7 +158,7 @@ export default function Home({
                 fontWeight={["bold"]}
                 lineHeight={["1em"]}
               >
-                Halo Semua
+                {data && data.attributes.haloHeader}
               </Text>
               <Text fontSize={["xl", "3xl", "4xl"]}>
                 Saya <Box as="span">{data && data.attributes.nama}</Box>
@@ -207,7 +207,7 @@ export default function Home({
             fontWeight={["bold"]}
             fontSize={["2xl", "3xl", "4xl", "5xl"]}
           >
-            Tentang
+            {data && data.attributes.tentangSayaHeader}
           </Heading>
           {data && (
             <Box
@@ -226,7 +226,7 @@ export default function Home({
               fontWeight={["bold"]}
               fontSize={["2xl", "3xl", "4xl", "5xl"]}
             >
-              Kontak
+              {data && data.attributes.kontakHeader}
             </Heading>
             <VStack
               w={["100%"]}
@@ -315,7 +315,7 @@ export default function Home({
               fontWeight={["bold"]}
               fontSize={["2xl", "3xl", "4xl", "5xl"]}
             >
-              Riwayat pekerjaan
+             {data && data.attributes.riwayatPekerjaanHeader}
             </Heading>
             <Grid
               w={["100%"]}
@@ -407,7 +407,7 @@ export default function Home({
               fontSize={["2xl", "3xl", "4xl", "5xl"]}
               lineHeight={["1.2em"]}
             >
-              Riwayat projects yang pernah saya kerjakan
+              {data && data.attributes.riwayatProjek}
             </Text>
             {data && (
               <Box

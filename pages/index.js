@@ -479,6 +479,12 @@ export default function Home({
                   <GridItem key={id}>
                     <Card
                       shadow="xl"
+                      _hover={{
+                        backgroundColor: 'blackAlpha.50'
+                      }}
+                      _active={{
+                        backgroundColor: 'blackAlpha.100'
+                      }}
                       borderColor={["gray.100"]}
                       borderWidth={["1px"]}
                       w={["100%"]}

@@ -537,12 +537,19 @@ export default function Home({
               alignItems={["flex-start"]}
               spacing={["30px"]}
             >
-              <Box w={["100%"]} h={["250px"]} bgColor={["brand.500"]} position={['relative']}>
-                <Image
-                  src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${filteredDataModal.attributes.gambarProjek.data.attributes.formats.large.url}`}
-                  alt="profile-rhafael"
-                  fill
-                />
+              <Box
+                w={["100%"]}
+                h={["250px"]}
+                bgColor={["brand.500"]}
+                position={["relative"]}
+              >
+                {filteredDataModal && (
+                  <Image
+                    src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${filteredDataModal.attributes.gambarProjek.data.attributes.formats.large.url}`}
+                    alt="profile-rhafael"
+                    fill
+                  />
+                )}
               </Box>
               <VStack w={["100%"]} h={["100%"]} alignItems={["flex-start"]}>
                 <Heading

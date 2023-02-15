@@ -48,15 +48,17 @@ export async function getStaticProps() {
 
   return {
     props: {
-      data: !data ? null : {
-        ...data,
-        attributes: {
-          ...data.attributes,
-          tentangSaya: getHtmlFromMd(data.attributes.tentangSaya).value,
-          kontak: getHtmlFromMd(data.attributes.kontak).value,
-          projek: getHtmlFromMd(data.attributes.projek).value,
-        },
-      },
+      data: !data
+        ? null
+        : {
+            ...data,
+            attributes: {
+              ...data.attributes,
+              tentangSaya: getHtmlFromMd(data.attributes.tentangSaya).value,
+              kontak: getHtmlFromMd(data.attributes.kontak).value,
+              projek: getHtmlFromMd(data.attributes.projek).value,
+            },
+          },
       dataContact,
       dataJobs,
       dataProjects,
@@ -315,7 +317,7 @@ export default function Home({
               fontWeight={["bold"]}
               fontSize={["2xl", "3xl", "4xl", "5xl"]}
             >
-             {data && data.attributes.riwayatPekerjaanHeader}
+              {data && data.attributes.riwayatPekerjaanHeader}
             </Heading>
             <Grid
               w={["100%"]}
@@ -480,10 +482,10 @@ export default function Home({
                     <Card
                       shadow="xl"
                       _hover={{
-                        backgroundColor: 'blackAlpha.50'
+                        backgroundColor: "blackAlpha.50",
                       }}
                       _active={{
-                        backgroundColor: 'blackAlpha.100'
+                        backgroundColor: "blackAlpha.100",
                       }}
                       borderColor={["gray.100"]}
                       borderWidth={["1px"]}
@@ -619,9 +621,21 @@ export default function Home({
           </ModalBody>
 
           <ModalFooter>
-            <Button variant="brand" onClick={onClose}>
-              Tutup
-            </Button>
+            <HStack w={["100%"]} justifyContent={["flex-end"]}>
+              {filteredDataModal && filteredDataModal.attributes.tautan && (
+                <Button
+                  variant="brand"
+                  onClick={onClose}
+                  as={Link}
+                  href={filteredDataModal.attributes.tautan}
+                >
+                  Lihat web aplikasi
+                </Button>
+              )}
+              <Button variant="brandOutline" onClick={onClose}>
+                Tutup
+              </Button>
+            </HStack>
           </ModalFooter>
         </ModalContent>
       </Modal>

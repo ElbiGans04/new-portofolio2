@@ -355,13 +355,24 @@ export default function Home({
                         alignItems={["flex-start"]}
                       >
                         <VStack w={["100%"]} alignItems={["flex-start"]}>
-                          <Text
-                            fontSize={["xl", "2xl", "3xl"]}
-                            fontWeight={["bold"]}
-                            lineHeight={["1.1em"]}
-                          >
-                            {attributes.namaPerusahaan}
-                          </Text>
+                          {attributes.tautan ? (
+                            <Link
+                              fontSize={["xl", "2xl", "3xl"]}
+                              fontWeight={["bold"]}
+                              lineHeight={["1.1em"]}
+                              href={attributes.tautan}
+                            >
+                              {attributes.namaPerusahaan}
+                            </Link>
+                          ) : (
+                            <Text
+                              fontSize={["xl", "2xl", "3xl"]}
+                              fontWeight={["bold"]}
+                              lineHeight={["1.1em"]}
+                            >
+                              {attributes.namaPerusahaan}
+                            </Text>
+                          )}
                           <Text
                             fontSize={["lg", "xl", "2xl"]}
                             lineHeight={["1.1em"]}

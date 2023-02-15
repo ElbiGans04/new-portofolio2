@@ -23,8 +23,8 @@ import Head from "next/head";
 import NextImage from "next/image";
 import NextLink from "next/link";
 import {
-  AiOutlineComment,
-  AiOutlineHeart,
+  // AiOutlineComment,
+  // AiOutlineHeart,
   AiOutlineLink,
 } from "react-icons/ai";
 import urls from "@/src/constants/url";
@@ -37,6 +37,12 @@ export async function getStaticProps({ params }) {
       value: params.slug,
     },
   ]);
+
+  if (!Array.isArray(data) || (Array.isArray(data) && data.length === 0)) {
+    return {
+      notFound: true
+    }
+  }
 
   const { data: data2 } = await getArticles(
     ["*"],
@@ -59,9 +65,9 @@ export async function getStaticProps({ params }) {
   return {
     props: {
       data: data[0],
-      plainText: getTextFromMd(data[0].attributes.isi).value,
-      htmlConverter: getHtmlFromMd(data[0].attributes.isi).value,
-      articlesLainnya: data2
+      plainText: data[0] && getTextFromMd(data[0].attributes.isi).value,
+      htmlConverter: data[0] && getHtmlFromMd(data[0].attributes.isi).value,
+      articlesLainnya: Array.isArray(data2) && data2
         .filter((candidate) => candidate.attributes.slug !== params.slug)
         .map((value) => ({
           ...value,
@@ -79,9 +85,9 @@ export async function getStaticPaths() {
   const { data } = await getArticles(["id"], false);
 
   return {
-    paths: data.map((candidate) => ({
+    paths: Array.isArray(data) ? data.map((candidate) => ({
       params: { slug: candidate.id + "" },
-    })),
+    })) : [],
     fallback: "blocking",
   };
 }
@@ -196,7 +202,7 @@ export default function Blog({
                 flexShrink={[0]}
                 position={["relative"]}
               >
-                {data.attributes.images &&
+                {data && data.attributes.images &&
                   Array.isArray(data.attributes.images.data) &&
                   data.attributes.images.data[0] && (
                     <NextImage
@@ -226,19 +232,19 @@ export default function Blog({
                     lineHeight={["1.2em"]}
                     fontWeight={["bold"]}
                   >
-                    {data.attributes.judul}
+                    {data && data.attributes.judul}
                   </Text>
 
                   <Text fontSize={["md", "lg", "xl"]}>
-                    {getFormatDateArticle(data.attributes.createdAt)} -{" "}
-                    {getReadingTime(plainText)} Menit
+                    {getFormatDateArticle(data && data.attributes.createdAt || new Date())} -{" "}
+                    {getReadingTime(plainText || '')} Menit
                   </Text>
                   <HStack
                     w={["100%"]}
                     height={["100%"]}
                     alignItems={["flex-start"]}
                   >
-                    {data.attributes.tags.data.map(({ id, attributes }) => {
+                    {Array.isArray(data) && data.attributes.tags.data.map(({ id, attributes }) => {
                       return (
                         <Link
                           as={NextLink}
@@ -255,25 +261,16 @@ export default function Blog({
                   </HStack>
                 </VStack>
                 <VStack w={["100%"]} alignItems={["flex-start"]}>
-                  <Box
-                    dangerouslySetInnerHTML={{ __html: htmlConverter }}
-                    as="div"
-                    fontSize={["lg", "xl", "2xl"]}
-                    className={slugCssModule.content}
-                  />
-
-                  {/* <Text fontSize={["2xl", "3xl", "4xl"]} fontWeight={["bold"]}>
-                    Heading 1
-                  </Text>
-                  <Text fontSize={["xl", "2xl", "3xl"]} fontWeight={["bold"]}>
-                    Heading 2
-                  </Text>
-                  <Text fontSize={["lg", "xl", "2xl"]} fontWeight={["bold"]}>
-                    Heading 3
-                  </Text>
-                  <Text fontSize={["md", "lg", "xl"]} fontWeight={["bold"]}>
-                    Heading 4
-                  </Text> */}
+                  {
+                    htmlConverter && (
+                      <Box
+                        dangerouslySetInnerHTML={{ __html: htmlConverter }}
+                        as="div"
+                        fontSize={["lg", "xl", "2xl"]}
+                        className={slugCssModule.content}
+                      />
+                    )
+                  }
                 </VStack>
               </VStack>
 

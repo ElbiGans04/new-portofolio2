@@ -48,7 +48,7 @@ export async function getStaticProps() {
 
   return {
     props: {
-      data: {
+      data: !data ? null : {
         ...data,
         attributes: {
           ...data.attributes,
@@ -105,6 +105,7 @@ export default function Home({
   const [state, dispatch] = useReducer(MainReducer, initialFiltersState);
 
   const filteredData = useMemo(() => {
+    if (!Array.isArray(dataProjects)) return [];
     return dataProjects.filter(({ attributes }) => {
       if (state.filterProjectActive === "ALL") return true;
       return (
@@ -115,6 +116,7 @@ export default function Home({
   }, [state.filterProjectActive, dataProjects]);
 
   const filteredDataModal = useMemo(() => {
+    if (!Array.isArray(dataProjects)) return null;
     return dataProjects.find(({ id }) => {
       return parseInt(state.selectedDataId) === parseInt(id);
     });
@@ -159,7 +161,7 @@ export default function Home({
                 Halo Semua
               </Text>
               <Text fontSize={["xl", "3xl", "4xl"]}>
-                Saya <Box as="span">{data.attributes.nama}</Box>
+                Saya <Box as="span">{data && data.attributes.nama}</Box>
                 <br />
                 Saya adalah seorang{" "}
                 <Box
@@ -169,13 +171,13 @@ export default function Home({
                   fontWeight={["bold"]}
                   whiteSpace={["nowrap"]}
                 >
-                  {data.attributes.job}
+                  {data && data.attributes.job}
                 </Box>
               </Text>
             </VStack>
           </GridItem>
 
-          {isLg && (
+          {isLg && !!data && (
             <GridItem>
               <VStack w={["100%"]} height={["100%"]} spacing={["16px"]}>
                 <Box
@@ -207,181 +209,189 @@ export default function Home({
           >
             Tentang
           </Heading>
-          <Box
-            fontSize={["lg", "xl", "2xl", "3xl"]}
-            dangerouslySetInnerHTML={{ __html: data.attributes.tentangSaya }}
-            className={indexModuleScss.content}
-          />
+          {data && (
+            <Box
+              fontSize={["lg", "xl", "2xl", "3xl"]}
+              dangerouslySetInnerHTML={{ __html: data.attributes.tentangSaya }}
+              className={indexModuleScss.content}
+            />
+          )}
         </VStack>
 
-        <VStack w={["100%"]} height={["100%"]} alignItems={["flex-start"]}>
-          <Heading
-            as="h1"
-            color={["brand.50"]}
-            fontWeight={["bold"]}
-            fontSize={["2xl", "3xl", "4xl", "5xl"]}
-          >
-            Kontak
-          </Heading>
+        {Array.isArray(dataContact) && (
+          <VStack w={["100%"]} height={["100%"]} alignItems={["flex-start"]}>
+            <Heading
+              as="h1"
+              color={["brand.50"]}
+              fontWeight={["bold"]}
+              fontSize={["2xl", "3xl", "4xl", "5xl"]}
+            >
+              Kontak
+            </Heading>
+            <VStack
+              w={["100%"]}
+              height={["100%"]}
+              alignItems={["flex-start"]}
+              spacing={["20px"]}
+            >
+              {data && (
+                <Box
+                  fontSize={["lg", "xl", "2xl", "3xl"]}
+                  dangerouslySetInnerHTML={{ __html: data.attributes.kontak }}
+                  className={indexModuleScss.content}
+                />
+              )}
+              <List spacing={3}>
+                <ListItem>
+                  <Link
+                    href={
+                      dataContact.find(
+                        (candidate) => candidate.attributes.judul === "Github"
+                      )?.attributes?.tautan
+                    }
+                    fontSize={["lg", "xl", "2xl", "3xl"]}
+                    verticalAlign={["middle"]}
+                  >
+                    <ListIcon as={AiFillGithub} />
+                    {
+                      dataContact.find(
+                        (candidate) => candidate.attributes.judul === "Github"
+                      )?.attributes?.judul
+                    }
+                  </Link>
+                </ListItem>
+                <ListItem>
+                  <Link
+                    href={
+                      "mailto:" +
+                      dataContact.find(
+                        (candidate) => candidate.attributes.judul === "Email"
+                      )?.attributes?.tautan
+                    }
+                    fontSize={["lg", "xl", "2xl", "3xl"]}
+                    verticalAlign={["middle"]}
+                  >
+                    <ListIcon as={AiFillMail} />
+                    {
+                      dataContact.find(
+                        (candidate) => candidate.attributes.judul === "Email"
+                      )?.attributes?.judul
+                    }
+                  </Link>
+                </ListItem>
+                <ListItem>
+                  <Link
+                    href={
+                      dataContact.find(
+                        (candidate) => candidate.attributes.judul === "Linkedin"
+                      )?.attributes?.tautan
+                    }
+                    fontSize={["lg", "xl", "2xl", "3xl"]}
+                    verticalAlign={["middle"]}
+                  >
+                    <ListIcon as={AiFillLinkedin} />
+                    {
+                      dataContact.find(
+                        (candidate) => candidate.attributes.judul === "Linkedin"
+                      )?.attributes?.judul
+                    }
+                  </Link>
+                </ListItem>
+              </List>
+            </VStack>
+          </VStack>
+        )}
+
+        {Array.isArray(dataJobs) && (
           <VStack
             w={["100%"]}
             height={["100%"]}
             alignItems={["flex-start"]}
-            spacing={["20px"]}
+            spacing={["32px"]}
           >
-            <Box
-              fontSize={["lg", "xl", "2xl", "3xl"]}
-              dangerouslySetInnerHTML={{ __html: data.attributes.kontak }}
-              className={indexModuleScss.content}
-            />
-            <List spacing={3}>
-              <ListItem>
-                <Link
-                  href={
-                    dataContact.find(
-                      (candidate) => candidate.attributes.judul === "Github"
-                    )?.attributes?.tautan
-                  }
-                  fontSize={["lg", "xl", "2xl", "3xl"]}
-                  verticalAlign={["middle"]}
-                >
-                  <ListIcon as={AiFillGithub} />
-                  {
-                    dataContact.find(
-                      (candidate) => candidate.attributes.judul === "Github"
-                    )?.attributes?.judul
-                  }
-                </Link>
-              </ListItem>
-              <ListItem>
-                <Link
-                  href={
-                    "mailto:" +
-                    dataContact.find(
-                      (candidate) => candidate.attributes.judul === "Email"
-                    )?.attributes?.tautan
-                  }
-                  fontSize={["lg", "xl", "2xl", "3xl"]}
-                  verticalAlign={["middle"]}
-                >
-                  <ListIcon as={AiFillMail} />
-                  {
-                    dataContact.find(
-                      (candidate) => candidate.attributes.judul === "Email"
-                    )?.attributes?.judul
-                  }
-                </Link>
-              </ListItem>
-              <ListItem>
-                <Link
-                  href={
-                    dataContact.find(
-                      (candidate) => candidate.attributes.judul === "Linkedin"
-                    )?.attributes?.tautan
-                  }
-                  fontSize={["lg", "xl", "2xl", "3xl"]}
-                  verticalAlign={["middle"]}
-                >
-                  <ListIcon as={AiFillLinkedin} />
-                  {
-                    dataContact.find(
-                      (candidate) => candidate.attributes.judul === "Linkedin"
-                    )?.attributes?.judul
-                  }
-                </Link>
-              </ListItem>
-            </List>
-          </VStack>
-        </VStack>
-
-        <VStack
-          w={["100%"]}
-          height={["100%"]}
-          alignItems={["flex-start"]}
-          spacing={["32px"]}
-        >
-          <Heading
-            as="h1"
-            color={["brand.50"]}
-            fontWeight={["bold"]}
-            fontSize={["2xl", "3xl", "4xl", "5xl"]}
-          >
-            Riwayat pekerjaan
-          </Heading>
-          <Grid
-            w={["100%"]}
-            height={["100%"]}
-            gridTemplateColumns={["repeat(6, 1fr)"]}
-            gap={["50px 0"]}
-          >
-            {dataJobs.map(({ id, attributes }) => {
-              return (
-                <React.Fragment key={id}>
-                  {isLg && (
-                    <GridItem>
-                      <VStack w={["100%"]} height={["100%"]}>
-                        <Box
-                          w={["70px"]}
-                          h={["70px"]}
-                          backgroundColor={["brand.50"]}
-                          borderRadius={["50%"]}
-                          borderWidth={["7px"]}
-                          flexShrink={[0]}
-                        />
-                        <Box
-                          w={["10px"]}
-                          h={["100%"]}
-                          backgroundColor={["brand.50"]}
-                        />
+            <Heading
+              as="h1"
+              color={["brand.50"]}
+              fontWeight={["bold"]}
+              fontSize={["2xl", "3xl", "4xl", "5xl"]}
+            >
+              Riwayat pekerjaan
+            </Heading>
+            <Grid
+              w={["100%"]}
+              height={["100%"]}
+              gridTemplateColumns={["repeat(6, 1fr)"]}
+              gap={["50px 0"]}
+            >
+              {dataJobs.map(({ id, attributes }) => {
+                return (
+                  <React.Fragment key={id}>
+                    {isLg && (
+                      <GridItem>
+                        <VStack w={["100%"]} height={["100%"]}>
+                          <Box
+                            w={["70px"]}
+                            h={["70px"]}
+                            backgroundColor={["brand.50"]}
+                            borderRadius={["50%"]}
+                            borderWidth={["7px"]}
+                            flexShrink={[0]}
+                          />
+                          <Box
+                            w={["10px"]}
+                            h={["100%"]}
+                            backgroundColor={["brand.50"]}
+                          />
+                        </VStack>
+                      </GridItem>
+                    )}
+                    <GridItem colSpan={[6, 5]}>
+                      <VStack
+                        w={["100%"]}
+                        h={["100%"]}
+                        spacing={["32px"]}
+                        alignItems={["flex-start"]}
+                      >
+                        <VStack w={["100%"]} alignItems={["flex-start"]}>
+                          <Text
+                            fontSize={["xl", "2xl", "3xl"]}
+                            fontWeight={["bold"]}
+                            lineHeight={["1.1em"]}
+                          >
+                            {attributes.namaPerusahaan}
+                          </Text>
+                          <Text
+                            fontSize={["lg", "xl", "2xl"]}
+                            lineHeight={["1.1em"]}
+                          >
+                            Sebagai {attributes.jabatan}
+                          </Text>
+                          <Text
+                            fontSize={["lg", "xl", "xl"]}
+                            lineHeight={["1.1em"]}
+                          >
+                            {getFormatDateArticle(attributes.dari)} -{" "}
+                            {attributes.sampai
+                              ? getFormatDateArticle(attributes.sampai)
+                              : "Sekarang"}
+                          </Text>
+                        </VStack>
+                        <VStack w={["100%"]} alignItems={["flex-start"]}>
+                          <Text
+                            fontSize={["lg", "xl"]}
+                            lineHeight={["1.5em", null, null, null, "1.3em"]}
+                          >
+                            {attributes.deskripsi}
+                          </Text>
+                        </VStack>
                       </VStack>
                     </GridItem>
-                  )}
-                  <GridItem colSpan={[6, 5]}>
-                    <VStack
-                      w={["100%"]}
-                      h={["100%"]}
-                      spacing={["32px"]}
-                      alignItems={["flex-start"]}
-                    >
-                      <VStack w={["100%"]} alignItems={["flex-start"]}>
-                        <Text
-                          fontSize={["xl", "2xl", "3xl"]}
-                          fontWeight={["bold"]}
-                          lineHeight={["1.1em"]}
-                        >
-                          {attributes.namaPerusahaan}
-                        </Text>
-                        <Text
-                          fontSize={["lg", "xl", "2xl"]}
-                          lineHeight={["1.1em"]}
-                        >
-                          Sebagai {attributes.jabatan}
-                        </Text>
-                        <Text
-                          fontSize={["lg", "xl", "xl"]}
-                          lineHeight={["1.1em"]}
-                        >
-                          {getFormatDateArticle(attributes.dari)} -{" "}
-                          {attributes.sampai
-                            ? getFormatDateArticle(attributes.sampai)
-                            : "Sekarang"}
-                        </Text>
-                      </VStack>
-                      <VStack w={["100%"]} alignItems={["flex-start"]}>
-                        <Text
-                          fontSize={["lg", "xl"]}
-                          lineHeight={["1.5em", null, null, null, "1.3em"]}
-                        >
-                          {attributes.deskripsi}
-                        </Text>
-                      </VStack>
-                    </VStack>
-                  </GridItem>
-                </React.Fragment>
-              );
-            })}
-          </Grid>
-        </VStack>
+                  </React.Fragment>
+                );
+              })}
+            </Grid>
+          </VStack>
+        )}
 
         <VStack
           w={["100%"]}
@@ -399,11 +409,13 @@ export default function Home({
             >
               Riwayat projects yang pernah saya kerjakan
             </Text>
-            <Box
-              fontSize={["lg", "xl", "2xl", "3xl"]}
-              dangerouslySetInnerHTML={{ __html: data.attributes.projek }}
-              className={indexModuleScss.content}
-            />
+            {data && (
+              <Box
+                fontSize={["lg", "xl", "2xl", "3xl"]}
+                dangerouslySetInnerHTML={{ __html: data.attributes.projek }}
+                className={indexModuleScss.content}
+              />
+            )}
 
             {/* Action */}
             <HStack
@@ -425,26 +437,27 @@ export default function Home({
               >
                 Semua
               </Button>
-              {dataProjectTypes.map(({ id, attributes }) => {
-                return (
-                  <Button
-                    key={id}
-                    onClick={() =>
-                      dispatch({
-                        type: "filter-button-change",
-                        payload: { data: id },
-                      })
-                    }
-                    variant={
-                      state.filterProjectActive === id
-                        ? "brand"
-                        : "brandOutline"
-                    }
-                  >
-                    {attributes.judul}
-                  </Button>
-                );
-              })}
+              {Array.isArray(dataProjectTypes) &&
+                dataProjectTypes.map(({ id, attributes }) => {
+                  return (
+                    <Button
+                      key={id}
+                      onClick={() =>
+                        dispatch({
+                          type: "filter-button-change",
+                          payload: { data: id },
+                        })
+                      }
+                      variant={
+                        state.filterProjectActive === id
+                          ? "brand"
+                          : "brandOutline"
+                      }
+                    >
+                      {attributes.judul}
+                    </Button>
+                  );
+                })}
             </HStack>
           </VStack>
 
@@ -460,62 +473,63 @@ export default function Home({
             ]}
             gap={["60px 30px"]}
           >
-            {filteredData.map(({ id, attributes }) => {
-              return (
-                <GridItem key={id}>
-                  <Card
-                    shadow="xl"
-                    borderColor={["gray.100"]}
-                    borderWidth={["1px"]}
-                    w={["100%"]}
-                    cursor="pointer"
-                    onClick={() => {
-                      dispatch({
-                        type: "select-project-change",
-                        payload: { data: id },
-                      });
-                      onOpen();
-                    }}
-                  >
-                    <CardBody>
-                      <Stack mt="6" spacing="3">
-                        <Heading size={["xl"]} color={["brand.50"]}>
-                          {attributes.judul}
-                        </Heading>
-                        <Text fontSize={["lg"]}>
-                          {attributes.deskripsiSingkat}
-                        </Text>
-                      </Stack>
-                    </CardBody>
-                    <CardFooter>
-                      <HStack
-                        w={["100%"]}
-                        height={["100%"]}
-                        justifyContent={["flex-start"]}
-                        flexWrap={["wrap"]}
-                        spacing={[0]}
-                      >
-                        <Text
-                          fontWeight={["bold"]}
-                          color="brand.50"
-                          fontSize={["md"]}
+            {Array.isArray(filteredData) &&
+              filteredData.map(({ id, attributes }) => {
+                return (
+                  <GridItem key={id}>
+                    <Card
+                      shadow="xl"
+                      borderColor={["gray.100"]}
+                      borderWidth={["1px"]}
+                      w={["100%"]}
+                      cursor="pointer"
+                      onClick={() => {
+                        dispatch({
+                          type: "select-project-change",
+                          payload: { data: id },
+                        });
+                        onOpen();
+                      }}
+                    >
+                      <CardBody>
+                        <Stack mt="6" spacing="3">
+                          <Heading size={["xl"]} color={["brand.50"]}>
+                            {attributes.judul}
+                          </Heading>
+                          <Text fontSize={["lg"]}>
+                            {attributes.deskripsiSingkat}
+                          </Text>
+                        </Stack>
+                      </CardBody>
+                      <CardFooter>
+                        <HStack
+                          w={["100%"]}
+                          height={["100%"]}
+                          justifyContent={["flex-start"]}
+                          flexWrap={["wrap"]}
+                          spacing={[0]}
                         >
-                          {attributes.project_tools.data.map(
-                            ({ id, attributes }) => {
-                              return (
-                                <React.Fragment key={id}>
-                                  #{attributes.judul}{" "}
-                                </React.Fragment>
-                              );
-                            }
-                          )}
-                        </Text>
-                      </HStack>
-                    </CardFooter>
-                  </Card>
-                </GridItem>
-              );
-            })}
+                          <Text
+                            fontWeight={["bold"]}
+                            color="brand.50"
+                            fontSize={["md"]}
+                          >
+                            {attributes.project_tools.data.map(
+                              ({ id, attributes }) => {
+                                return (
+                                  <React.Fragment key={id}>
+                                    #{attributes.judul}{" "}
+                                  </React.Fragment>
+                                );
+                              }
+                            )}
+                          </Text>
+                        </HStack>
+                      </CardFooter>
+                    </Card>
+                  </GridItem>
+                );
+              })}
           </Grid>
         </VStack>
       </VStack>

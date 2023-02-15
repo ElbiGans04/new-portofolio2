@@ -47,7 +47,7 @@ export async function getStaticProps() {
 
   return {
     props: {
-      dataArticle: dataArticle.map((candidate) => ({
+      dataArticle: !dataArticle ? null : dataArticle.map((candidate) => ({
         ...candidate,
         attributes: {
           ...candidate.attributes,
@@ -121,7 +121,7 @@ export default function Blogs({ dataArticle, dataTags }) {
               marginTop={["20px"]}
             >
               {/* Card */}
-              {state.map(({ id, attributes }) => {
+              {Array.isArray(state) && state.map(({ id, attributes }) => {
                 return (
                   <React.Fragment key={id}>
                     <VStack
@@ -320,6 +320,7 @@ function FilterComponent({
 }) {
   const [state, dispatch] = useReducer(MainReducer, initialFiltersState);
   const dataMemo = useMemo(() => {
+    if (!Array.isArray(data)) return [];
     return data.map((candidate) => ({
       label: candidate.attributes.judul,
       value: candidate.id,
@@ -328,7 +329,7 @@ function FilterComponent({
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    if (!Array.isArray(dataArticle)) return null;
+    if (!Array.isArray(dataArticle)) return [];
     setState(
       dataArticle
         .filter(({ attributes }) => {

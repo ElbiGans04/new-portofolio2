@@ -8,7 +8,6 @@ import {
   GridItem,
   Heading,
   HStack,
-  Image as ChakraImage,
   Link,
   List,
   ListIcon,
@@ -41,11 +40,11 @@ import { getProjects } from "@/src/services/projects";
 import { getProjectTypes } from "@/src/services/projectTypes";
 
 export async function getStaticProps() {
-  const { data } = await getHome(["*"], ["*"]);
-  const { data: dataContact } = await getContact(["*"], ["*"]);
-  const { data: dataJobs } = await getJobs(["*"], ["*"]);
-  const { data: dataProjects } = await getProjects(["*"], ["*"]);
-  const { data: dataProjectTypes } = await getProjectTypes(["*"], ["*"]);
+  const { data } = await getHome();
+  const { data: dataContact } = await getContact();
+  const { data: dataJobs } = await getJobs();
+  const { data: dataProjects } = await getProjects();
+  const { data: dataProjectTypes } = await getProjectTypes();
 
   return {
     props: {

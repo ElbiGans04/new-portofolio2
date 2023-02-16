@@ -47,13 +47,15 @@ export async function getStaticProps() {
 
   return {
     props: {
-      dataArticle: !dataArticle ? null : dataArticle.map((candidate) => ({
-        ...candidate,
-        attributes: {
-          ...candidate.attributes,
-          plainDeskripsi: getTextFromMd(candidate.attributes.isi).value,
-        },
-      })),
+      dataArticle: !dataArticle
+        ? null
+        : dataArticle.map((candidate) => ({
+            ...candidate,
+            attributes: {
+              ...candidate.attributes,
+              plainDeskripsi: getTextFromMd(candidate.attributes.isi).value,
+            },
+          })),
       dataTags,
     },
   };
@@ -121,120 +123,123 @@ export default function Blogs({ dataArticle, dataTags }) {
               marginTop={["20px"]}
             >
               {/* Card */}
-              {Array.isArray(state) && state.map(({ id, attributes }) => {
-                return (
-                  <React.Fragment key={id}>
-                    <VStack
-                      w={["100%"]}
-                      h={["max-content"]}
-                      alignItems={["flex-start"]}
-                      spacing={["30px"]}
-                    >
-                      {/* Header */}
-                      <Link
-                        as={NextLink}
-                        href={`${urls.blogs.url}/${attributes.slug}`}
-                        width={["100%"]}
-                      >
-                        <Box
-                          w={["100%", "90%"]}
-                          height={["200px", "250px", "350px"]}
-                          backgroundColor={["#D9D9D9"]}
-                          flexShrink={[0]}
-                          position={["relative"]}
-                        >
-                          {attributes.images &&
-                            Array.isArray(attributes.images.data) &&
-                            attributes.images.data[0] && (
-                              <NextImage
-                                src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${attributes.images.data[0].attributes.formats.large.url}`}
-                                fill
-                                alt={attributes.judul}
-                              />
-                            )}
-                        </Box>
-                      </Link>
-
-                      {/* Body */}
-
+              {Array.isArray(state) &&
+                state.map(({ id, attributes }, index) => {
+                  return (
+                    <React.Fragment key={id}>
                       <VStack
                         w={["100%"]}
-                        height={["100%"]}
+                        h={["max-content"]}
                         alignItems={["flex-start"]}
-                        spacing={["40px"]}
+                        spacing={["30px"]}
                       >
+                        {/* Header */}
+                        <Link
+                          as={NextLink}
+                          href={`${urls.blogs.url}/${attributes.slug}`}
+                          width={["100%"]}
+                        >
+                          <Box
+                            w={["100%", "90%"]}
+                            height={["200px", "250px", "350px"]}
+                            backgroundColor={["#D9D9D9"]}
+                            flexShrink={[0]}
+                            position={["relative"]}
+                          >
+                            {attributes.images &&
+                              Array.isArray(attributes.images.data) &&
+                              attributes.images.data[0] && (
+                                <NextImage
+                                  src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${attributes.images.data[0].attributes.formats.large.url}`}
+                                  fill
+                                  alt={attributes.judul}
+                                  sizes={`100vw, (min-width: ${breakpoints.sm}) 90vw, (min-width: ${breakpoints.lg}) 50vw,`}
+                                  priority={index === 0}
+                                />
+                              )}
+                          </Box>
+                        </Link>
+
+                        {/* Body */}
+
                         <VStack
                           w={["100%"]}
                           height={["100%"]}
                           alignItems={["flex-start"]}
+                          spacing={["40px"]}
                         >
-                          <Link
-                            fontSize={["2xl", "3xl", "4xl"]}
-                            fontWeight={["bold"]}
-                            _hover={{
-                              textDecoration: "underline",
-                            }}
-                            as={NextLink}
-                            href={`${urls.blogs.url}/${attributes.slug}`}
+                          <VStack
+                            w={["100%"]}
+                            height={["100%"]}
+                            alignItems={["flex-start"]}
                           >
-                            {attributes.judul}
-                          </Link>
-
-                          <Text fontSize={["md", "lg", "xl"]}>
-                            {getFormatDateArticle(attributes.createdAt)} -{" "}
-                            {getReadingTime(attributes.plainDeskripsi)} Menit
-                          </Text>
-                        </VStack>
-                        <VStack w={["100%"]} alignItems={["flex-start"]}>
-                          <Text fontSize={["lg", "xl", "2xl"]}>
-                            {attributes.deskripsi}...
-                          </Text>
-                          <Link
-                            fontSize={["lg", "xl", "2xl"]}
-                            fontWeight={["bold"]}
-                            color={["brand.50"]}
-                            _hover={{
-                              textDecoration: "underline",
-                            }}
-                            as={NextLink}
-                            href={`${urls.blogs.url}/${attributes.slug}`}
-                          >
-                            Klik disini untuk membaca selengkapnya.
-                          </Link>
-                        </VStack>
-                      </VStack>
-
-                      {/* Footer */}
-                      <HStack
-                        w={["100%"]}
-                        height={["100%"]}
-                        alignItems={["flex-start"]}
-                      >
-                        {attributes.tags.data.map(({ id, attributes }) => {
-                          return (
                             <Link
-                              as={NextLink}
-                              href={`${urls.blogs.url}?${urls.blogs.params.tag}=${id}`}
+                              fontSize={["2xl", "3xl", "4xl"]}
                               fontWeight={["bold"]}
-                              color="brand.50"
-                              fontSize={["md", "lg", "xl"]}
-                              key={id}
+                              _hover={{
+                                textDecoration: "underline",
+                              }}
+                              as={NextLink}
+                              href={`${urls.blogs.url}/${attributes.slug}`}
                             >
-                              #{attributes.judul}
+                              {attributes.judul}
                             </Link>
-                          );
-                        })}
-                      </HStack>
-                    </VStack>
-                    {/* Batas */}
-                    <Box
-                      w={["90%"]}
-                      height={["1px"]}
-                      bgColor={["rgba(0,0,0, 0.2)"]}
-                    />
-                  </React.Fragment>
-                );
-              })}
+
+                            <Text fontSize={["md", "lg", "xl"]}>
+                              {getFormatDateArticle(attributes.createdAt)} -{" "}
+                              {getReadingTime(attributes.plainDeskripsi)} Menit
+                            </Text>
+                          </VStack>
+                          <VStack w={["100%"]} alignItems={["flex-start"]}>
+                            <Text fontSize={["lg", "xl", "2xl"]}>
+                              {attributes.deskripsi}...
+                            </Text>
+                            <Link
+                              fontSize={["lg", "xl", "2xl"]}
+                              fontWeight={["bold"]}
+                              color={["brand.50"]}
+                              _hover={{
+                                textDecoration: "underline",
+                              }}
+                              as={NextLink}
+                              href={`${urls.blogs.url}/${attributes.slug}`}
+                            >
+                              Klik disini untuk membaca selengkapnya.
+                            </Link>
+                          </VStack>
+                        </VStack>
+
+                        {/* Footer */}
+                        <HStack
+                          w={["100%"]}
+                          height={["100%"]}
+                          alignItems={["flex-start"]}
+                        >
+                          {attributes.tags.data.map(({ id, attributes }) => {
+                            return (
+                              <Link
+                                as={NextLink}
+                                href={`${urls.blogs.url}?${urls.blogs.params.tag}=${id}`}
+                                fontWeight={["bold"]}
+                                color="brand.50"
+                                fontSize={["md", "lg", "xl"]}
+                                key={id}
+                              >
+                                #{attributes.judul}
+                              </Link>
+                            );
+                          })}
+                        </HStack>
+                      </VStack>
+                      {/* Batas */}
+                      <Box
+                        w={["90%"]}
+                        height={["1px"]}
+                        bgColor={["rgba(0,0,0, 0.2)"]}
+                      />
+                    </React.Fragment>
+                  );
+                })}
               {/* End Of Card */}
             </VStack>
           </GridItem>
@@ -351,7 +356,7 @@ function FilterComponent({
           })
           .filter(({ attributes }) => {
             if (!state.date.from && !state.date.until) return true;
-  
+
             const waktuData = dayjs(attributes.createdAt);
             const waktuDulu = dayjs(state.date.from || new Date());
             const waktuSetelah = dayjs(state.date.until || new Date());

@@ -202,6 +202,8 @@ export default function Blog({
                       src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${data.attributes.images.data[0].attributes.formats.large.url}`}
                       fill
                       alt={data.attributes.judul}
+                      sizes={`90vw, (min-width: ${breakpoints.lg}) 50vw`}
+                      priority
                     />
                   )}
               </Box>
@@ -432,7 +434,10 @@ function Salin() {
     ssr: true,
     fallback: false, // return false on the server, and re-evaluate on the client side
   });
-  const [state, setState] = useState({ isOpen: undefined, message: 'Salin Tautan' });
+  const [state, setState] = useState({
+    isOpen: undefined,
+    message: "Salin Tautan",
+  });
   return (
     <Tooltip
       hasArrow
@@ -444,7 +449,7 @@ function Salin() {
       <Button
         variant="brandOutline"
         w={["100%", null, null, "inherit"]}
-        onBlur={() => setState({isOpen: undefined, message: 'Salin Tautan'})}
+        onBlur={() => setState({ isOpen: undefined, message: "Salin Tautan" })}
         onClick={() => {
           navigator.permissions
             .query({ name: "clipboard-write" })
@@ -452,8 +457,15 @@ function Salin() {
               if (result.state === "granted" || result.state === "prompt") {
                 navigator.clipboard
                   .writeText(window && window.location.href)
-                  .then(() => setState({isOpen: true, message: 'Berhasil Menyalin Tautan'}))
-                  .catch(() => setState({isOpen: true, message: 'Gagal Menyalin Tautan'}));
+                  .then(() =>
+                    setState({
+                      isOpen: true,
+                      message: "Berhasil Menyalin Tautan",
+                    })
+                  )
+                  .catch(() =>
+                    setState({ isOpen: true, message: "Gagal Menyalin Tautan" })
+                  );
               }
             });
         }}

@@ -183,8 +183,8 @@ export default function Home({
             <GridItem>
               <VStack w={["100%"]} height={["100%"]} spacing={["16px"]}>
                 <Box
-                  w={["150px", null, null, "400px", "450px"]}
-                  height={["150px", null, null, "400px", "450px"]}
+                  w={["0", null, null, "400px", "450px"]}
+                  height={["0", null, null, "400px", "450px"]}
                   position={["relative"]}
                   borderWidth={["5px", "15px"]}
                   borderColor={["brand.50"]}
@@ -195,6 +195,8 @@ export default function Home({
                     src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${data.attributes.profile.data.attributes.formats.large.url}`}
                     alt="profile-rhafael"
                     fill
+                    sizes={`(min-width: ${breakpoints.lg}) 400px, (min-width: ${breakpoints.xl}) 450px`}
+                    priority
                   />
                 </Box>
               </VStack>

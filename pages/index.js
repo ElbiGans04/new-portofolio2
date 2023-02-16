@@ -100,6 +100,11 @@ export default function Home({
   dataProjectTypes,
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const {
+    isOpen: isOpen2,
+    onOpen: onOpen2,
+    onClose: onClose2,
+  } = useDisclosure();
   const [isLg] = useMediaQuery(`(min-width: ${breakpoints.lg})`, {
     ssr: true,
     fallback: false, // return false on the server, and re-evaluate on the client side
@@ -576,12 +581,15 @@ export default function Home({
                 h={["250px"]}
                 bgColor={["brand.500"]}
                 position={["relative"]}
+                cursor={["pointer"]}
+                onClick={onOpen2}
               >
                 {filteredDataModal && (
                   <Image
                     src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${filteredDataModal.attributes.gambarProjek.data.attributes.formats.large.url}`}
                     alt="profile-rhafael"
                     fill
+                    sizes={`90vw, (min-width: ${breakpoints.sm}) 90vw, (min-width: ${breakpoints.md}) 80vw, (min-width: ${breakpoints.lg}) 60vw, (min-width: ${breakpoints.xl}) 40vw`}
                   />
                 )}
               </Box>
@@ -614,7 +622,6 @@ export default function Home({
                   {filteredDataModal &&
                     filteredDataModal.attributes.project_tools.data.map(
                       ({ id, attributes }, index, arrayy) => {
-                        console.log(index, arrayy);
                         return (
                           <React.Fragment key={id}>
                             {attributes.judul}
@@ -649,6 +656,31 @@ export default function Home({
                 Tutup
               </Button>
             </HStack>
+          </ModalFooter>
+        </ModalContent>
+      </Modal>
+
+      <Modal onClose={onClose2} size="full" isOpen={isOpen2}>
+        <ModalOverlay />
+        <ModalContent>
+          <ModalHeader>
+            {filteredDataModal && filteredDataModal.attributes.judul}
+          </ModalHeader>
+          <ModalCloseButton />
+          <ModalBody display={['grid']} gridTemplateColumns={['1fr']} gridTemplateRows={['1fr']}>
+            <HStack w={['100%']} h={['100%']} position={['relative']}>
+              {filteredDataModal && (
+                <Image
+                  src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${filteredDataModal.attributes.gambarProjek.data.attributes.formats.large.url}`}
+                  alt="profile-rhafael"
+                  fill
+                  sizes={`90vw`}
+                />
+              )}
+            </HStack>
+          </ModalBody>
+          <ModalFooter>
+            <Button onClick={onClose2}>Close</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

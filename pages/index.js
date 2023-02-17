@@ -32,7 +32,6 @@ import { breakpoints } from "@/src/config/chakra.config";
 import { getHome } from "@/src/services/home";
 import getHtmlFromMd from "@/src/helpers/getHtmlFromMd";
 import indexModuleScss from "@/src/styles/index.module.scss";
-import { getContact } from "@/src/services/contacts";
 import { getJobs } from "@/src/services/jobs";
 import React, { useMemo, useReducer } from "react";
 import getFormatDateArticle from "@/src/helpers/getFormatDateArticle";
@@ -42,7 +41,6 @@ import ModalImage from "@/src/components/Modal/modalImage";
 
 export async function getStaticProps() {
   const { data } = await getHome();
-  const { data: dataContact } = await getContact();
   const { data: dataJobs } = await getJobs();
   const { data: dataProjects } = await getProjects();
   const { data: dataProjectTypes } = await getProjectTypes();
@@ -60,7 +58,6 @@ export async function getStaticProps() {
               projek: getHtmlFromMd(data.attributes.projek).value,
             },
           },
-      dataContact,
       dataJobs,
       dataProjects,
       dataProjectTypes,
@@ -95,7 +92,6 @@ function MainReducer(state, action) {
 
 export default function Home({
   data,
-  dataContact,
   dataJobs,
   dataProjects,
   dataProjectTypes,
@@ -220,7 +216,7 @@ export default function Home({
           </Section>
         )}
 
-        {data && Array.isArray(dataContact) && (
+        {data && (
           <Section title={data.attributes.kontakHeader || "Kontak Saya"}>
             <VStack
               w={["100%"]}
@@ -239,56 +235,38 @@ export default function Home({
                 <ListItem>
                   <Link
                     href={
-                      dataContact.find(
-                        (candidate) => candidate.attributes.judul === "Github"
-                      )?.attributes?.tautan
+                      data.attributes.github
                     }
                     fontSize={["lg", "xl", "2xl", "3xl"]}
                     verticalAlign={["middle"]}
                   >
                     <ListIcon as={AiFillGithub} />
-                    {
-                      dataContact.find(
-                        (candidate) => candidate.attributes.judul === "Github"
-                      )?.attributes?.judul
-                    }
+                    Github
                   </Link>
                 </ListItem>
                 <ListItem>
                   <Link
                     href={
                       "mailto:" +
-                      dataContact.find(
-                        (candidate) => candidate.attributes.judul === "Email"
-                      )?.attributes?.tautan
+                      data.attributes.email
                     }
                     fontSize={["lg", "xl", "2xl", "3xl"]}
                     verticalAlign={["middle"]}
                   >
                     <ListIcon as={AiFillMail} />
-                    {
-                      dataContact.find(
-                        (candidate) => candidate.attributes.judul === "Email"
-                      )?.attributes?.judul
-                    }
+                   Email
                   </Link>
                 </ListItem>
                 <ListItem>
                   <Link
                     href={
-                      dataContact.find(
-                        (candidate) => candidate.attributes.judul === "Linkedin"
-                      )?.attributes?.tautan
+                      data.attributes.linkedin
                     }
                     fontSize={["lg", "xl", "2xl", "3xl"]}
                     verticalAlign={["middle"]}
                   >
                     <ListIcon as={AiFillLinkedin} />
-                    {
-                      dataContact.find(
-                        (candidate) => candidate.attributes.judul === "Linkedin"
-                      )?.attributes?.judul
-                    }
+                    Linkedin
                   </Link>
                 </ListItem>
               </List>

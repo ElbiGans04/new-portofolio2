@@ -1,19 +1,13 @@
+import InputWithButton from "@/src/components/Input/withButton";
 import {
-  Text,
-  VStack,
-  Modal,
+  Button, Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay,
-  Box,
-  Heading,
-  Button,
-  useDisclosure
+  ModalOverlay, Text, useDisclosure, VStack
 } from "@chakra-ui/react";
-import InputWithButton from "@/src/components/Input/withButton";
 
 export default function Berlangganan({maxContent = false}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -25,30 +19,13 @@ export default function Berlangganan({maxContent = false}) {
         spacing={["10px"]}
         alignItems={["flex-start"]}
       >
-        {/* <Box
-            width={["150px"]}
-            height={["150px"]}
-            position={["relative"]}
-            overflow={["hidden"]}
-            borderRadius={["50%"]}
-            borderWidth={["5px"]}
-            borderColor={["brand.50"]}
-            flexShrink={["0"]}
-            >
-            <Image
-                src={ProfileImage}
-                alt="profile picture"
-                placeholder="blur"
-                fill
-            />
-            </Box> */}
         <Text
           as="h1"
           color={["brand.50"]}
           fontWeight={["bold"]}
           fontSize={["5xl", "6xl", "7xl"]}
         >
-          Halo
+          Halo 
         </Text>
         <Text as="p" fontWeight={["semibold"]} fontSize={["md","lg", "xl"]}>
           Ayo berlangganan agar tidak ketinggalan update apapun dari website ini
@@ -61,8 +38,8 @@ export default function Berlangganan({maxContent = false}) {
       <Modal size="xl" isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader color="brand.50">Peringatan</ModalHeader>
-          <ModalCloseButton color="brand.50" />
+          <ModalHeader>Peringatan</ModalHeader>
+          <ModalCloseButton />
           <ModalBody>
             <VStack
               w={["100%"]}

@@ -680,7 +680,7 @@ export default function Home({
             </HStack>
           </ModalBody>
           <ModalFooter>
-            <Button onClick={onClose2}>Close</Button>
+            <Button variant="brand" onClick={onClose2}>Close</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

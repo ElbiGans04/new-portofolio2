@@ -413,9 +413,6 @@ function FilterComponent({
               <Input
                 data-peer=""
                 w={["70%"]}
-                borderColor={["brand.50"]}
-                _focusVisible={{ boxShadow: "0 0 1px #7e1aff" }}
-                _hover={{ borderColor: ["brand.600"] }}
                 borderRightRadius={["0"]}
                 borderLeftRadius={["8px"]}
                 value={search}
@@ -626,10 +623,6 @@ function FilterComponent({
                 borderColor={["brand.50"]}
               >
                 <Input
-                  borderColor={["brand.50"]}
-                  _focusVisible={{ boxShadow: "0 0 1px #7e1aff" }}
-                  _hover={{ borderColor: ["brand.600"] }}
-                  borderRadius={["8px"]}
                   w={["100%"]}
                   type="date"
                   value={state.date.from}
@@ -659,10 +652,6 @@ function FilterComponent({
                 borderColor={["brand.50"]}
               >
                 <Input
-                  borderColor={["brand.50"]}
-                  _focusVisible={{ boxShadow: "0 0 1px #7e1aff" }}
-                  _hover={{ borderColor: ["brand.600"] }}
-                  borderRadius={["8px"]}
                   w={["100%"]}
                   type="date"
                   value={state.date.until}

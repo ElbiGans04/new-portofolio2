@@ -1,7 +1,8 @@
 import { extendTheme } from "@chakra-ui/react";
 import source_sans from "../constants/fonts/source_sans_3";
 import work_sans from "../constants/fonts/work_sans";
-
+import inputAnatomyTheme from "./chakraComponents/Input";
+import modalAnatomyTheme from "./chakraComponents/Modal";
 /**
  * Custom Breakpoint
  */
@@ -82,6 +83,8 @@ export const configuration = {
         },
       },
     },
+    Modal: modalAnatomyTheme,
+    Input: inputAnatomyTheme
   },
 };
 

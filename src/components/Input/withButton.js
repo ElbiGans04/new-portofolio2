@@ -11,9 +11,6 @@ export default function InputWithButton({children, onClick}) {
       <Input
         data-peer=""
         w={["70%"]}
-        borderColor={["brand.50"]}
-        _focusVisible={{ boxShadow: "0 0 1px #7e1aff" }}
-        _hover={{ borderColor: ["brand.600"] }}
         borderRightRadius={["0"]}
         borderLeftRadius={["8px"]}
       ></Input>

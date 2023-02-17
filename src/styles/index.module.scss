@@ -12,3 +12,7 @@ $brandTextBold : var(--chakra-colors-brand-50);
         margin-bottom: 0;
     }
 }
+
+.objectFit {
+    object-fit: contain;
+}

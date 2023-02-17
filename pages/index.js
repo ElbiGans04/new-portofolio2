@@ -675,6 +675,7 @@ export default function Home({
                   alt="profile-rhafael"
                   fill
                   sizes={`90vw`}
+                  className={indexModuleScss.objectFit}
                 />
               )}
             </HStack>

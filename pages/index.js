@@ -38,6 +38,7 @@ import React, { useMemo, useReducer } from "react";
 import getFormatDateArticle from "@/src/helpers/getFormatDateArticle";
 import { getProjects } from "@/src/services/projects";
 import { getProjectTypes } from "@/src/services/projectTypes";
+import ModalImage from "@/src/components/Modal/modalImage";
 
 export async function getStaticProps() {
   const { data } = await getHome();
@@ -209,34 +210,18 @@ export default function Home({
           )}
         </Grid>
 
-        <VStack w={["100%"]} height={["100%"]} alignItems={["flex-start"]}>
-          <Heading
-            as="h1"
-            color={["brand.50"]}
-            fontWeight={["bold"]}
-            fontSize={["2xl", "3xl", "4xl", "5xl"]}
-          >
-            {data && data.attributes.tentangSayaHeader}
-          </Heading>
-          {data && (
+        {data && (
+          <Section title={data.attributes.tentangSayaHeader || "Tentang Saya"}>
             <Box
               fontSize={["lg", "xl", "2xl", "3xl"]}
               dangerouslySetInnerHTML={{ __html: data.attributes.tentangSaya }}
               className={indexModuleScss.content}
             />
-          )}
-        </VStack>
+          </Section>
+        )}
 
-        {Array.isArray(dataContact) && (
-          <VStack w={["100%"]} height={["100%"]} alignItems={["flex-start"]}>
-            <Heading
-              as="h1"
-              color={["brand.50"]}
-              fontWeight={["bold"]}
-              fontSize={["2xl", "3xl", "4xl", "5xl"]}
-            >
-              {data && data.attributes.kontakHeader}
-            </Heading>
+        {data && Array.isArray(dataContact) && (
+          <Section title={data.attributes.kontakHeader || "Kontak Saya"}>
             <VStack
               w={["100%"]}
               height={["100%"]}
@@ -308,24 +293,18 @@ export default function Home({
                 </ListItem>
               </List>
             </VStack>
-          </VStack>
+          </Section>
         )}
 
-        {Array.isArray(dataJobs) && (
-          <VStack
-            w={["100%"]}
-            height={["100%"]}
-            alignItems={["flex-start"]}
-            spacing={["32px"]}
+        {data && Array.isArray(dataJobs) && (
+          <Section
+            title={
+              data.attributes.riwayatPekerjaanHeader || "Riwayat Pekerjaan"
+            }
+            containerProps={{
+              spacing: ["32px"],
+            }}
           >
-            <Heading
-              as="h1"
-              color={["brand.50"]}
-              fontWeight={["bold"]}
-              fontSize={["2xl", "3xl", "4xl", "5xl"]}
-            >
-              {data && data.attributes.riwayatPekerjaanHeader}
-            </Heading>
             <Grid
               w={["100%"]}
               height={["100%"]}
@@ -410,7 +389,7 @@ export default function Home({
                 );
               })}
             </Grid>
-          </VStack>
+          </Section>
         )}
 
         <VStack
@@ -419,68 +398,15 @@ export default function Home({
           alignItems={["flex-start"]}
           spacing={["50px"]}
         >
-          <VStack w={["100%"]} height={["100%"]} alignItems={["flex-start"]}>
-            <Text
-              as="h1"
-              color={["brand.50"]}
-              fontWeight={["bold"]}
-              fontSize={["2xl", "3xl", "4xl", "5xl"]}
-              lineHeight={["1.2em"]}
-            >
-              {data && data.attributes.riwayatProjek}
-            </Text>
-            {data && (
+          {data && Array.isArray(dataJobs) && (
+            <Section title={data.attributes.riwayatProjek || "Riwayat Projek"}>
               <Box
                 fontSize={["lg", "xl", "2xl", "3xl"]}
                 dangerouslySetInnerHTML={{ __html: data.attributes.projek }}
                 className={indexModuleScss.content}
               />
-            )}
-
-            {/* Action */}
-            <HStack
-              marginTop={["20px!important"]}
-              w={["100%"]}
-              h={["100%"]}
-              alignItems={["flex-start"]}
-            >
-              <Button
-                onClick={() =>
-                  dispatch({
-                    type: "filter-button-change",
-                    payload: { data: "ALL" },
-                  })
-                }
-                variant={
-                  state.filterProjectActive === "ALL" ? "brand" : "brandOutline"
-                }
-              >
-                Semua
-              </Button>
-              {Array.isArray(dataProjectTypes) &&
-                dataProjectTypes.map(({ id, attributes }) => {
-                  return (
-                    <Button
-                      key={id}
-                      onClick={() =>
-                        dispatch({
-                          type: "filter-button-change",
-                          payload: { data: id },
-                        })
-                      }
-                      variant={
-                        state.filterProjectActive === id
-                          ? "brand"
-                          : "brandOutline"
-                      }
-                    >
-                      {attributes.judul}
-                    </Button>
-                  );
-                })}
-            </HStack>
-          </VStack>
-
+            </Section>
+          )}
           <Grid
             w={["100%"]}
             h={["100%"]}
@@ -660,31 +586,38 @@ export default function Home({
         </ModalContent>
       </Modal>
 
-      <Modal onClose={onClose2} size="full" isOpen={isOpen2}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>
-            {filteredDataModal && filteredDataModal.attributes.judul}
-          </ModalHeader>
-          <ModalCloseButton />
-          <ModalBody display={['grid']} gridTemplateColumns={['1fr']} gridTemplateRows={['1fr']}>
-            <HStack w={['100%']} h={['100%']} position={['relative']}>
-              {filteredDataModal && (
-                <Image
-                  src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${filteredDataModal.attributes.gambarProjek.data.attributes.formats.large.url}`}
-                  alt="profile-rhafael"
-                  fill
-                  sizes={`90vw`}
-                  className={indexModuleScss.objectFit}
-                />
-              )}
-            </HStack>
-          </ModalBody>
-          <ModalFooter>
-            <Button variant="brand" onClick={onClose2}>Close</Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
+      {filteredDataModal && (
+        <ModalImage
+          judul={filteredDataModal.attributes.judul}
+          url={
+            filteredDataModal.attributes.images.data.attributes.formats
+              .large.url
+          }
+          isOpen={isOpen2}
+          onClose={onClose2}
+        />
+      )}
     </>
+  );
+}
+
+function Section({ title = "", children, containerProps = {} }) {
+  return (
+    <VStack
+      w={["100%"]}
+      height={["100%"]}
+      alignItems={["flex-start"]}
+      {...containerProps}
+    >
+      <Heading
+        as="h1"
+        color={["brand.50"]}
+        fontWeight={["bold"]}
+        fontSize={["2xl", "3xl", "4xl", "5xl"]}
+      >
+        {title}
+      </Heading>
+      {children}
+    </VStack>
   );
 }

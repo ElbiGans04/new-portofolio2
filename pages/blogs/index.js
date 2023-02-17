@@ -37,7 +37,8 @@ import { getTags } from "@/src/services/tags";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import isSameOrBefore from "dayjs/plugin/isSameOrBefore";
-
+import InputWithButton from "@/src/components/Input/withButton";
+import TagBlog from "@/src/components/Tags";
 dayjs.extend(isSameOrAfter);
 dayjs.extend(isSameOrBefore);
 
@@ -217,16 +218,12 @@ export default function Blogs({ dataArticle, dataTags }) {
                         >
                           {attributes.tags.data.map(({ id, attributes }) => {
                             return (
-                              <Link
-                                as={NextLink}
-                                href={`${urls.blogs.url}?${urls.blogs.params.tag}=${id}`}
-                                fontWeight={["bold"]}
-                                color="brand.50"
-                                fontSize={["md", "lg", "xl"]}
+                              <TagBlog
                                 key={id}
+                                link={`${urls.blogs.url}?${urls.blogs.params.tag}=${id}`}
                               >
                                 #{attributes.judul}
-                              </Link>
+                              </TagBlog>
                             );
                           })}
                         </HStack>
@@ -391,74 +388,30 @@ function FilterComponent({
         </Text>
 
         <VStack w={["100%"]} h={["100%"]} spacing={["20px"]}>
-          <VStack w={["100%"]} h={["100%"]} alignItems={["flex-start"]}>
-            <Text
-              color="brand.50"
-              fontSize={["lg", "xl", "2xl"]}
-              fontWeight={["bold"]}
+          <FilterComponentField title="Judul">
+            <InputWithButton
+              onClick={() => {
+                dispatch({
+                  type: "filter-title-change",
+                  payload: {
+                    data: search,
+                  },
+                });
+              }}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
             >
-              Judul
-            </Text>
-            <HStack
-              w={["100%"]}
-              // borderWidth={["1px"]}
-              // borderColor={["brand.50"]}
-              borderRadius={["8px"]}
-              h={["100%"]}
-              spacing={[0]}
-              // _hover={{ opacity: ["0.8"] }}
-              // _focusVisible={{ borderWidth: ["2px"], opacity: ['1'] }}
-              // overflow={['hidden']}
-            >
-              <Input
-                data-peer=""
-                w={["70%"]}
-                borderRightRadius={["0"]}
-                borderLeftRadius={["8px"]}
-                value={search}
-                onInput={(e) => setSearch(e.target.value)}
-              />
-              <Button
-                w={["30%"]}
-                height={["100%"]}
-                variant="brand"
-                borderRightRadius={["8px"]}
-                borderLeftRadius={["0px"]}
-                onClick={() => {
-                  dispatch({
-                    type: "filter-title-change",
-                    payload: {
-                      data: search,
-                    },
-                  });
-                }}
-              >
-                Cari
-              </Button>
-            </HStack>
-          </VStack>
+              Cari
+            </InputWithButton>
+          </FilterComponentField>
 
-          <VStack w={["100%"]} alignItems={["flex-start"]}>
-            <Text
-              color="brand.50"
-              fontSize={["lg", "xl", "2xl"]}
-              fontWeight={["bold"]}
-            >
-              Tags
-            </Text>
+          <FilterComponentField title="Tags">
             <HStack
               w={["100%"]}
               borderRadius={["50%"]}
               h={["100%"]}
               borderColor={["brand.50"]}
             >
-              {/* <Input
-                borderColor={["brand.50"]}
-                _focusVisible={{ boxShadow: "0 0 1px #7e1aff" }}
-                _hover={{ borderColor: ["brand.600"] }}
-                borderRadius={["8px"]}
-                w={["100%"]}
-              ></Input> */}
               <ReactSelect
                 onChange={(values) =>
                   dispatch({
@@ -605,17 +558,10 @@ function FilterComponent({
                 }}
               />
             </HStack>
-          </VStack>
+          </FilterComponentField>
 
           <SimpleGrid columns={2} w={["100%"]} spacingX={["30px"]}>
-            <VStack w={["100%"]} alignItems={["flex-start"]}>
-              <Text
-                color="brand.50"
-                fontSize={["lg", "xl", "2xl"]}
-                fontWeight={["bold"]}
-              >
-                Dari
-              </Text>
+            <FilterComponentField title="Dari">
               <HStack
                 w={["100%"]}
                 borderRadius={["50%"]}
@@ -636,15 +582,9 @@ function FilterComponent({
                   }
                 ></Input>
               </HStack>
-            </VStack>
-            <VStack w={["100%"]} alignItems={["flex-start"]}>
-              <Text
-                color="brand.50"
-                fontSize={["lg", "xl", "2xl"]}
-                fontWeight={["bold"]}
-              >
-                Sampai
-              </Text>
+            </FilterComponentField>
+            <FilterComponentField title="Sampai">
+              {" "}
               <HStack
                 w={["100%"]}
                 borderRadius={["50%"]}
@@ -665,7 +605,7 @@ function FilterComponent({
                   }
                 ></Input>
               </HStack>
-            </VStack>
+            </FilterComponentField>
           </SimpleGrid>
         </VStack>
       </VStack>
@@ -676,6 +616,21 @@ function FilterComponent({
           <Berlangganan maxContent />
         </>
       )}
+    </VStack>
+  );
+}
+
+function FilterComponentField({ title, children }) {
+  return (
+    <VStack w={["100%"]} h={["100%"]} alignItems={["flex-start"]}>
+      <Text
+        color="brand.50"
+        fontSize={["lg", "xl", "2xl"]}
+        fontWeight={["bold"]}
+      >
+        {title}
+      </Text>
+      {children}
     </VStack>
   );
 }

@@ -18,6 +18,7 @@ import {
   useMediaQuery,
   VStack,
   Tooltip,
+  useDisclosure,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import NextImage from "next/image";
@@ -30,6 +31,8 @@ import {
 import urls from "@/src/constants/url";
 import slugCssModule from "@/src/styles/blogs/slug.module.scss";
 import { useState } from "react";
+import TagBlog from "@/src/components/Tags";
+import ModalImage from "@/src/components/Modal/modalImage";
 
 export async function getStaticProps({ params }) {
   const { data } = await getArticles(["*"], true, [
@@ -104,6 +107,7 @@ export default function Blog({
   articlesLainnya,
   tagsLainnya,
 }) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [isLg] = useMediaQuery(`(min-width: ${breakpoints.lg})`, {
     ssr: true,
     fallback: false, // return false on the server, and re-evaluate on the client side
@@ -193,6 +197,8 @@ export default function Blog({
                 backgroundColor={["#D9D9D9"]}
                 flexShrink={[0]}
                 position={["relative"]}
+                onClick={onOpen}
+                cursor={'pointer'}
               >
                 {data &&
                   data.attributes.images &&
@@ -244,16 +250,12 @@ export default function Blog({
                     {Array.isArray(data) &&
                       data.attributes.tags.data.map(({ id, attributes }) => {
                         return (
-                          <Link
-                            as={NextLink}
-                            href={`${urls.blogs.url}?${urls.blogs.params.tag}=${id}`}
-                            fontWeight={["bold"]}
-                            color="brand.50"
-                            fontSize={["md", "lg", "xl"]}
+                          <TagBlog
+                            link={`${urls.blogs.url}?${urls.blogs.params.tag}=${id}`}
                             key={id}
                           >
                             #{attributes.judul}
-                          </Link>
+                          </TagBlog>
                         );
                       })}
                   </HStack>
@@ -424,6 +426,18 @@ export default function Blog({
             </VStack>
           </GridItem>
         </Grid>
+
+        {data && (
+          <ModalImage
+            judul={data.attributes.judul}
+            url={
+              data.attributes.images.data[0].attributes.formats
+                .large.url
+            }
+            isOpen={isOpen}
+            onClose={onClose}
+          />
+        )}
       </VStack>
     </>
   );

@@ -21,7 +21,7 @@ import {
   useMediaQuery,
   VStack,
   useColorModeValue,
-  useToken
+  useToken,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import NextImage from "next/image";
@@ -71,7 +71,7 @@ export default function Blogs({ dataArticle, dataTags }) {
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [state, setState] = useState(dataArticle);
-  const backgroundColor = useColorModeValue("#D9D9D9", "gray.900")
+  const backgroundColor = useColorModeValue("#D9D9D9", "gray.900");
   return (
     <>
       <Head>
@@ -230,12 +230,15 @@ export default function Blogs({ dataArticle, dataTags }) {
                           })}
                         </HStack>
                       </VStack>
+
                       {/* Batas */}
-                      <Box
-                        w={["90%"]}
-                        height={["1px"]}
-                        bgColor={["borderLayer1"]}
-                      />
+                      {state.length - 1 !== index && (
+                        <Box
+                          w={["90%"]}
+                          height={["1px"]}
+                          bgColor={["borderLayer1"]}
+                        />
+                      )}
                     </React.Fragment>
                   );
                 })}
@@ -331,8 +334,8 @@ function FilterComponent({
     }));
   }, [data]);
   const [search, setSearch] = useState("");
-  const [bgLayer1] = useToken("colors", ["bgLayer1",]);
-  const textColor = useColorModeValue(configuration.colors.brand[50], 'white')
+  const [bgLayer1] = useToken("colors", ["bgLayer1"]);
+  const textColor = useColorModeValue(configuration.colors.brand[50], "white");
 
   useEffect(() => {
     if (Array.isArray(dataArticle)) {

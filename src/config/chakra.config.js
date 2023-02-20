@@ -3,6 +3,7 @@ import source_sans from "../constants/fonts/source_sans_3";
 import work_sans from "../constants/fonts/work_sans";
 import inputAnatomyTheme from "./chakraComponents/Input";
 import modalAnatomyTheme from "./chakraComponents/Modal";
+import switchAnatomyTheme from "./chakraComponents/Switch";
 /**
  * Custom Breakpoint
  */
@@ -18,6 +19,42 @@ export const breakpoints = {
  * Custom Configuration
  */
 export const configuration = {
+  semanticTokens: {
+    colors: {
+      bgLayer1: {
+        default: "white",
+        _dark: "gray.900",
+      },
+      bgLayer2: {
+        default: "whiteAlpha.900",
+        _dark: "gray.800",
+      },
+      bgLayer3: {
+        default: "whiteAlpha.800",
+        _dark: "gray.700",
+      },
+      textLayer1: {
+        default: "black",
+        _dark: "whiteAlpha.900",
+      },
+      borderLayer1: {
+        default: "rgba(0 ,0 ,0 , 0.2)",
+        _dark: "rgba(255,255,255, 0.2)",
+      },
+    },
+  },
+  styles: {
+    global: () => ({
+      "html, body": {
+        color: "textLayer1",
+        background: "bgLayer2",
+      },
+    }),
+  },
+  config: {
+    initialColorMode: "system",
+    useSystemColorMode: true,
+  },
   breakpoints,
   colors: {
     brand: {
@@ -66,7 +103,7 @@ export const configuration = {
           },
         },
         brandOutline: {
-          backgroundColor: "white",
+          backgroundColor: "bgLayer1",
           color: "brand.50",
           cursor: "pointer",
           borderWidth: "1px",
@@ -84,7 +121,8 @@ export const configuration = {
       },
     },
     Modal: modalAnatomyTheme,
-    Input: inputAnatomyTheme
+    Input: inputAnatomyTheme,
+    Switch: switchAnatomyTheme,
   },
 };
 

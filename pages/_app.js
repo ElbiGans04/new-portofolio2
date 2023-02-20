@@ -14,7 +14,7 @@ export default function App({ Component, pageProps }) {
         }}
       >
         <Navbar />
-        <Container maxW={style.maxWidthContent}>
+        <Container maxW={style.maxWidthContent} backgroundColor="bgLayer2" color="textLayer1">
           <Component {...pageProps} />
         </Container>
         <Footer />

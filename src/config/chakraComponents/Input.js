@@ -14,6 +14,8 @@ const brand = definePartsStyle({
     transitionDuration: '0.2s',
     _focusVisible: { borderWidth: ["1.5px"], boxShadow: "0 0 3px #7e1aff!important" },
     _hover: {   boxShadow: "0 0 2px #7e1aff"},
+    backgroundColor: 'bgLayer1',
+    color: 'textLayer1'
   },
 });
 

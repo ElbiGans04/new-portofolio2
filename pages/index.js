@@ -24,6 +24,7 @@ import {
   useDisclosure,
   VStack,
   useMediaQuery,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import Image from "next/image";
@@ -126,6 +127,19 @@ export default function Home({
     });
   }, [state.selectedDataId, dataProjects]);
 
+  const cardItem = useColorModeValue(
+    {
+      hover: "blackAlpha.50",
+      active: "blackAlpha.100",
+      borderColor: 'gray.100'
+    },
+    {
+      hover: "bgLayer2",
+      active: "bgLayer1",
+      borderColor: 'bgLayer3'
+    }
+  );
+
   return (
     <>
       <Head>
@@ -139,6 +153,9 @@ export default function Home({
         height={["100%"]}
         spacing={["50px", "100px"]}
         paddingX={[0, null, null, null, "48px", "0"]}
+        backgroundColor="bgLayer2"
+        color="textLayer1"
+        paddingBottom={["100px"]}
       >
         <Grid
           w={["100%"]}
@@ -234,9 +251,7 @@ export default function Home({
               <List spacing={3}>
                 <ListItem>
                   <Link
-                    href={
-                      data.attributes.github
-                    }
+                    href={data.attributes.github}
                     fontSize={["lg", "xl", "2xl", "3xl"]}
                     verticalAlign={["middle"]}
                   >
@@ -246,22 +261,17 @@ export default function Home({
                 </ListItem>
                 <ListItem>
                   <Link
-                    href={
-                      "mailto:" +
-                      data.attributes.email
-                    }
+                    href={"mailto:" + data.attributes.email}
                     fontSize={["lg", "xl", "2xl", "3xl"]}
                     verticalAlign={["middle"]}
                   >
                     <ListIcon as={AiFillMail} />
-                   Email
+                    Email
                   </Link>
                 </ListItem>
                 <ListItem>
                   <Link
-                    href={
-                      data.attributes.linkedin
-                    }
+                    href={data.attributes.linkedin}
                     fontSize={["lg", "xl", "2xl", "3xl"]}
                     verticalAlign={["middle"]}
                   >
@@ -403,13 +413,14 @@ export default function Home({
                   <GridItem key={id}>
                     <Card
                       shadow="xl"
+                      bgColor={["bgLayer3"]}
                       _hover={{
-                        backgroundColor: "blackAlpha.50",
+                        backgroundColor: cardItem.hover,
                       }}
                       _active={{
-                        backgroundColor: "blackAlpha.100",
+                        backgroundColor: cardItem.active,
                       }}
-                      borderColor={["gray.100"]}
+                      borderColor={cardItem.borderColor}
                       borderWidth={["1px"]}
                       w={["100%"]}
                       cursor="pointer"
@@ -426,7 +437,7 @@ export default function Home({
                           <Heading size={["xl"]} color={["brand.50"]}>
                             {attributes.judul}
                           </Heading>
-                          <Text fontSize={["lg"]}>
+                          <Text fontSize={["lg"]} color={["textLayer1"]}>
                             {attributes.deskripsiSingkat}
                           </Text>
                         </Stack>
@@ -568,8 +579,8 @@ export default function Home({
         <ModalImage
           judul={filteredDataModal.attributes.judul}
           url={
-            filteredDataModal.attributes.images.data.attributes.formats
-              .large.url
+            filteredDataModal.attributes.images.data.attributes.formats.large
+              .url
           }
           isOpen={isOpen2}
           onClose={onClose2}

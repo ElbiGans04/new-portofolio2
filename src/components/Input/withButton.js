@@ -15,11 +15,11 @@ export default function InputWithButton({children, onClick, onChange, value}) {
         borderLeftRadius={["8px"]}
         value={value}
         onInput={onChange}
-      ></Input>
+      />
       <Button
         w={["30%"]}
         height={["100%"]}
-        colorScheme={'brand'}
+        variant={'brand'}
         borderRadius={[0]}
         borderRightRadius={["8px"]}
         borderLeftRadius={["0px"]}

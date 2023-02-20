@@ -7,19 +7,18 @@ export default function Footer() {
       w={["100%"]}
       h={["100%"]}
       justifyContent={["center"]}
-      backgroundColor={["white"]}
-      borderTopColor={["rgba(0,0,0, 0.2)"]}
+      backgroundColor="bgLayer1" color="textLayer1"
+      borderTopColor={["borderLayer1"]}
       borderTopWidth={["1px"]}
-      marginTop={["100px"]}
       padding={["30px"]}
     >
-      <Container maxW={style.maxWidthContent}>
+      <Container  maxW={style.maxWidthContent}>
         <HStack justifyContent="center" align={["center"]} color={["brand.50"]} spacing={['7px']}>
-          <Text color={["black"]} fontSize={["xl"]}>
+          <Text color="textLayer1" fontSize={["xl"]}>
             Made With
           </Text>
           <BsSuitHeartFill />
-          <Text color={["black"]} fontSize={["xl"]}>
+          <Text color="textLayer1" fontSize={["xl"]}>
             By{" "}
             <Box as="span" fontWeight={["bold"]} color={["brand.50"]}>
               Elbi

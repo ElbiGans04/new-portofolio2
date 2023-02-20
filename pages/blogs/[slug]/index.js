@@ -19,6 +19,7 @@ import {
   VStack,
   Tooltip,
   useDisclosure,
+  useColorModeValue,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import NextImage from "next/image";
@@ -112,6 +113,7 @@ export default function Blog({
     ssr: true,
     fallback: false, // return false on the server, and re-evaluate on the client side
   });
+  const backgroundColor = useColorModeValue("#D9D9D9", "gray.900")
 
   return (
     <>
@@ -133,7 +135,7 @@ export default function Blog({
           {/* Left */}
           <GridItem
             borderRightWidth={[0, null, null, "1px"]}
-            borderRightColor={["rgba(0,0,0, 0.2)"]}
+            borderRightColor={["borderLayer1"]}
             paddingX={[0, null, null, "20px"]}
             height={["100%"]}
             paddingTop={["0", null, null, "20px"]}
@@ -194,7 +196,7 @@ export default function Blog({
               <Box
                 w={["100%"]}
                 height={["200px", "350px"]}
-                backgroundColor={["#D9D9D9"]}
+                backgroundColor={[backgroundColor]}
                 flexShrink={[0]}
                 position={["relative"]}
                 onClick={onOpen}

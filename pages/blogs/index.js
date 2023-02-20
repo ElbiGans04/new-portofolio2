@@ -20,6 +20,8 @@ import {
   useDisclosure,
   useMediaQuery,
   VStack,
+  useColorModeValue,
+  useToken
 } from "@chakra-ui/react";
 import Head from "next/head";
 import NextImage from "next/image";
@@ -69,7 +71,7 @@ export default function Blogs({ dataArticle, dataTags }) {
   });
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [state, setState] = useState(dataArticle);
-
+  const backgroundColor = useColorModeValue("#D9D9D9", "gray.900")
   return (
     <>
       <Head>
@@ -90,7 +92,7 @@ export default function Blogs({ dataArticle, dataTags }) {
           {isLg && (
             <GridItem
               borderRightWidth={[0, "1px"]}
-              borderRightColor={["rgba(0,0,0, 0.2)"]}
+              borderRightColor={["borderLayer1"]}
               paddingX={[0, "20px"]}
               height={["100%"]}
               paddingTop={["20px"]}
@@ -143,7 +145,7 @@ export default function Blogs({ dataArticle, dataTags }) {
                           <Box
                             w={["100%", "90%"]}
                             height={["200px", "250px", "350px"]}
-                            backgroundColor={["#D9D9D9"]}
+                            backgroundColor={[backgroundColor]}
                             flexShrink={[0]}
                             position={["relative"]}
                           >
@@ -232,7 +234,7 @@ export default function Blogs({ dataArticle, dataTags }) {
                       <Box
                         w={["90%"]}
                         height={["1px"]}
-                        bgColor={["rgba(0,0,0, 0.2)"]}
+                        bgColor={["borderLayer1"]}
                       />
                     </React.Fragment>
                   );
@@ -329,6 +331,8 @@ function FilterComponent({
     }));
   }, [data]);
   const [search, setSearch] = useState("");
+  const [bgLayer1] = useToken("colors", ["bgLayer1",]);
+  const textColor = useColorModeValue(configuration.colors.brand[50], 'white')
 
   useEffect(() => {
     if (Array.isArray(dataArticle)) {
@@ -448,6 +452,12 @@ function FilterComponent({
                       },
                     };
                   },
+                  menu: (baseStyles, state) => {
+                    return {
+                      ...baseStyles,
+                      backgroundColor: bgLayer1,
+                    };
+                  },
                   multiValueLabel: (baseStyles, state) => {
                     return {
                       ...baseStyles,
@@ -493,6 +503,7 @@ function FilterComponent({
                   control: (baseStyles, state) => {
                     return {
                       ...baseStyles,
+                      backgroundColor: bgLayer1,
                       borderColor: state.isDisabled
                         ? configuration.colors.brand[100]
                         : state.isFocused
@@ -536,14 +547,14 @@ function FilterComponent({
                         ? configuration.colors.brand[100]
                         : state.isFocused || state.isSelected
                         ? "white"
-                        : configuration.colors.brand[50],
+                        : textColor,
                       backgroundColor: state.isDisabled
                         ? configuration.colors.brand[100]
                         : state.isSelected
                         ? configuration.colors.brand[50]
                         : state.isFocused
                         ? configuration.colors.brand[400]
-                        : "white",
+                        : bgLayer1,
                       ":active": {
                         backgroundColor: state.isDisabled
                           ? configuration.colors.brand[100]
@@ -612,7 +623,7 @@ function FilterComponent({
 
       {langgananTampil && (
         <>
-          <Box w={["90%"]} height={["1px"]} bgColor={["rgba(0,0,0, 0.2)"]} />
+          <Box w={["90%"]} height={["1px"]} bgColor={["borderLayer1"]} />
           <Berlangganan maxContent />
         </>
       )}

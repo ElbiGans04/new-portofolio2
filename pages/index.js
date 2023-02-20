@@ -127,16 +127,18 @@ export default function Home({
     });
   }, [state.selectedDataId, dataProjects]);
 
+  console.log(filteredDataModal, filteredData)
+
   const cardItem = useColorModeValue(
     {
       hover: "blackAlpha.50",
       active: "blackAlpha.100",
-      borderColor: 'gray.100'
+      borderColor: "gray.100",
     },
     {
       hover: "bgLayer2",
       active: "bgLayer1",
-      borderColor: 'bgLayer3'
+      borderColor: "bgLayer3",
     }
   );
 
@@ -393,6 +395,50 @@ export default function Home({
                 dangerouslySetInnerHTML={{ __html: data.attributes.projek }}
                 className={indexModuleScss.content}
               />
+              {/* Action */}
+              <HStack
+                marginTop={["20px!important"]}
+                w={["100%"]}
+                h={["100%"]}
+                alignItems={["flex-start"]}
+              >
+                <Button
+                  onClick={() =>
+                    dispatch({
+                      type: "filter-button-change",
+                      payload: { data: "ALL" },
+                    })
+                  }
+                  variant={
+                    state.filterProjectActive === "ALL"
+                      ? "brand"
+                      : "brandOutline"
+                  }
+                >
+                  Semua
+                </Button>
+                {Array.isArray(dataProjectTypes) &&
+                  dataProjectTypes.map(({ id, attributes }) => {
+                    return (
+                      <Button
+                        key={id}
+                        onClick={() =>
+                          dispatch({
+                            type: "filter-button-change",
+                            payload: { data: id },
+                          })
+                        }
+                        variant={
+                          state.filterProjectActive === id
+                            ? "brand"
+                            : "brandOutline"
+                        }
+                      >
+                        {attributes.judul}
+                      </Button>
+                    );
+                  })}
+              </HStack>
             </Section>
           )}
           <Grid
@@ -579,7 +625,7 @@ export default function Home({
         <ModalImage
           judul={filteredDataModal.attributes.judul}
           url={
-            filteredDataModal.attributes.images.data.attributes.formats.large
+            filteredDataModal.attributes.gambarProjek.data.attributes.formats.large
               .url
           }
           isOpen={isOpen2}

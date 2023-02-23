@@ -113,6 +113,8 @@ export default function Home({
     if (!Array.isArray(dataProjects)) return [];
     return dataProjects.filter(({ attributes }) => {
       if (state.filterProjectActive === "ALL") return true;
+      if (!attributes.project_type.data) return false;
+      
       return (
         parseInt(state.filterProjectActive) ===
         parseInt(attributes.project_type.data.id)
@@ -126,8 +128,6 @@ export default function Home({
       return parseInt(state.selectedDataId) === parseInt(id);
     });
   }, [state.selectedDataId, dataProjects]);
-
-  console.log(filteredDataModal, filteredData)
 
   const cardItem = useColorModeValue(
     {
@@ -526,7 +526,7 @@ export default function Home({
         <ModalContent>
           <ModalHeader color="brand.50">
             Projek{" "}
-            {filteredDataModal &&
+            {filteredDataModal && filteredDataModal.attributes.project_type.data &&
               filteredDataModal.attributes.project_type.data.attributes.judul}
           </ModalHeader>
           <ModalCloseButton color="brand.50" />
@@ -575,7 +575,7 @@ export default function Home({
                 </Text>
                 <Text title="proses pengembangan" fontSize={["xl"]}>
                   Projek{" "}
-                  {filteredDataModal &&
+                  {filteredDataModal && filteredDataModal.attributes.project_type.data &&
                     filteredDataModal.attributes.project_type.data.attributes
                       .judul}
                 </Text>

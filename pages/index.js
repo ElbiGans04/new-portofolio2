@@ -45,7 +45,7 @@ export async function getStaticProps() {
   const { data: dataJobs } = await getJobs();
   const { data: dataProjects } = await getProjects();
   const { data: dataProjectTypes } = await getProjectTypes();
-
+  
   return {
     props: {
       data: !data
@@ -184,9 +184,9 @@ export default function Home({
                 {data && data.attributes.haloHeader}
               </Text>
               <Text fontSize={["xl", "3xl", "4xl"]}>
-                Saya <Box as="span">{data && data.attributes.nama}</Box>
+                Im <Box as="span">{data && data.attributes.nama}</Box>
                 <br />
-                Saya adalah seorang{" "}
+                Im a{" "}
                 <Box
                   as="span"
                   color={["brand.50"]}
@@ -353,7 +353,7 @@ export default function Home({
                             fontSize={["lg", "xl", "2xl"]}
                             lineHeight={["1.1em"]}
                           >
-                            Sebagai {attributes.jabatan}
+                            As {attributes.jabatan}
                           </Text>
                           <Text
                             fontSize={["lg", "xl", "xl"]}
@@ -362,7 +362,7 @@ export default function Home({
                             {getFormatDateArticle(attributes.dari)} -{" "}
                             {attributes.sampai
                               ? getFormatDateArticle(attributes.sampai)
-                              : "Sekarang"}
+                              : "Now"}
                           </Text>
                         </VStack>
                         <VStack w={["100%"]} alignItems={["flex-start"]}>

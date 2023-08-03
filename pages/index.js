@@ -34,7 +34,7 @@ import { getHome } from "@/src/services/home";
 import getHtmlFromMd from "@/src/helpers/getHtmlFromMd";
 import indexModuleScss from "@/src/styles/index.module.scss";
 import { getJobs } from "@/src/services/jobs";
-import React, { useMemo, useReducer } from "react";
+import React, { useMemo, useReducer, useEffect } from "react";
 import getFormatDateArticle from "@/src/helpers/getFormatDateArticle";
 import { getProjects } from "@/src/services/projects";
 import { getProjectTypes } from "@/src/services/projectTypes";
@@ -45,7 +45,7 @@ export async function getStaticProps() {
   const { data: dataJobs } = await getJobs();
   const { data: dataProjects } = await getProjects();
   const { data: dataProjectTypes } = await getProjectTypes();
-  
+
   return {
     props: {
       data: !data
@@ -114,7 +114,7 @@ export default function Home({
     return dataProjects.filter(({ attributes }) => {
       if (state.filterProjectActive === "ALL") return true;
       if (!attributes.project_type.data) return false;
-      
+
       return (
         parseInt(state.filterProjectActive) ===
         parseInt(attributes.project_type.data.id)
@@ -128,6 +128,10 @@ export default function Home({
       return parseInt(state.selectedDataId) === parseInt(id);
     });
   }, [state.selectedDataId, dataProjects]);
+
+  useEffect(() => {
+    console.log(filteredDataModal);
+  }, [filteredDataModal]);
 
   const cardItem = useColorModeValue(
     {
@@ -213,7 +217,7 @@ export default function Home({
                   overflow={["hidden"]}
                 >
                   <Image
-                    src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${data.attributes.profile.data.attributes.formats.large.url}`}
+                    src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${data?.attributes?.profile?.data?.attributes?.url}`}
                     alt="profile-rhafael"
                     fill
                     sizes={`(min-width: ${breakpoints.lg}) 400px, (min-width: ${breakpoints.xl}) 450px`}
@@ -525,9 +529,11 @@ export default function Home({
         <ModalOverlay />
         <ModalContent>
           <ModalHeader color="brand.50">
-            Projek{" "}
-            {filteredDataModal && filteredDataModal.attributes.project_type.data &&
-              filteredDataModal.attributes.project_type.data.attributes.judul}
+            Project{" "}
+            {
+              filteredDataModal?.attributes?.project_type?.data?.attributes
+                ?.judul
+            }
           </ModalHeader>
           <ModalCloseButton color="brand.50" />
           <ModalBody>
@@ -547,9 +553,10 @@ export default function Home({
               >
                 {filteredDataModal && (
                   <Image
-                    src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${filteredDataModal.attributes.gambarProjek.data.attributes.formats.large.url}`}
+                    src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${filteredDataModal?.attributes?.gambarProjek?.data?.attributes?.url}`}
                     alt="profile-rhafael"
                     fill
+                    objectFit="contain"
                     sizes={`90vw, (min-width: ${breakpoints.sm}) 90vw, (min-width: ${breakpoints.md}) 80vw, (min-width: ${breakpoints.lg}) 60vw, (min-width: ${breakpoints.xl}) 40vw`}
                   />
                 )}
@@ -560,32 +567,33 @@ export default function Home({
                   fontWeight={["bold"]}
                   color={["brand.50"]}
                 >
-                  {filteredDataModal && filteredDataModal.attributes.judul}
+                  {filteredDataModal && filteredDataModal?.attributes?.judul}
                 </Heading>
                 <Text title="proses pengembangan" fontSize={["xl"]}>
                   {getFormatDateArticle(
                     filteredDataModal &&
-                      filteredDataModal.attributes.waktuMulaiDevelop
+                      filteredDataModal?.attributes?.waktuMulaiDevelop
                   )}{" "}
                   -{" "}
                   {getFormatDateArticle(
                     filteredDataModal &&
-                      filteredDataModal.attributes.waktuSelesaiDevelop
+                      filteredDataModal?.attributes?.waktuSelesaiDevelop
                   )}
                 </Text>
                 <Text title="proses pengembangan" fontSize={["xl"]}>
-                  Projek{" "}
-                  {filteredDataModal && filteredDataModal.attributes.project_type.data &&
-                    filteredDataModal.attributes.project_type.data.attributes
-                      .judul}
+                  Project{" "}
+                  {filteredDataModal &&
+                    filteredDataModal?.attributes?.project_type?.data &&
+                    filteredDataModal?.attributes?.project_type?.data
+                      ?.attributes?.judul}
                 </Text>
                 <Text title="proses pengembangan" fontSize={["xl"]}>
                   {filteredDataModal &&
-                    filteredDataModal.attributes.project_tools.data.map(
+                    filteredDataModal?.attributes?.project_tools?.data?.map(
                       ({ id, attributes }, index, arrayy) => {
                         return (
                           <React.Fragment key={id}>
-                            {attributes.judul}
+                            {attributes?.judul}
                             {index < arrayy.length - 1 && ", "}
                           </React.Fragment>
                         );
@@ -596,19 +604,19 @@ export default function Home({
 
               <Text fontSize={["xl"]}>
                 {filteredDataModal &&
-                  filteredDataModal.attributes.deskripsiPanjang}
+                  filteredDataModal?.attributes?.deskripsiPanjang}
               </Text>
             </VStack>
           </ModalBody>
 
           <ModalFooter>
             <HStack w={["100%"]} justifyContent={["flex-end"]}>
-              {filteredDataModal && filteredDataModal.attributes.tautan && (
+              {filteredDataModal && filteredDataModal?.attributes?.tautan && (
                 <Button
                   variant="brand"
                   onClick={onClose}
                   as={Link}
-                  href={filteredDataModal.attributes.tautan}
+                  href={filteredDataModal?.attributes?.tautan}
                 >
                   Lihat web aplikasi
                 </Button>
@@ -623,10 +631,10 @@ export default function Home({
 
       {filteredDataModal && (
         <ModalImage
-          judul={filteredDataModal.attributes.judul}
+          judul={filteredDataModal?.attributes?.judul}
           url={
-            filteredDataModal.attributes.gambarProjek.data.attributes.formats.large
-              .url
+            filteredDataModal?.attributes?.gambarProjek?.data?.attributes
+              ?.url
           }
           isOpen={isOpen2}
           onClose={onClose2}

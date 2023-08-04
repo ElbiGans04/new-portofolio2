@@ -1,15 +1,19 @@
 import InputWithButton from "@/src/components/Input/withButton";
 import {
-  Button, Modal,
+  Button,
+  Modal,
   ModalBody,
   ModalCloseButton,
   ModalContent,
   ModalFooter,
   ModalHeader,
-  ModalOverlay, Text, useDisclosure, VStack
+  ModalOverlay,
+  Text,
+  useDisclosure,
+  VStack,
 } from "@chakra-ui/react";
 
-export default function Berlangganan({maxContent = false}) {
+export default function Berlangganan({ maxContent = false }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   return (
     <>
@@ -25,20 +29,24 @@ export default function Berlangganan({maxContent = false}) {
           fontWeight={["bold"]}
           fontSize={["5xl", "6xl", "7xl"]}
         >
-          Halo 
+          Hi
         </Text>
-        <Text as="p" fontWeight={["semibold"]} fontSize={["md","lg", "xl"]}>
-          Ayo berlangganan agar tidak ketinggalan update apapun dari website ini
+        <Text as="p" fontWeight={["semibold"]} fontSize={["md", "lg", "xl"]}>
+          Come on, subscribe so you don`t miss any updates from this website
         </Text>
-        <InputWithButton onClick={onOpen}>Berlangganan</InputWithButton>
-        <Text fontSize={["sm", "md", "lg"]} fontWeight={["bold"]} color={["brand.50"]}>
-          *Saya tidak akan mengirimkan email spam kepada anda*
+        <InputWithButton onClick={onOpen}>Subscribe</InputWithButton>
+        <Text
+          fontSize={["sm", "md", "lg"]}
+          fontWeight={["bold"]}
+          color={["brand.50"]}
+        >
+          *I will not send spam emails to you*
         </Text>
       </VStack>
       <Modal size="xl" isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Peringatan</ModalHeader>
+          <ModalHeader>Warning</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <VStack
@@ -47,15 +55,15 @@ export default function Berlangganan({maxContent = false}) {
               alignItems={["flex-start"]}
               spacing={["30px"]}
             >
-              <Text fontSize={["md","lg", "xl"]}>
-                Fitur belum tersedia
+              <Text fontSize={["md", "lg", "xl"]}>
+                Features not yet available
               </Text>
             </VStack>
           </ModalBody>
 
           <ModalFooter>
             <Button variant="brand" onClick={onClose}>
-              Tutup
+              Close
             </Button>
           </ModalFooter>
         </ModalContent>

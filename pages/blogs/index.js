@@ -153,7 +153,7 @@ export default function Blogs({ dataArticle, dataTags }) {
                               Array.isArray(attributes.images.data) &&
                               attributes.images.data[0] && (
                                 <NextImage
-                                  src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${attributes.images.data[0].attributes.formats.large.url}`}
+                                  src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${attributes?.images?.data[0]?.attributes?.url}`}
                                   fill
                                   alt={attributes.judul}
                                   sizes={`100vw, (min-width: ${breakpoints.sm}) 90vw, (min-width: ${breakpoints.lg}) 50vw,`}
@@ -190,7 +190,7 @@ export default function Blogs({ dataArticle, dataTags }) {
 
                             <Text fontSize={["md", "lg", "xl"]}>
                               {getFormatDateArticle(attributes.createdAt)} -{" "}
-                              {getReadingTime(attributes.plainDeskripsi)} Menit
+                              {getReadingTime(attributes.plainDeskripsi)} Minutes
                             </Text>
                           </VStack>
                           <VStack w={["100%"]} alignItems={["flex-start"]}>
@@ -207,7 +207,7 @@ export default function Blogs({ dataArticle, dataTags }) {
                               as={NextLink}
                               href={`${urls.blogs.url}/${attributes.slug}`}
                             >
-                              Klik disini untuk membaca selengkapnya.
+                              Click here to read more.
                             </Link>
                           </VStack>
                         </VStack>
@@ -263,7 +263,7 @@ export default function Blogs({ dataArticle, dataTags }) {
 
               <ModalFooter>
                 <Button variant="brand" onClick={onClose}>
-                  Tutup
+                  Close
                 </Button>
               </ModalFooter>
             </ModalContent>
@@ -395,7 +395,7 @@ function FilterComponent({
         </Text>
 
         <VStack w={["100%"]} h={["100%"]} spacing={["20px"]}>
-          <FilterComponentField title="Judul">
+          <FilterComponentField title="Title">
             <InputWithButton
               onClick={() => {
                 dispatch({
@@ -408,7 +408,7 @@ function FilterComponent({
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             >
-              Cari
+              Find
             </InputWithButton>
           </FilterComponentField>
 
@@ -575,7 +575,7 @@ function FilterComponent({
           </FilterComponentField>
 
           <SimpleGrid columns={2} w={["100%"]} spacingX={["30px"]}>
-            <FilterComponentField title="Dari">
+            <FilterComponentField title="From">
               <HStack
                 w={["100%"]}
                 borderRadius={["50%"]}
@@ -597,7 +597,7 @@ function FilterComponent({
                 ></Input>
               </HStack>
             </FilterComponentField>
-            <FilterComponentField title="Sampai">
+            <FilterComponentField title="To">
               {" "}
               <HStack
                 w={["100%"]}

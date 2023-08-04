@@ -207,7 +207,7 @@ export default function Blog({
                   Array.isArray(data.attributes.images.data) &&
                   data.attributes.images.data[0] && (
                     <NextImage
-                      src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${data.attributes.images.data[0].attributes.formats.large.url}`}
+                      src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${data?.attributes?.images?.data[0]?.attributes?.url}`}
                       fill
                       alt={data.attributes.judul}
                       sizes={`90vw, (min-width: ${breakpoints.lg}) 50vw`}
@@ -242,7 +242,7 @@ export default function Blog({
                     {getFormatDateArticle(
                       (data && data.attributes.createdAt) || new Date()
                     )}{" "}
-                    - {getReadingTime(plainText || "")} Menit
+                    - {getReadingTime(plainText || "")} Minutes
                   </Text>
                   <HStack
                     w={["100%"]}
@@ -323,7 +323,7 @@ export default function Blog({
                         fontWeight={["bold"]}
                         lineHeight={["1.2em"]}
                       >
-                        Rekomendasi artikel dengan tag yang sama
+                        Recommended articles with the same tag
                       </Text>
 
                       <VStack
@@ -351,7 +351,7 @@ export default function Blog({
                                 </Link>
                                 <Text fontSize={["md", "lg", "xl"]}>
                                   {getFormatDateArticle(attributes.createdAt)} -
-                                  {getReadingTime(attributes.plainText)} Menit
+                                  {getReadingTime(attributes.plainText)} Minutes
                                 </Text>
                                 <HStack
                                   w={["100%"]}
@@ -397,7 +397,7 @@ export default function Blog({
                       fontWeight={["bold"]}
                       lineHeight={["1.2em"]}
                     >
-                      Tags lainnya
+                      Other tags
                     </Text>
 
                     <VStack
@@ -433,8 +433,7 @@ export default function Blog({
           <ModalImage
             judul={data.attributes.judul}
             url={
-              data.attributes.images.data[0].attributes.formats
-                .large.url
+              data?.attributes?.images?.data[0]?.attributes?.url
             }
             isOpen={isOpen}
             onClose={onClose}
@@ -452,7 +451,7 @@ function Salin() {
   });
   const [state, setState] = useState({
     isOpen: undefined,
-    message: "Salin Tautan",
+    message: "Copy Link",
   });
   return (
     <Tooltip
@@ -465,7 +464,7 @@ function Salin() {
       <Button
         variant="brandOutline"
         w={["100%", null, null, "inherit"]}
-        onBlur={() => setState({ isOpen: undefined, message: "Salin Tautan" })}
+        onBlur={() => setState({ isOpen: undefined, message: "Copy Link" })}
         onClick={() => {
           navigator.permissions
             .query({ name: "clipboard-write" })

@@ -9,7 +9,7 @@ const nextConfig = {
       {
         protocol: pecah[0],
         hostname: pecah[1].slice(2),
-        port: pecah[2],
+        port: pecah[2] || "",
       },
     ],
   },

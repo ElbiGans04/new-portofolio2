@@ -113,7 +113,7 @@ export default function Blog({
     ssr: true,
     fallback: false, // return false on the server, and re-evaluate on the client side
   });
-  const backgroundColor = useColorModeValue("#D9D9D9", "gray.900")
+  const backgroundColor = useColorModeValue("#D9D9D9", "gray.900");
 
   return (
     <>
@@ -200,7 +200,7 @@ export default function Blog({
                 flexShrink={[0]}
                 position={["relative"]}
                 onClick={onOpen}
-                cursor={'pointer'}
+                cursor={"pointer"}
               >
                 {data &&
                   data.attributes.images &&
@@ -432,9 +432,7 @@ export default function Blog({
         {data && (
           <ModalImage
             judul={data.attributes.judul}
-            url={
-              data?.attributes?.images?.data[0]?.attributes?.url
-            }
+            url={data?.attributes?.images?.data[0]?.attributes?.url}
             isOpen={isOpen}
             onClose={onClose}
           />
@@ -466,23 +464,36 @@ function Salin() {
         w={["100%", null, null, "inherit"]}
         onBlur={() => setState({ isOpen: undefined, message: "Copy Link" })}
         onClick={() => {
-          navigator.permissions
-            .query({ name: "clipboard-write" })
-            .then((result) => {
-              if (result.state === "granted" || result.state === "prompt") {
-                navigator.clipboard
-                  .writeText(window && window.location.href)
-                  .then(() =>
-                    setState({
-                      isOpen: true,
-                      message: "Berhasil Menyalin Tautan",
-                    })
-                  )
-                  .catch(() =>
-                    setState({ isOpen: true, message: "Gagal Menyalin Tautan" })
-                  );
-              }
-            });
+          function clip () {
+            navigator.clipboard
+              .writeText(window && window.location.href)
+              .then(() =>
+                setState({
+                  isOpen: true,
+                  message: "Berhasil Menyalin Tautan",
+                })
+              )
+              .catch(() =>
+                setState({ isOpen: true, message: "Gagal Menyalin Tautan" })
+              );
+          }
+          let isChrome =
+            !!window.chrome &&
+            (!!window.chrome.webstore || !!window.chrome.runtime);
+
+          if (isChrome) {
+            navigator.permissions
+              .query({ name: "write" })
+              .then((result) => {
+                if (result.state === "granted" || result.state === "prompt") {
+                  clip()
+                }
+              });
+
+            return;
+          }
+
+          clip()
         }}
       >
         <AiOutlineLink style={!isLg && { marginRight: "10px" }} />{" "}

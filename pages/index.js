@@ -419,7 +419,7 @@ export default function Home({
                       : "brandOutline"
                   }
                 >
-                  Semua
+                  All
                 </Button>
                 {Array.isArray(dataProjectTypes) &&
                   dataProjectTypes.map(({ id, attributes }) => {

@@ -129,10 +129,6 @@ export default function Home({
     });
   }, [state.selectedDataId, dataProjects]);
 
-  useEffect(() => {
-    console.log(filteredDataModal);
-  }, [filteredDataModal]);
-
   const cardItem = useColorModeValue(
     {
       hover: "blackAlpha.50",

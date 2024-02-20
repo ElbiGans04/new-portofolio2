@@ -66,6 +66,7 @@ export default function Navbar() {
       borderBottomWidth={["1px"]}
       zIndex={style.navbarZIndex}
       paddingY={["16px"]}
+      paddingX={[0, null, null, null, "48px", "0"]}
     >
       <Container maxW={style.maxWidthContent}>
         <Flex justifyContent="space-between" align={["center"]}>

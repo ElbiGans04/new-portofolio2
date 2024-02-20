@@ -470,11 +470,11 @@ function Salin() {
               .then(() =>
                 setState({
                   isOpen: true,
-                  message: "Berhasil Menyalin Tautan",
+                  message: "Successfully copied the text",
                 })
               )
               .catch(() =>
-                setState({ isOpen: true, message: "Gagal Menyalin Tautan" })
+                setState({ isOpen: true, message: "Failed copied the text" })
               );
           }
           let isChrome =
@@ -497,7 +497,7 @@ function Salin() {
         }}
       >
         <AiOutlineLink style={!isLg && { marginRight: "10px" }} />{" "}
-        {!isLg && "Salin"}
+        {!isLg && "Copy Url"}
       </Button>
     </Tooltip>
   );

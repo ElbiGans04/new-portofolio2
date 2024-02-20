@@ -124,7 +124,7 @@ export default function Navbar() {
                 <>
                   <MenuButton isActive={isOpen} as={ButtonCustomMenu} />
                   <MenuList>
-                    <MenuGroup title="Halaman">
+                    <MenuGroup title="Page">
                       <MenuItem
                         as={NextLink}
                         href="/"
@@ -154,7 +154,7 @@ export default function Navbar() {
                     <MenuOptionGroup
                       onChange={toggleColorMode}
                       value={colorMode}
-                      title="Tampilan"
+                      title="Mode"
                       type="radio"
                     >
                       <MenuItemOption
@@ -167,7 +167,7 @@ export default function Navbar() {
                         value="light"
                         icon={<BsSunFill />}
                       >
-                        Mode Terang
+                        Light Mode
                       </MenuItemOption>
                       <MenuItemOption
                         _hover={{
@@ -179,7 +179,7 @@ export default function Navbar() {
                         value="dark"
                         icon={<BsFillMoonFill />}
                       >
-                        Mode Gelap
+                        Dark Mode
                       </MenuItemOption>
                     </MenuOptionGroup>
                   </MenuList>

@@ -27,7 +27,7 @@ import { AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { BsFillMoonFill, BsSunFill } from "react-icons/bs";
 import { breakpoints } from "@/src/config/chakra.config";
 import urls from "@/src/constants/url";
-import { usePathname, useSearchParams } from "next/navigation";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const ButtonCustomMenu = forwardRef(({ isActive, ...props }, ref) => (
@@ -49,7 +49,6 @@ const ButtonCustomMenu = forwardRef(({ isActive, ...props }, ref) => (
 
 function ProgressBar() {
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const [enable, setEnable] = useState({
     show: false,
     url: '',

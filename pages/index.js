@@ -30,13 +30,18 @@ import {
 } from "@chakra-ui/react";
 import Head from "next/head";
 import Image from "next/image";
-import { AiFillGithub, AiFillLinkedin, AiFillMail } from "react-icons/ai";
+import {
+  AiFillGithub,
+  AiFillLinkedin,
+  AiFillMail,
+  AiOutlineUp,
+} from "react-icons/ai";
 import { breakpoints } from "@/src/config/chakra.config";
 import { getHome } from "@/src/services/home";
 import getHtmlFromMd from "@/src/helpers/getHtmlFromMd";
 import indexModuleScss from "@/src/styles/index.module.scss";
 import { getJobs } from "@/src/services/jobs";
-import React, { useMemo, useReducer, useEffect } from "react";
+import React, { useMemo, useReducer, useEffect, useState } from "react";
 import getFormatDateArticle from "@/src/helpers/getFormatDateArticle";
 import { getProjects } from "@/src/services/projects";
 import { getProjectTypes } from "@/src/services/projectTypes";
@@ -305,81 +310,14 @@ export default function Home({
               gridTemplateColumns={["repeat(6, 1fr)"]}
               gap={["50px 0"]}
             >
-              {dataJobs.map(({ id, attributes }) => {
+              {dataJobs.map(({ id, attributes }, index) => {
                 return (
-                  <React.Fragment key={id}>
-                    {isLg && (
-                      <GridItem>
-                        <VStack w={["100%"]} height={["100%"]}>
-                          <Box
-                            w={["70px"]}
-                            h={["70px"]}
-                            backgroundColor={["brand.50"]}
-                            borderRadius={["50%"]}
-                            borderWidth={["7px"]}
-                            flexShrink={[0]}
-                          />
-                          <Box
-                            w={["10px"]}
-                            h={["100%"]}
-                            backgroundColor={["brand.50"]}
-                          />
-                        </VStack>
-                      </GridItem>
-                    )}
-                    <GridItem colSpan={[6, 5]}>
-                      <VStack
-                        w={["100%"]}
-                        h={["100%"]}
-                        spacing={["32px"]}
-                        alignItems={["flex-start"]}
-                      >
-                        <VStack w={["100%"]} alignItems={["flex-start"]}>
-                          {attributes.tautan ? (
-                            <Link
-                              fontSize={["xl", "2xl", "3xl"]}
-                              fontWeight={["bold"]}
-                              lineHeight={["1.1em"]}
-                              href={attributes.tautan}
-                            >
-                              {attributes.namaPerusahaan}
-                            </Link>
-                          ) : (
-                            <Text
-                              fontSize={["xl", "2xl", "3xl"]}
-                              fontWeight={["bold"]}
-                              lineHeight={["1.1em"]}
-                            >
-                              {attributes.namaPerusahaan}
-                            </Text>
-                          )}
-                          <Text
-                            fontSize={["lg", "xl", "2xl"]}
-                            lineHeight={["1.1em"]}
-                          >
-                            As {attributes.jabatan}
-                          </Text>
-                          <Text
-                            fontSize={["lg", "xl", "xl"]}
-                            lineHeight={["1.1em"]}
-                          >
-                            {getFormatDateArticle(attributes.dari)} -{" "}
-                            {attributes.sampai
-                              ? getFormatDateArticle(attributes.sampai)
-                              : "Now"}
-                          </Text>
-                        </VStack>
-                        <VStack w={["100%"]} alignItems={["flex-start"]}>
-                          <Text
-                            fontSize={["lg", "xl"]}
-                            lineHeight={["1.5em", null, null, null, "1.3em"]}
-                          >
-                            {attributes.deskripsi}
-                          </Text>
-                        </VStack>
-                      </VStack>
-                    </GridItem>
-                  </React.Fragment>
+                  <RiwayatPekerjaanItem
+                    key={id}
+                    attributes={attributes}
+                    isLg={isLg}
+                    index={index}
+                  ></RiwayatPekerjaanItem>
                 );
               })}
             </Grid>
@@ -662,15 +600,15 @@ const cardVariants = {
     opacity: 0,
     x: 500,
     transition: {
-      duration: 1
-    }
+      duration: 1,
+    },
   },
   onscreen: {
     opacity: 1,
     x: 0,
     transition: {
-      duration: 1
-    }
+      duration: 1,
+    },
   },
 };
 
@@ -704,5 +642,96 @@ function Section({ title = "", children, containerProps = {} }) {
         </VStack>
       </ChakraBox>
     </ChakraBox>
+  );
+}
+
+function RiwayatPekerjaanItem({ attributes, isLg, index }) {
+  const [isOpen, setIsOpen] = useState(() => index == 0);
+  const memo = useMemo(() => {
+    if (!isLg) return true
+    return isOpen 
+  }, [isOpen, isLg])
+  return (
+    <React.Fragment>
+      {isLg && (
+        <GridItem>
+          <VStack w={["100%"]} height={["100%"]}>
+            <Box
+              w={["70px"]}
+              h={["70px"]}
+              backgroundColor={["brand.50"]}
+              borderRadius={["50%"]}
+              borderWidth={["7px"]}
+              flexShrink={[0]}
+              display="flex"
+              justifyContent={["center"]}
+              alignItems={["center"]}
+              fontSize={["md"]}
+              color={["white"]}
+              fontWeight={["bold"]}
+              as="button"
+              onClick={() => setIsOpen((state) => !state)}
+              transform={[memo ? '' : 'rotate(180deg)']}
+              transition={['0.3s']}
+            >
+              <AiOutlineUp />
+            </Box>
+            {memo && (
+              <Box w={["10px"]} h={["100%"]} backgroundColor={["brand.50"]} />
+            )}
+          </VStack>
+        </GridItem>
+      )}
+      <GridItem colSpan={[6, 5]}>
+        <VStack
+          w={["100%"]}
+          h={["100%"]}
+          spacing={["32px"]}
+          alignItems={["flex-start"]}
+        >
+          <VStack w={["100%"]} alignItems={["flex-start"]}>
+            {attributes.tautan ? (
+              <Link
+                fontSize={["xl", "2xl", "3xl"]}
+                fontWeight={["bold"]}
+                lineHeight={["1.1em"]}
+                href={attributes.tautan}
+              >
+                {attributes.namaPerusahaan}
+              </Link>
+            ) : (
+              <Text
+                fontSize={["xl", "2xl", "3xl"]}
+                fontWeight={["bold"]}
+                lineHeight={["1.1em"]}
+              >
+                {attributes.namaPerusahaan}
+              </Text>
+            )}
+            <Text fontSize={["lg", "xl", "2xl"]} lineHeight={["1.1em"]}>
+              As {attributes.jabatan}
+            </Text>
+            {memo && (
+              <Text fontSize={["lg", "xl", "xl"]} lineHeight={["1.1em"]}>
+                {getFormatDateArticle(attributes.dari)} -{" "}
+                {attributes.sampai
+                  ? getFormatDateArticle(attributes.sampai)
+                  : "Now"}
+              </Text>
+            )}
+          </VStack>
+          {memo && (
+            <VStack w={["100%"]} alignItems={["flex-start"]}>
+              <Text
+                fontSize={["lg", "xl"]}
+                lineHeight={["1.5em", null, null, null, "1.3em"]}
+              >
+                {attributes.deskripsi}
+              </Text>
+            </VStack>
+          )}
+        </VStack>
+      </GridItem>
+    </React.Fragment>
   );
 }

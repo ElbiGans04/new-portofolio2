@@ -25,6 +25,8 @@ import {
   VStack,
   useMediaQuery,
   useColorModeValue,
+  chakra,
+  shouldForwardProp,
 } from "@chakra-ui/react";
 import Head from "next/head";
 import Image from "next/image";
@@ -39,6 +41,7 @@ import getFormatDateArticle from "@/src/helpers/getFormatDateArticle";
 import { getProjects } from "@/src/services/projects";
 import { getProjectTypes } from "@/src/services/projectTypes";
 import ModalImage from "@/src/components/Modal/modalImage";
+import { motion, isValidMotionProp } from "framer-motion";
 
 export async function getStaticProps() {
   const { data } = await getHome();
@@ -158,6 +161,7 @@ export default function Home({
         backgroundColor="bgLayer2"
         color="textLayer1"
         paddingBottom={["100px"]}
+        overflowX="hidden"
       >
         <Grid
           w={["100%"]}
@@ -441,83 +445,89 @@ export default function Home({
               </HStack>
             </Section>
           )}
-          <Grid
-            w={["100%"]}
-            h={["100%"]}
-            templateColumns={[
-              "repeat(1, 1fr)",
-              null,
-              "repeat(2, 1fr)",
-              null,
-              "repeat(3, 1fr)",
-            ]}
-            gap={["60px 30px"]}
-          >
-            {Array.isArray(filteredData) &&
-              filteredData.map(({ id, attributes }) => {
-                return (
-                  <GridItem key={id}>
-                    <Card
-                      shadow="xl"
-                      bgColor={["bgLayer3"]}
-                      _hover={{
-                        backgroundColor: cardItem.hover,
-                      }}
-                      _active={{
-                        backgroundColor: cardItem.active,
-                      }}
-                      borderColor={cardItem.borderColor}
-                      borderWidth={["1px"]}
-                      w={["100%"]}
-                      cursor="pointer"
-                      onClick={() => {
-                        dispatch({
-                          type: "select-project-change",
-                          payload: { data: id },
-                        });
-                        onOpen();
-                      }}
-                    >
-                      <CardBody>
-                        <Stack mt="6" spacing="3">
-                          <Heading size={["xl"]} color={["brand.50"]}>
-                            {attributes.judul}
-                          </Heading>
-                          <Text fontSize={["lg"]} color={["textLayer1"]}>
-                            {attributes.deskripsiSingkat}
-                          </Text>
-                        </Stack>
-                      </CardBody>
-                      <CardFooter>
-                        <HStack
-                          w={["100%"]}
-                          height={["100%"]}
-                          justifyContent={["flex-start"]}
-                          flexWrap={["wrap"]}
-                          spacing={[0]}
-                        >
-                          <Text
-                            fontWeight={["bold"]}
-                            color="brand.50"
-                            fontSize={["md"]}
+
+          {/* Data Portfolio List Item */}
+          {Array.isArray(filteredData) && filteredData.length > 0 && (
+            <Section>
+              <Grid
+                w={["100%"]}
+                h={["100%"]}
+                templateColumns={[
+                  "repeat(1, 1fr)",
+                  null,
+                  "repeat(2, 1fr)",
+                  null,
+                  "repeat(3, 1fr)",
+                ]}
+                gap={["60px 30px"]}
+              >
+                {filteredData.map(({ id, attributes }) => {
+                  return (
+                    <GridItem key={id}>
+                      <Card
+                        shadow="xl"
+                        bgColor={["bgLayer3"]}
+                        _hover={{
+                          backgroundColor: cardItem.hover,
+                        }}
+                        _active={{
+                          backgroundColor: cardItem.active,
+                        }}
+                        borderColor={cardItem.borderColor}
+                        borderWidth={["1px"]}
+                        w={["100%"]}
+                        h={["100%"]}
+                        cursor="pointer"
+                        onClick={() => {
+                          dispatch({
+                            type: "select-project-change",
+                            payload: { data: id },
+                          });
+                          onOpen();
+                        }}
+                      >
+                        <CardBody>
+                          <Stack h={["100%"]} mt="6" spacing="3">
+                            <Heading size={["xl"]} color={["brand.50"]}>
+                              {attributes.judul}
+                            </Heading>
+                            <Text fontSize={["lg"]} color={["textLayer1"]}>
+                              {attributes.deskripsiSingkat}
+                            </Text>
+                          </Stack>
+                        </CardBody>
+                        <CardFooter>
+                          <HStack
+                            w={["100%"]}
+                            height={["100%"]}
+                            justifyContent={["flex-start"]}
+                            flexWrap={["wrap"]}
+                            spacing={[0]}
                           >
-                            {attributes.project_tools.data.map(
-                              ({ id, attributes }) => {
-                                return (
-                                  <React.Fragment key={id}>
-                                    #{attributes.judul}{" "}
-                                  </React.Fragment>
-                                );
-                              }
-                            )}
-                          </Text>
-                        </HStack>
-                      </CardFooter>
-                    </Card>
-                  </GridItem>
-                );
-              })}
-          </Grid>
+                            <Text
+                              fontWeight={["bold"]}
+                              color="brand.50"
+                              fontSize={["md"]}
+                            >
+                              {attributes.project_tools.data.map(
+                                ({ id, attributes }) => {
+                                  return (
+                                    <React.Fragment key={id}>
+                                      #{attributes.judul}{" "}
+                                    </React.Fragment>
+                                  );
+                                }
+                              )}
+                            </Text>
+                          </HStack>
+                        </CardFooter>
+                      </Card>
+                    </GridItem>
+                  );
+                })}
+              </Grid>
+            </Section>
+          )}
         </VStack>
       </VStack>
 
@@ -629,8 +639,7 @@ export default function Home({
         <ModalImage
           judul={filteredDataModal?.attributes?.judul}
           url={
-            filteredDataModal?.attributes?.gambarProjek?.data?.attributes
-              ?.url
+            filteredDataModal?.attributes?.gambarProjek?.data?.attributes?.url
           }
           isOpen={isOpen2}
           onClose={onClose2}
@@ -640,23 +649,60 @@ export default function Home({
   );
 }
 
+const ChakraBox = chakra(motion.div, {
+  /**
+   * Allow motion props and non-Chakra props to be forwarded.
+   */
+  shouldForwardProp: (prop) =>
+    isValidMotionProp(prop) || shouldForwardProp(prop),
+});
+
+const cardVariants = {
+  offscreen: {
+    opacity: 0,
+    x: 500,
+    transition: {
+      duration: 1
+    }
+  },
+  onscreen: {
+    opacity: 1,
+    x: 0,
+    transition: {
+      duration: 1
+    }
+  },
+};
+
 function Section({ title = "", children, containerProps = {} }) {
   return (
-    <VStack
+    <ChakraBox
       w={["100%"]}
-      height={["100%"]}
-      alignItems={["flex-start"]}
-      {...containerProps}
+      h={["100%"]}
+      initial="offscreen"
+      whileInView="onscreen"
+      viewport={{ once: true, amount: "some" }}
     >
-      <Heading
-        as="h1"
-        color={["brand.50"]}
-        fontWeight={["bold"]}
-        fontSize={["2xl", "3xl", "4xl", "5xl"]}
-      >
-        {title}
-      </Heading>
-      {children}
-    </VStack>
+      <ChakraBox w={["100%"]} h={["100%"]} variants={cardVariants}>
+        <VStack
+          w={["100%"]}
+          height={["100%"]}
+          alignItems={["flex-start"]}
+          {...containerProps}
+        >
+          {title && (
+            <Heading
+              as="h1"
+              color={["brand.50"]}
+              fontWeight={["bold"]}
+              fontSize={["2xl", "3xl", "4xl", "5xl"]}
+            >
+              {title}
+            </Heading>
+          )}
+          {children}
+        </VStack>
+      </ChakraBox>
+    </ChakraBox>
   );
 }

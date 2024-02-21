@@ -97,7 +97,7 @@ export default function Navbar() {
   });
 
   return (
-    <VStack backgroundColor="bgLayer1" zIndex={9999} position={["sticky"]} top={["0"]} left={["0"]} right="0" bottom="0">
+    <VStack backgroundColor="bgLayer1" zIndex={1} position={["sticky"]} top={["0"]} left={["0"]} right="0" bottom="0">
       <ProgressBar></ProgressBar>
       <HStack
         w={["100%"]}

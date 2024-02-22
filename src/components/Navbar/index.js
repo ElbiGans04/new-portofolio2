@@ -49,32 +49,26 @@ const ButtonCustomMenu = forwardRef(({ isActive, ...props }, ref) => (
 
 function ProgressBar() {
   const pathname = usePathname();
-  const [enable, setEnable] = useState({
-    show: false,
-    url: '',
-  });
+  const [enable, setEnable] = useState(false);
 
-  // For Enable
-  useEffect(() => {
-    if (enable.url != pathname) {
-      setEnable({
-        show: true,
-        url: `${pathname}`
-      });
-    }
-  }, [pathname, setEnable, enable]);
+  const router = useRouter();
 
-  // For Disabled
   useEffect(() => {
-    if (enable.show) {
-      setTimeout(() => {
-        setEnable(state => ({
-          ...state,
-          show: false
-        }));
-      }, 500)
+    const startHandler = () => {
+      setEnable(true);
     }
-  }, [enable, setEnable])
+
+    const completeHandler = () => {
+      setEnable(false);
+    }
+    router.events.on('routeChangeStart',  startHandler);
+    router.events.on('routeChangeComplete',  completeHandler);
+
+    return () => {
+      router.events.off('routeChangeStart', startHandler);
+      router.events.off('routeChangeComplete', completeHandler);
+    };
+  }, [router, setEnable]);
 
   return (
     <Progress
@@ -82,7 +76,7 @@ function ProgressBar() {
       h="10px"
       size="md"
       colorScheme={"brand"}
-      isIndeterminate={enable.show}
+      isIndeterminate={enable}
       backgroundColor="transparent"
     ></Progress>
   );

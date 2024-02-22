@@ -73,7 +73,7 @@ function ProgressBar() {
   return (
     <Progress
       w="100%"
-      h="10px"
+      h="5px"
       size="md"
       colorScheme={"brand"}
       isIndeterminate={enable}

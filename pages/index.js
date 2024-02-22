@@ -45,6 +45,7 @@ import React, { useMemo, useReducer, useEffect, useState } from "react";
 import getFormatDateArticle from "@/src/helpers/getFormatDateArticle";
 import { getProjects } from "@/src/services/projects";
 import { getProjectTypes } from "@/src/services/projectTypes";
+import { getProjectPlaform } from "@/src/services/projectPlatform";
 import ModalImage from "@/src/components/Modal/modalImage";
 import { motion, isValidMotionProp } from "framer-motion";
 
@@ -53,7 +54,7 @@ export async function getStaticProps() {
   const { data: dataJobs } = await getJobs();
   const { data: dataProjects } = await getProjects();
   const { data: dataProjectTypes } = await getProjectTypes();
-
+  const { data: dataProjectPlatform } = await getProjectPlaform();
   return {
     props: {
       data: !data
@@ -70,6 +71,7 @@ export async function getStaticProps() {
       dataJobs,
       dataProjects,
       dataProjectTypes,
+      dataProjectPlatform,
     },
   };
 }
@@ -77,6 +79,7 @@ export async function getStaticProps() {
 const initialFiltersState = {
   selectedDataId: null,
   filterProjectActive: "ALL",
+  filterProjectPlatformActive: "ALL",
 };
 
 function MainReducer(state, action) {
@@ -85,6 +88,12 @@ function MainReducer(state, action) {
       return {
         ...state,
         filterProjectActive: action.payload.data,
+      };
+    }
+    case "filter-platform-button-change": {
+      return {
+        ...state,
+        filterProjectPlatformActive: action.payload.data,
       };
     }
     case "select-project-change": {
@@ -104,6 +113,7 @@ export default function Home({
   dataJobs,
   dataProjects,
   dataProjectTypes,
+  dataProjectPlatform,
 }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const {
@@ -119,16 +129,30 @@ export default function Home({
 
   const filteredData = useMemo(() => {
     if (!Array.isArray(dataProjects)) return [];
-    return dataProjects.filter(({ attributes }) => {
-      if (state.filterProjectActive === "ALL") return true;
-      if (!attributes.project_type.data) return false;
+    return dataProjects
+      .filter(({ attributes }) => {
+        if (state.filterProjectActive === "ALL") return true;
+        if (!attributes?.project_type?.data) return false;
 
-      return (
-        parseInt(state.filterProjectActive) ===
-        parseInt(attributes.project_type.data.id)
-      );
-    });
-  }, [state.filterProjectActive, dataProjects]);
+        return (
+          parseInt(state.filterProjectActive) ===
+          parseInt(attributes.project_type.data.id)
+        );
+      })
+      .filter(({ attributes }) => {
+        if (state.filterProjectPlatformActive === "ALL") return true;
+        if (!attributes?.project_platform?.data) return false;
+
+        return (
+          parseInt(state.filterProjectPlatformActive) ===
+          parseInt(attributes.project_platform.data.id)
+        );
+      });
+  }, [
+    state.filterProjectActive,
+    state.filterProjectPlatformActive,
+    dataProjects,
+  ]);
 
   const filteredDataModal = useMemo(() => {
     if (!Array.isArray(dataProjects)) return null;
@@ -168,77 +192,75 @@ export default function Home({
         paddingBottom={["100px"]}
         overflowX="hidden"
       >
-        {
-          data && (
-            <Section>
-              <Grid
-                w={["100%"]}
-                height={["100%"]}
-                gridTemplateColumns={["1fr", "repeat(2, 1fr)"]}
-                paddingY={["64px"]}
-                gap={["30px"]}
-                alignItems={["center"]}
-              >
-                <GridItem>
-                  <VStack
-                    w={["100%"]}
-                    height={["100%"]}
-                    alignItems={["flex-start"]}
-                    spacing={["10px"]}
-                    justifyContent={["center"]}
+        {data && (
+          <Section>
+            <Grid
+              w={["100%"]}
+              height={["100%"]}
+              gridTemplateColumns={["1fr", "repeat(2, 1fr)"]}
+              paddingY={["64px"]}
+              gap={["30px"]}
+              alignItems={["center"]}
+            >
+              <GridItem>
+                <VStack
+                  w={["100%"]}
+                  height={["100%"]}
+                  alignItems={["flex-start"]}
+                  spacing={["10px"]}
+                  justifyContent={["center"]}
+                >
+                  <Text
+                    fontSize={["6xl", "8xl", "9xl"]}
+                    as="h1"
+                    fontWeight={["bold"]}
+                    lineHeight={["1em"]}
                   >
-                    <Text
-                      fontSize={["6xl", "8xl", "9xl"]}
-                      as="h1"
+                    {data && data.attributes.haloHeader}
+                  </Text>
+                  <Text fontSize={["xl", "3xl", "4xl"]}>
+                    Im <Box as="span">{data && data.attributes.nama}</Box>
+                    <br />
+                    Im a{" "}
+                    <Box
+                      as="span"
+                      color={["brand.50"]}
+                      fontSize={["2xl", "4xl", "5xl"]}
                       fontWeight={["bold"]}
-                      lineHeight={["1em"]}
+                      whiteSpace={["nowrap"]}
                     >
-                      {data && data.attributes.haloHeader}
-                    </Text>
-                    <Text fontSize={["xl", "3xl", "4xl"]}>
-                      Im <Box as="span">{data && data.attributes.nama}</Box>
-                      <br />
-                      Im a{" "}
-                      <Box
-                        as="span"
-                        color={["brand.50"]}
-                        fontSize={["2xl", "4xl", "5xl"]}
-                        fontWeight={["bold"]}
-                        whiteSpace={["nowrap"]}
-                      >
-                        {data && data.attributes.job}
-                      </Box>
-                    </Text>
+                      {data && data.attributes.job}
+                    </Box>
+                  </Text>
+                </VStack>
+              </GridItem>
+
+              {isLg && !!data && (
+                <GridItem>
+                  <VStack w={["100%"]} height={["100%"]} spacing={["16px"]}>
+                    <Box
+                      w={["0", null, null, "400px", "450px"]}
+                      height={["0", null, null, "400px", "450px"]}
+                      position={["relative"]}
+                      borderWidth={["5px", "15px"]}
+                      borderColor={["brand.50"]}
+                      borderRadius={["50%"]}
+                      overflow={["hidden"]}
+                    >
+                      <Image
+                        src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${data?.attributes?.profile?.data?.attributes?.url}`}
+                        alt="profile-rhafael"
+                        fill
+                        sizes={`(min-width: ${breakpoints.lg}) 400px, (min-width: ${breakpoints.xl}) 450px`}
+                        priority
+                      />
+                    </Box>
                   </VStack>
                 </GridItem>
-
-                {isLg && !!data && (
-                  <GridItem>
-                    <VStack w={["100%"]} height={["100%"]} spacing={["16px"]}>
-                      <Box
-                        w={["0", null, null, "400px", "450px"]}
-                        height={["0", null, null, "400px", "450px"]}
-                        position={["relative"]}
-                        borderWidth={["5px", "15px"]}
-                        borderColor={["brand.50"]}
-                        borderRadius={["50%"]}
-                        overflow={["hidden"]}
-                      >
-                        <Image
-                          src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${data?.attributes?.profile?.data?.attributes?.url}`}
-                          alt="profile-rhafael"
-                          fill
-                          sizes={`(min-width: ${breakpoints.lg}) 400px, (min-width: ${breakpoints.xl}) 450px`}
-                          priority
-                        />
-                      </Box>
-                    </VStack>
-                  </GridItem>
-                )}
-              </Grid>
-            </Section>
-          )
-        }
+              )}
+            </Grid>
+          </Section>
+        )}
 
         {data && (
           <Section title={data.attributes.tentangSayaHeader || "Tentang Saya"}>
@@ -383,6 +405,50 @@ export default function Home({
                         }
                       >
                         {attributes.judul}
+                      </Button>
+                    );
+                  })}
+              </HStack>
+              {/* Action */}
+              <HStack
+                marginTop={["20px!important"]}
+                w={["100%"]}
+                h={["100%"]}
+                alignItems={["flex-start"]}
+              >
+                <Button
+                  onClick={() =>
+                    dispatch({
+                      type: "filter-platform-button-change",
+                      payload: { data: "ALL" },
+                    })
+                  }
+                  variant={
+                    state.filterProjectPlatformActive === "ALL"
+                      ? "brand"
+                      : "brandOutline"
+                  }
+                >
+                  All
+                </Button>
+                {Array.isArray(dataProjectPlatform) &&
+                  dataProjectPlatform.map(({ id, attributes }) => {
+                    return (
+                      <Button
+                        key={id}
+                        onClick={() =>
+                          dispatch({
+                            type: "filter-platform-button-change",
+                            payload: { data: id },
+                          })
+                        }
+                        variant={
+                          state.filterProjectPlatformActive === id
+                            ? "brand"
+                            : "brandOutline"
+                        }
+                      >
+                        {attributes.platform_name}
                       </Button>
                     );
                   })}
@@ -654,9 +720,9 @@ function Section({ title = "", children, containerProps = {} }) {
 function RiwayatPekerjaanItem({ attributes, isLg, index }) {
   const [isOpen, setIsOpen] = useState(() => index == 0);
   const memo = useMemo(() => {
-    if (!isLg) return true
-    return isOpen 
-  }, [isOpen, isLg])
+    if (!isLg) return true;
+    return isOpen;
+  }, [isOpen, isLg]);
   return (
     <React.Fragment>
       {isLg && (
@@ -677,9 +743,9 @@ function RiwayatPekerjaanItem({ attributes, isLg, index }) {
               fontWeight={["bold"]}
               as="button"
               onClick={() => setIsOpen((state) => !state)}
-              transform={[memo ? '' : 'rotate(180deg)']}
-              transition={['0.3s']}
-              title={`${!memo ? 'Open' : 'Close'} Section`}
+              transform={[memo ? "" : "rotate(180deg)"]}
+              transition={["0.3s"]}
+              title={`${!memo ? "Open" : "Close"} Section`}
             >
               <AiOutlineUp />
             </Box>

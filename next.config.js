@@ -4,7 +4,6 @@ const pecah = process.env.STRAPI_BASE_URL.split(":");
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    domains: [process.env.STRAPI_BASE_URL],
     remotePatterns: [
       {
         protocol: pecah[0],

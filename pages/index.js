@@ -168,71 +168,77 @@ export default function Home({
         paddingBottom={["100px"]}
         overflowX="hidden"
       >
-        <Grid
-          w={["100%"]}
-          height={["100%"]}
-          gridTemplateColumns={["1fr", "repeat(2, 1fr)"]}
-          paddingY={["64px"]}
-          gap={["30px"]}
-          alignItems={["center"]}
-        >
-          <GridItem>
-            <VStack
-              w={["100%"]}
-              height={["100%"]}
-              alignItems={["flex-start"]}
-              spacing={["10px"]}
-              justifyContent={["center"]}
-            >
-              <Text
-                fontSize={["6xl", "8xl", "9xl"]}
-                as="h1"
-                fontWeight={["bold"]}
-                lineHeight={["1em"]}
+        {
+          data && (
+            <Section>
+              <Grid
+                w={["100%"]}
+                height={["100%"]}
+                gridTemplateColumns={["1fr", "repeat(2, 1fr)"]}
+                paddingY={["64px"]}
+                gap={["30px"]}
+                alignItems={["center"]}
               >
-                {data && data.attributes.haloHeader}
-              </Text>
-              <Text fontSize={["xl", "3xl", "4xl"]}>
-                Im <Box as="span">{data && data.attributes.nama}</Box>
-                <br />
-                Im a{" "}
-                <Box
-                  as="span"
-                  color={["brand.50"]}
-                  fontSize={["2xl", "4xl", "5xl"]}
-                  fontWeight={["bold"]}
-                  whiteSpace={["nowrap"]}
-                >
-                  {data && data.attributes.job}
-                </Box>
-              </Text>
-            </VStack>
-          </GridItem>
+                <GridItem>
+                  <VStack
+                    w={["100%"]}
+                    height={["100%"]}
+                    alignItems={["flex-start"]}
+                    spacing={["10px"]}
+                    justifyContent={["center"]}
+                  >
+                    <Text
+                      fontSize={["6xl", "8xl", "9xl"]}
+                      as="h1"
+                      fontWeight={["bold"]}
+                      lineHeight={["1em"]}
+                    >
+                      {data && data.attributes.haloHeader}
+                    </Text>
+                    <Text fontSize={["xl", "3xl", "4xl"]}>
+                      Im <Box as="span">{data && data.attributes.nama}</Box>
+                      <br />
+                      Im a{" "}
+                      <Box
+                        as="span"
+                        color={["brand.50"]}
+                        fontSize={["2xl", "4xl", "5xl"]}
+                        fontWeight={["bold"]}
+                        whiteSpace={["nowrap"]}
+                      >
+                        {data && data.attributes.job}
+                      </Box>
+                    </Text>
+                  </VStack>
+                </GridItem>
 
-          {isLg && !!data && (
-            <GridItem>
-              <VStack w={["100%"]} height={["100%"]} spacing={["16px"]}>
-                <Box
-                  w={["0", null, null, "400px", "450px"]}
-                  height={["0", null, null, "400px", "450px"]}
-                  position={["relative"]}
-                  borderWidth={["5px", "15px"]}
-                  borderColor={["brand.50"]}
-                  borderRadius={["50%"]}
-                  overflow={["hidden"]}
-                >
-                  <Image
-                    src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${data?.attributes?.profile?.data?.attributes?.url}`}
-                    alt="profile-rhafael"
-                    fill
-                    sizes={`(min-width: ${breakpoints.lg}) 400px, (min-width: ${breakpoints.xl}) 450px`}
-                    priority
-                  />
-                </Box>
-              </VStack>
-            </GridItem>
-          )}
-        </Grid>
+                {isLg && !!data && (
+                  <GridItem>
+                    <VStack w={["100%"]} height={["100%"]} spacing={["16px"]}>
+                      <Box
+                        w={["0", null, null, "400px", "450px"]}
+                        height={["0", null, null, "400px", "450px"]}
+                        position={["relative"]}
+                        borderWidth={["5px", "15px"]}
+                        borderColor={["brand.50"]}
+                        borderRadius={["50%"]}
+                        overflow={["hidden"]}
+                      >
+                        <Image
+                          src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${data?.attributes?.profile?.data?.attributes?.url}`}
+                          alt="profile-rhafael"
+                          fill
+                          sizes={`(min-width: ${breakpoints.lg}) 400px, (min-width: ${breakpoints.xl}) 450px`}
+                          priority
+                        />
+                      </Box>
+                    </VStack>
+                  </GridItem>
+                )}
+              </Grid>
+            </Section>
+          )
+        }
 
         {data && (
           <Section title={data.attributes.tentangSayaHeader || "Tentang Saya"}>
@@ -562,11 +568,11 @@ export default function Home({
                   as={Link}
                   href={filteredDataModal?.attributes?.tautan}
                 >
-                  Lihat web aplikasi
+                  Check out this app
                 </Button>
               )}
               <Button variant="brandOutline" onClick={onClose}>
-                Tutup
+                Close
               </Button>
             </HStack>
           </ModalFooter>
@@ -673,6 +679,7 @@ function RiwayatPekerjaanItem({ attributes, isLg, index }) {
               onClick={() => setIsOpen((state) => !state)}
               transform={[memo ? '' : 'rotate(180deg)']}
               transition={['0.3s']}
+              title={`${!memo ? 'Open' : 'Close'} Section`}
             >
               <AiOutlineUp />
             </Box>

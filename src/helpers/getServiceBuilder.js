@@ -52,7 +52,12 @@ class GetServiceBuilder {
 
   async request(options = {}, fields, populate, filters) {
     return await (
-      await fetch(this.generateUrl(fields, populate, filters), options)
+      await fetch(this.generateUrl(fields, populate, filters), {
+        ...options,
+        'headers' : {
+          'Strapi-Response-Format': 'v4'
+        }
+      })
     ).json();
   }
 }

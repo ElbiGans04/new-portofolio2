@@ -55,6 +55,7 @@ export async function getStaticProps() {
   const { data: dataProjects } = await getProjects();
   const { data: dataProjectTypes } = await getProjectTypes();
   const { data: dataProjectPlatform } = await getProjectPlaform();
+  
   return {
     props: {
       data: !data
@@ -68,7 +69,10 @@ export async function getStaticProps() {
               projek: getHtmlFromMd(data.attributes.projek).value,
             },
           },
-      dataJobs,
+      dataJobs : [
+        ...dataJobs?.filter(candidate => candidate?.attributes?.sampai)?.sort((a, b) => new Date (a.attributes.dari) - new Date (b.attributes.dari)),
+        ...dataJobs?.filter(candidate => !candidate?.attributes?.sampai)?.sort((a, b) => new Date (a.attributes.dari) - new Date (b.attributes.dari)),
+      ],
       dataProjects,
       dataProjectTypes,
       dataProjectPlatform,
@@ -293,6 +297,10 @@ export default function Home({
                     href={data.attributes.github}
                     fontSize={["lg", "xl", "2xl", "3xl"]}
                     verticalAlign={["middle"]}
+                    textDecoration={'underline'}
+                    _hover={{
+                      textDecoration: 'none'
+                    }}
                   >
                     <ListIcon as={AiFillGithub} />
                     Github
@@ -303,6 +311,10 @@ export default function Home({
                     href={"mailto:" + data.attributes.email}
                     fontSize={["lg", "xl", "2xl", "3xl"]}
                     verticalAlign={["middle"]}
+                    textDecoration={'underline'}
+                    _hover={{
+                      textDecoration: 'none'
+                    }}
                   >
                     <ListIcon as={AiFillMail} />
                     Email
@@ -313,6 +325,10 @@ export default function Home({
                     href={data.attributes.linkedin}
                     fontSize={["lg", "xl", "2xl", "3xl"]}
                     verticalAlign={["middle"]}
+                    textDecoration={'underline'}
+                    _hover={{
+                      textDecoration: 'none'
+                    }}
                   >
                     <ListIcon as={AiFillLinkedin} />
                     Linkedin
@@ -570,7 +586,7 @@ export default function Home({
                 {filteredDataModal && (
                   <Image
                     src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${filteredDataModal?.attributes?.gambarProjek?.data?.attributes?.url}`}
-                    alt="profile-rhafael"
+                    alt={`Image-Of-Project-${filteredDataModal && filteredDataModal?.attributes?.judul}`}
                     fill
                     objectFit="contain"
                     sizes={`90vw, (min-width: ${breakpoints.sm}) 90vw, (min-width: ${breakpoints.md}) 80vw, (min-width: ${breakpoints.lg}) 60vw, (min-width: ${breakpoints.xl}) 40vw`}
@@ -597,14 +613,14 @@ export default function Home({
                   )}
                 </Text>
                 <Text title="proses pengembangan" fontSize={["xl"]}>
-                  Project{" "}
+                  Project Type : {" "}
                   {filteredDataModal &&
                     filteredDataModal?.attributes?.project_type?.data &&
                     filteredDataModal?.attributes?.project_type?.data
                       ?.attributes?.judul}
                 </Text>
                 <Text title="proses pengembangan" fontSize={["xl"]}>
-                  {filteredDataModal &&
+                  Technology Used : {filteredDataModal &&
                     filteredDataModal?.attributes?.project_tools?.data?.map(
                       ({ id, attributes }, index, arrayy) => {
                         return (
@@ -769,6 +785,10 @@ function RiwayatPekerjaanItem({ attributes, isLg, index }) {
                 fontWeight={["bold"]}
                 lineHeight={["1.1em"]}
                 href={attributes.tautan}
+                textDecoration={'underline'}
+                _hover={{
+                  textDecoration: 'none'
+                }}
               >
                 {attributes.namaPerusahaan}
               </Link>

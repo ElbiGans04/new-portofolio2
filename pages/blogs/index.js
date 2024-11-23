@@ -158,6 +158,7 @@ export default function Blogs({ dataArticle, dataTags }) {
                                   alt={attributes.judul}
                                   sizes={`100vw, (min-width: ${breakpoints.sm}) 90vw, (min-width: ${breakpoints.lg}) 50vw,`}
                                   priority={index === 0}
+                                  objectFit="cover"
                                 />
                               )}
                           </Box>
@@ -179,9 +180,7 @@ export default function Blogs({ dataArticle, dataTags }) {
                             <Link
                               fontSize={["2xl", "3xl", "4xl"]}
                               fontWeight={["bold"]}
-                              _hover={{
-                                textDecoration: "underline",
-                              }}
+                             
                               as={NextLink}
                               href={`${urls.blogs.url}/${attributes.slug}`}
                             >
@@ -201,8 +200,9 @@ export default function Blogs({ dataArticle, dataTags }) {
                               fontSize={["lg", "xl", "2xl"]}
                               fontWeight={["bold"]}
                               color={["brand.50"]}
+                              textDecoration={'underline'}
                               _hover={{
-                                textDecoration: "underline",
+                                textDecoration: 'none'
                               }}
                               as={NextLink}
                               href={`${urls.blogs.url}/${attributes.slug}`}

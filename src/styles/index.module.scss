@@ -11,6 +11,14 @@ $brandTextBold : var(--chakra-colors-brand-50);
     p:last-child {
         margin-bottom: 0;
     }
+
+    a {
+        text-decoration: underline;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
 }
 
 .objectFit {

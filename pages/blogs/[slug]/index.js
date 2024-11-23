@@ -212,6 +212,7 @@ export default function Blog({
                       alt={data.attributes.judul}
                       sizes={`90vw, (min-width: ${breakpoints.lg}) 50vw`}
                       priority
+                      objectFit="cover"
                     />
                   )}
               </Box>
@@ -269,6 +270,7 @@ export default function Blog({
                       as="div"
                       fontSize={["lg", "xl", "2xl"]}
                       className={slugCssModule.content}
+                      width={['100%']}
                     />
                   )}
                 </VStack>

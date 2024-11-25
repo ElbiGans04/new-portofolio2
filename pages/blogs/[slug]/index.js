@@ -31,7 +31,7 @@ import {
 } from "react-icons/ai";
 import urls from "@/src/constants/url";
 import slugCssModule from "@/src/styles/blogs/slug.module.scss";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import TagBlog from "@/src/components/Tags";
 import ModalImage from "@/src/components/Modal/modalImage";
 
@@ -89,15 +89,15 @@ export async function getStaticProps({ params }) {
 }
 
 export async function getStaticPaths() {
-  const { data } = await getArticles(["id"], false);
+  const { data } = await getArticles(["id", "slug"], false);
 
   return {
     paths: Array.isArray(data)
       ? data.map((candidate) => ({
-          params: { slug: candidate.id + "" },
+          params: { slug: candidate?.attributes.slug + "" },
         }))
       : [],
-    fallback: "blocking",
+    fallback: false,
   };
 }
 
@@ -114,6 +114,10 @@ export default function Blog({
     fallback: false, // return false on the server, and re-evaluate on the client side
   });
   const backgroundColor = useColorModeValue("#D9D9D9", "gray.900");
+  const isImageHaveToShow = useMemo(
+    () => process.env.NEXT_PUBLIC_EXPORT_MODE != "false",
+    []
+  );
 
   return (
     <>
@@ -193,29 +197,31 @@ export default function Blog({
               spacing={["30px"]}
             >
               {/* Header */}
-              <Box
-                w={["100%"]}
-                height={["200px", "350px"]}
-                backgroundColor={[backgroundColor]}
-                flexShrink={[0]}
-                position={["relative"]}
-                onClick={onOpen}
-                cursor={"pointer"}
-              >
-                {data &&
-                  data.attributes.images &&
-                  Array.isArray(data.attributes.images.data) &&
-                  data.attributes.images.data[0] && (
-                    <NextImage
-                      src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${data?.attributes?.images?.data[0]?.attributes?.url}`}
-                      fill
-                      alt={data.attributes.judul}
-                      sizes={`90vw, (min-width: ${breakpoints.lg}) 50vw`}
-                      priority
-                      objectFit="cover"
-                    />
-                  )}
-              </Box>
+              {isImageHaveToShow && (
+                <Box
+                  w={["100%"]}
+                  height={["200px", "350px"]}
+                  backgroundColor={[backgroundColor]}
+                  flexShrink={[0]}
+                  position={["relative"]}
+                  onClick={onOpen}
+                  cursor={"pointer"}
+                >
+                  {data &&
+                    data.attributes.images &&
+                    Array.isArray(data.attributes.images.data) &&
+                    data.attributes.images.data[0] && (
+                      <NextImage
+                        src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${data?.attributes?.images?.data[0]?.attributes?.url}`}
+                        fill
+                        alt={data.attributes.judul}
+                        sizes={`90vw, (min-width: ${breakpoints.lg}) 50vw`}
+                        priority
+                        objectFit="cover"
+                      />
+                    )}
+                </Box>
+              )}
 
               {/* Body */}
 
@@ -270,7 +276,7 @@ export default function Blog({
                       as="div"
                       fontSize={["lg", "xl", "2xl"]}
                       className={slugCssModule.content}
-                      width={['100%']}
+                      width={["100%"]}
                     />
                   )}
                 </VStack>
@@ -466,7 +472,7 @@ function Salin() {
         w={["100%", null, null, "inherit"]}
         onBlur={() => setState({ isOpen: undefined, message: "Copy Link" })}
         onClick={() => {
-          function clip () {
+          function clip() {
             navigator.clipboard
               .writeText(window && window.location.href)
               .then(() =>
@@ -484,18 +490,16 @@ function Salin() {
             (!!window.chrome.webstore || !!window.chrome.runtime);
 
           if (isChrome) {
-            navigator.permissions
-              .query({ name: "write" })
-              .then((result) => {
-                if (result.state === "granted" || result.state === "prompt") {
-                  clip()
-                }
-              });
+            navigator.permissions.query({ name: "write" }).then((result) => {
+              if (result.state === "granted" || result.state === "prompt") {
+                clip();
+              }
+            });
 
             return;
           }
 
-          clip()
+          clip();
         }}
       >
         <AiOutlineLink style={!isLg && { marginRight: "10px" }} />{" "}

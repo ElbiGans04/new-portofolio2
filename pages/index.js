@@ -48,6 +48,7 @@ import { getProjectTypes } from "@/src/services/projectTypes";
 import { getProjectPlaform } from "@/src/services/projectPlatform";
 import ModalImage from "@/src/components/Modal/modalImage";
 import { motion, isValidMotionProp } from "framer-motion";
+import ProfileImage from "@/src/assets/images/img.jpg";
 
 export async function getStaticProps() {
   const { data } = await getHome();
@@ -55,7 +56,7 @@ export async function getStaticProps() {
   const { data: dataProjects } = await getProjects();
   const { data: dataProjectTypes } = await getProjectTypes();
   const { data: dataProjectPlatform } = await getProjectPlaform();
-  
+
   return {
     props: {
       data: !data
@@ -69,9 +70,17 @@ export async function getStaticProps() {
               projek: getHtmlFromMd(data.attributes.projek).value,
             },
           },
-      dataJobs : [
-        ...dataJobs?.filter(candidate => candidate?.attributes?.sampai)?.sort((a, b) => new Date (a.attributes.dari) - new Date (b.attributes.dari)),
-        ...dataJobs?.filter(candidate => !candidate?.attributes?.sampai)?.sort((a, b) => new Date (a.attributes.dari) - new Date (b.attributes.dari)),
+      dataJobs: [
+        ...dataJobs
+          ?.filter((candidate) => candidate?.attributes?.sampai)
+          ?.sort(
+            (a, b) => new Date(a.attributes.dari) - new Date(b.attributes.dari)
+          ),
+        ...dataJobs
+          ?.filter((candidate) => !candidate?.attributes?.sampai)
+          ?.sort(
+            (a, b) => new Date(a.attributes.dari) - new Date(b.attributes.dari)
+          ),
       ],
       dataProjects,
       dataProjectTypes,
@@ -165,6 +174,11 @@ export default function Home({
     });
   }, [state.selectedDataId, dataProjects]);
 
+  const isImageHaveToShow = useMemo(
+    () => process.env.NEXT_PUBLIC_EXPORT_MODE != "false",
+    []
+  );
+
   const cardItem = useColorModeValue(
     {
       hover: "blackAlpha.50",
@@ -252,7 +266,11 @@ export default function Home({
                       overflow={["hidden"]}
                     >
                       <Image
-                        src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${data?.attributes?.profile?.data?.attributes?.url}`}
+                        src={
+                          !isImageHaveToShow
+                            ? ProfileImage
+                            : `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${data?.attributes?.profile?.data?.attributes?.url}`
+                        }
                         alt="profile-rhafael"
                         fill
                         sizes={`(min-width: ${breakpoints.lg}) 400px, (min-width: ${breakpoints.xl}) 450px`}
@@ -297,9 +315,9 @@ export default function Home({
                     href={data.attributes.github}
                     fontSize={["lg", "xl", "2xl", "3xl"]}
                     verticalAlign={["middle"]}
-                    textDecoration={'underline'}
+                    textDecoration={"underline"}
                     _hover={{
-                      textDecoration: 'none'
+                      textDecoration: "none",
                     }}
                   >
                     <ListIcon as={AiFillGithub} />
@@ -311,9 +329,9 @@ export default function Home({
                     href={"mailto:" + data.attributes.email}
                     fontSize={["lg", "xl", "2xl", "3xl"]}
                     verticalAlign={["middle"]}
-                    textDecoration={'underline'}
+                    textDecoration={"underline"}
                     _hover={{
-                      textDecoration: 'none'
+                      textDecoration: "none",
                     }}
                   >
                     <ListIcon as={AiFillMail} />
@@ -325,9 +343,9 @@ export default function Home({
                     href={data.attributes.linkedin}
                     fontSize={["lg", "xl", "2xl", "3xl"]}
                     verticalAlign={["middle"]}
-                    textDecoration={'underline'}
+                    textDecoration={"underline"}
                     _hover={{
-                      textDecoration: 'none'
+                      textDecoration: "none",
                     }}
                   >
                     <ListIcon as={AiFillLinkedin} />
@@ -575,24 +593,29 @@ export default function Home({
               alignItems={["flex-start"]}
               spacing={["30px"]}
             >
-              <Box
-                w={["100%"]}
-                h={["250px"]}
-                bgColor={["brand.500"]}
-                position={["relative"]}
-                cursor={["pointer"]}
-                onClick={onOpen2}
-              >
-                {filteredDataModal && (
-                  <Image
-                    src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${filteredDataModal?.attributes?.gambarProjek?.data?.attributes?.url}`}
-                    alt={`Image-Of-Project-${filteredDataModal && filteredDataModal?.attributes?.judul}`}
-                    fill
-                    objectFit="contain"
-                    sizes={`90vw, (min-width: ${breakpoints.sm}) 90vw, (min-width: ${breakpoints.md}) 80vw, (min-width: ${breakpoints.lg}) 60vw, (min-width: ${breakpoints.xl}) 40vw`}
-                  />
-                )}
-              </Box>
+              {isImageHaveToShow && (
+                <Box
+                  w={["100%"]}
+                  h={["250px"]}
+                  bgColor={["brand.500"]}
+                  position={["relative"]}
+                  cursor={["pointer"]}
+                  onClick={onOpen2}
+                >
+                  {filteredDataModal && (
+                    <Image
+                      src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${filteredDataModal?.attributes?.gambarProjek?.data?.attributes?.url}`}
+                      alt={`Image-Of-Project-${
+                        filteredDataModal &&
+                        filteredDataModal?.attributes?.judul
+                      }`}
+                      fill
+                      objectFit="contain"
+                      sizes={`90vw, (min-width: ${breakpoints.sm}) 90vw, (min-width: ${breakpoints.md}) 80vw, (min-width: ${breakpoints.lg}) 60vw, (min-width: ${breakpoints.xl}) 40vw`}
+                    />
+                  )}
+                </Box>
+              )}
               <VStack w={["100%"]} h={["100%"]} alignItems={["flex-start"]}>
                 <Heading
                   fontSize={["lg", "xl", "2xl", "3xl"]}
@@ -613,14 +636,15 @@ export default function Home({
                   )}
                 </Text>
                 <Text title="proses pengembangan" fontSize={["xl"]}>
-                  Project Type : {" "}
+                  Project Type :{" "}
                   {filteredDataModal &&
                     filteredDataModal?.attributes?.project_type?.data &&
                     filteredDataModal?.attributes?.project_type?.data
                       ?.attributes?.judul}
                 </Text>
                 <Text title="proses pengembangan" fontSize={["xl"]}>
-                  Technology Used : {filteredDataModal &&
+                  Technology Used :{" "}
+                  {filteredDataModal &&
                     filteredDataModal?.attributes?.project_tools?.data?.map(
                       ({ id, attributes }, index, arrayy) => {
                         return (
@@ -785,9 +809,9 @@ function RiwayatPekerjaanItem({ attributes, isLg, index }) {
                 fontWeight={["bold"]}
                 lineHeight={["1.1em"]}
                 href={attributes.tautan}
-                textDecoration={'underline'}
+                textDecoration={"underline"}
                 _hover={{
-                  textDecoration: 'none'
+                  textDecoration: "none",
                 }}
               >
                 {attributes.namaPerusahaan}

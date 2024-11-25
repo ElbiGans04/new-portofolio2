@@ -2,8 +2,10 @@
 const path = require("path");
 const pecah = process.env.STRAPI_BASE_URL.split(":");
 const nextConfig = {
+  output: process.env.NEXT_PUBLIC_EXPORT_MODE == "false" ? "export" : undefined,
   reactStrictMode: true,
   images: {
+    unoptimized: process.env.NEXT_PUBLIC_EXPORT_MODE == "false" ? true : false,
     remotePatterns: [
       {
         protocol: pecah[0],

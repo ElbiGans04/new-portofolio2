@@ -72,6 +72,11 @@ export default function Blogs({ dataArticle, dataTags }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const [state, setState] = useState(dataArticle);
   const backgroundColor = useColorModeValue("#D9D9D9", "gray.900");
+  const isImageHaveToShow = useMemo(
+    () => process.env.NEXT_PUBLIC_EXPORT_MODE != "false",
+    []
+  );
+
   return (
     <>
       <Head>
@@ -137,32 +142,34 @@ export default function Blogs({ dataArticle, dataTags }) {
                         spacing={["30px"]}
                       >
                         {/* Header */}
-                        <Link
-                          as={NextLink}
-                          href={`${urls.blogs.url}/${attributes.slug}`}
-                          width={["100%"]}
-                        >
-                          <Box
-                            w={["100%", "90%"]}
-                            height={["200px", "250px", "350px"]}
-                            backgroundColor={[backgroundColor]}
-                            flexShrink={[0]}
-                            position={["relative"]}
+                        {isImageHaveToShow && (
+                          <Link
+                            as={NextLink}
+                            href={`${urls.blogs.url}/${attributes.slug}`}
+                            width={["100%"]}
                           >
-                            {attributes.images &&
-                              Array.isArray(attributes.images.data) &&
-                              attributes.images.data[0] && (
-                                <NextImage
-                                  src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${attributes?.images?.data[0]?.attributes?.url}`}
-                                  fill
-                                  alt={attributes.judul}
-                                  sizes={`100vw, (min-width: ${breakpoints.sm}) 90vw, (min-width: ${breakpoints.lg}) 50vw,`}
-                                  priority={index === 0}
-                                  objectFit="cover"
-                                />
-                              )}
-                          </Box>
-                        </Link>
+                            <Box
+                              w={["100%", "90%"]}
+                              height={["200px", "250px", "350px"]}
+                              backgroundColor={[backgroundColor]}
+                              flexShrink={[0]}
+                              position={["relative"]}
+                            >
+                              {attributes.images &&
+                                Array.isArray(attributes.images.data) &&
+                                attributes.images.data[0] && (
+                                  <NextImage
+                                    src={`${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${attributes?.images?.data[0]?.attributes?.url}`}
+                                    fill
+                                    alt={attributes.judul}
+                                    sizes={`100vw, (min-width: ${breakpoints.sm}) 90vw, (min-width: ${breakpoints.lg}) 50vw,`}
+                                    priority={index === 0}
+                                    objectFit="cover"
+                                  />
+                                )}
+                            </Box>
+                          </Link>
+                        )}
 
                         {/* Body */}
 
@@ -180,7 +187,6 @@ export default function Blogs({ dataArticle, dataTags }) {
                             <Link
                               fontSize={["2xl", "3xl", "4xl"]}
                               fontWeight={["bold"]}
-                             
                               as={NextLink}
                               href={`${urls.blogs.url}/${attributes.slug}`}
                             >
@@ -189,7 +195,8 @@ export default function Blogs({ dataArticle, dataTags }) {
 
                             <Text fontSize={["md", "lg", "xl"]}>
                               {getFormatDateArticle(attributes.createdAt)} -{" "}
-                              {getReadingTime(attributes.plainDeskripsi)} Minutes
+                              {getReadingTime(attributes.plainDeskripsi)}{" "}
+                              Minutes
                             </Text>
                           </VStack>
                           <VStack w={["100%"]} alignItems={["flex-start"]}>
@@ -200,9 +207,9 @@ export default function Blogs({ dataArticle, dataTags }) {
                               fontSize={["lg", "xl", "2xl"]}
                               fontWeight={["bold"]}
                               color={["brand.50"]}
-                              textDecoration={'underline'}
+                              textDecoration={"underline"}
                               _hover={{
-                                textDecoration: 'none'
+                                textDecoration: "none",
                               }}
                               as={NextLink}
                               href={`${urls.blogs.url}/${attributes.slug}`}

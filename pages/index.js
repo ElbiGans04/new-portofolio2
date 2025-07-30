@@ -174,8 +174,8 @@ export default function Home({
     });
   }, [state.selectedDataId, dataProjects]);
 
-  const isImageHaveToShow = useMemo(
-    () => process.env.NEXT_PUBLIC_EXPORT_MODE != "false",
+  const isExportMode = useMemo(
+    () => process.env.NEXT_PUBLIC_EXPORT_MODE === "true",
     []
   );
 
@@ -265,9 +265,10 @@ export default function Home({
                       borderRadius={["50%"]}
                       overflow={["hidden"]}
                     >
+                      {/* Jika mode export, maka gunakan static image, tetapi jika tidak, ambil gambar dari strapi */}
                       <Image
                         src={
-                          !isImageHaveToShow
+                          isExportMode
                             ? ProfileImage
                             : `${process.env.NEXT_PUBLIC_STRAPI_BASE_URL}${data?.attributes?.profile?.data?.attributes?.url}`
                         }
@@ -593,7 +594,7 @@ export default function Home({
               alignItems={["flex-start"]}
               spacing={["30px"]}
             >
-              {isImageHaveToShow && (
+              {!isExportMode && (
                 <Box
                   w={["100%"]}
                   h={["250px"]}

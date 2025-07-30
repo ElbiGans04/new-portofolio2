@@ -115,7 +115,7 @@ export default function Blog({
   });
   const backgroundColor = useColorModeValue("#D9D9D9", "gray.900");
   const isImageHaveToShow = useMemo(
-    () => process.env.NEXT_PUBLIC_EXPORT_MODE != "false",
+    () => process.env.NEXT_PUBLIC_EXPORT_MODE === "false",
     []
   );
 

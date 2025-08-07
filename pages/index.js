@@ -57,6 +57,18 @@ export async function getStaticProps() {
   const { data: dataProjectTypes } = await getProjectTypes();
   const { data: dataProjectPlatform } = await getProjectPlaform();
 
+  dataProjects.sort((a, b) => {
+    return a.attributes.judul.localeCompare(b.attributes.judul);
+  });
+
+  dataProjectTypes.sort((a, b) => {
+    return a.attributes.judul.localeCompare(b.attributes.judul);
+  });
+
+  dataProjectPlatform.sort((a, b) => {
+    return a.attributes.platform_name.localeCompare(b.attributes.platform_name);
+  });
+
   return {
     props: {
       data: !data
